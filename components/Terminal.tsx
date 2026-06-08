@@ -68,9 +68,10 @@ export default function Terminal({ color = '#FFB000' }: TerminalProps) {
     xterm.write('Uptime: 00:00:14  Procs: 42\r\n\r\n')
     
     xterm.write('Projects:\r\n')
-    xterm.write(' - neural-net-arch  [ONLINE]\r\n')
-    xterm.write(' - portfolio-site   [ACTIVE]\r\n')
-    xterm.write(' - noter-app        [DEPRECATED]\r\n\r\n')
+    xterm.write(' - school-bus-tracker [ACTIVE]\r\n')
+    xterm.write(' - jern-language-app  [ONLINE]\r\n')
+    xterm.write(' - masar-wayfinding   [PROTOTYPE]\r\n')
+    xterm.write(' - crt-terminal-os    [ONLINE]\r\n\r\n')
 
     xterm.write('$ ')
 

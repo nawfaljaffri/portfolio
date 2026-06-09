@@ -22,25 +22,27 @@ export default async function ArchivePage() {
   }`)
 
   return (
-    <main className="min-h-screen bg-[#111] text-white selection:bg-white selection:text-black pt-24 pb-32">
-      <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col gap-16">
+    <main className="min-h-screen bg-white text-[#111] selection:bg-black selection:text-white pt-24 pb-32">
+      <div className="w-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col gap-16">
         
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-white/10 pb-8">
-          <div>
-            <Link href="/" className="text-xs font-bold uppercase tracking-widest opacity-50 hover:opacity-100 transition-opacity mb-4 inline-block">&larr; Back Home</Link>
-            <h1 className="text-5xl md:text-8xl font-medium tracking-tight">Archive</h1>
-          </div>
-          <p className="max-w-xs text-sm opacity-60">A curated collection of posters, graphic design concepts, and visual experiments.</p>
+        <div className="flex flex-col border-b border-black/10 pb-8 relative">
+          <Link href="/" className="absolute top-0 right-0 w-12 h-12 rounded-full border border-black flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300">
+            <span className="sr-only">Back Home</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </Link>
+          
+          <h1 className="text-6xl md:text-9xl font-semibold tracking-tighter mb-4">Archive</h1>
+          <p className="max-w-sm text-sm font-medium opacity-60">A curated collection of posters, graphic design concepts, and visual experiments.</p>
         </div>
 
-        {/* Masonry Grid */}
+        {/* Masonry Grid with View Switcher */}
         {posters.length > 0 ? (
           <MasonryGrid items={posters} />
         ) : (
           <div className="text-center py-32 opacity-50 flex flex-col items-center gap-4">
-            <p>No posters found.</p>
-            <p className="text-sm">Go to <a href="/studio" className="underline hover:text-white">/studio</a> to add your first poster!</p>
+            <p className="font-bold">No posters found.</p>
+            <p className="text-sm">Go to <a href="/studio" className="underline hover:opacity-50">/studio</a> to add your first poster!</p>
           </div>
         )}
 

@@ -10,19 +10,21 @@ export default function ArchiveClient({ items }: { items: any[] }) {
   const [viewMode, setViewMode] = useState<ViewMode>('scroll')
 
   // We duplicate items slightly just to ensure we have enough content to fill the screen initially
-  const paddedItems = [...items, ...items, ...items]
+  const paddedItems = [...items, ...items, ...items, ...items, ...items]
 
   // Splitting into columns for the Scroll (Masonry) view
-  const scrollCol1 = paddedItems.filter((_, i) => i % 3 === 0)
-  const scrollCol2 = paddedItems.filter((_, i) => i % 3 === 1)
-  const scrollCol3 = paddedItems.filter((_, i) => i % 3 === 2)
+  const scrollCol1 = paddedItems.filter((_, i) => i % 5 === 0)
+  const scrollCol2 = paddedItems.filter((_, i) => i % 5 === 1)
+  const scrollCol3 = paddedItems.filter((_, i) => i % 5 === 2)
+  const scrollCol4 = paddedItems.filter((_, i) => i % 5 === 3)
+  const scrollCol5 = paddedItems.filter((_, i) => i % 5 === 4)
 
   return (
     <main className="min-h-screen bg-white text-[#111] selection:bg-black selection:text-white pt-24 pb-32 overflow-hidden">
       <div className="w-full mx-auto px-6 md:px-12 flex flex-col h-screen">
         
         {/* Header */}
-        <div className="flex flex-col relative mb-12 shrink-0 max-w-7xl mx-auto w-full">
+        <div className="flex flex-col relative mb-12 shrink-0 max-w-screen-2xl mx-auto w-full">
           <Link href="/" className="absolute -top-16 left-0 flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:opacity-50 transition-opacity">
             <span className="text-lg leading-none">&larr;</span> Back Home
           </Link>
@@ -59,42 +61,61 @@ export default function ArchiveClient({ items }: { items: any[] }) {
 
         {/* Dynamic Views */}
         {items.length === 0 ? (
-          <div className="text-center py-32 opacity-50 flex flex-col items-center gap-4 max-w-7xl mx-auto w-full">
+          <div className="text-center py-32 opacity-50 flex flex-col items-center gap-4 w-full">
             <p className="font-bold">No posters found.</p>
             <p className="text-sm">Go to <a href="/studio" className="underline hover:opacity-50">/studio</a> to add your first poster!</p>
           </div>
         ) : (
-          <div className="relative w-full flex-grow overflow-hidden">
+          <div className="relative w-full flex-grow overflow-hidden max-w-screen-2xl mx-auto">
             
-            {/* GRID MODE (Editorial static numbered squares) */}
+            {/* GRID MODE (Editorial static numbered tiny images) */}
             {viewMode === 'grid' && (
-              <div className="w-full max-w-7xl mx-auto h-full overflow-y-auto pb-32 hide-scrollbar">
-                <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2 md:gap-4">
+              <div className="w-full h-full overflow-y-auto pb-32 hide-scrollbar">
+                <div 
+                  style={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', 
+                    gap: '4rem 2rem' 
+                  }}
+                >
                   {items.map((poster, index) => (
-                    <div key={`${poster._id}-${index}`} className="relative group cursor-pointer aspect-square bg-black/5 overflow-hidden">
-                      <div className="absolute top-2 left-2 z-10 text-[10px] font-mono font-bold bg-white/80 backdrop-blur-sm px-1 rounded-sm">
-                        {(index + 1).toString().padStart(2, '0')}.
+                    <div key={`${poster._id}-${index}`} className="flex flex-col items-center group cursor-pointer">
+                      {/* Number Top Left of Cell */}
+                      <div className="w-full text-left mb-6">
+                        <span className="text-[10px] font-bold tracking-widest opacity-40">
+                          {(index + 1).toString().padStart(2, '0')}.
+                        </span>
                       </div>
-                      {poster.image?.asset?.url && (
-                        <img 
-                          src={urlForImage(poster.image).url()} 
-                          alt={poster.title || 'Poster'} 
-                          className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                        />
-                      )}
+                      
+                      {/* Tiny Image */}
+                      <div className="w-2/3 max-w-[150px] aspect-[3/4] relative transition-transform duration-700 ease-out group-hover:scale-110 group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)] bg-black/5">
+                        {poster.image?.asset?.url && (
+                          <img 
+                            src={urlForImage(poster.image).url()} 
+                            alt={poster.title || 'Poster'} 
+                            className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
+                          />
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* SCROLL MODE (Luxurious Vertical Masonry) */}
+            {/* SCROLL MODE (Luxurious Vertical Masonry - 5 Columns) */}
             {viewMode === 'scroll' && (
-              <div className="w-full max-w-7xl mx-auto h-full relative group">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-12 items-start h-full">
-                  <LuxuryMarquee data={scrollCol1} speed={0.5} vertical={true} />
-                  <LuxuryMarquee data={scrollCol2} speed={0.8} vertical={true} reverse={true} />
-                  <LuxuryMarquee data={scrollCol3} speed={0.4} vertical={true} />
+              <div className="w-full h-full relative group">
+                <div 
+                  className="items-start h-full"
+                  style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.5rem' }}
+                >
+                  {/* We pass a custom mode identifier so PosterCard knows to use Apple-esque styling */}
+                  <LuxuryMarquee data={scrollCol1} speed={0.5} vertical={true} mode="scroll" />
+                  <LuxuryMarquee data={scrollCol2} speed={0.8} vertical={true} reverse={true} mode="scroll" />
+                  <LuxuryMarquee data={scrollCol3} speed={0.4} vertical={true} mode="scroll" />
+                  <LuxuryMarquee data={scrollCol4} speed={0.7} vertical={true} reverse={true} mode="scroll" />
+                  <LuxuryMarquee data={scrollCol5} speed={0.6} vertical={true} mode="scroll" />
                 </div>
                 {/* Edge Fades */}
                 <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white to-transparent pointer-events-none z-10" />
@@ -102,10 +123,10 @@ export default function ArchiveClient({ items }: { items: any[] }) {
               </div>
             )}
 
-            {/* SLIDE MODE (Edge-to-Edge Horizontal Strip) */}
+            {/* SLIDE MODE (Edge-to-Edge Horizontal Strip - Many items) */}
             {viewMode === 'slide' && (
-              <div className="absolute inset-0 flex items-center -mx-6 md:-mx-12">
-                <LuxuryMarquee data={paddedItems} speed={1.2} vertical={false} />
+              <div className="absolute inset-0 flex items-center -mx-12 overflow-visible">
+                <LuxuryMarquee data={paddedItems} speed={1.2} vertical={false} mode="slide" />
               </div>
             )}
 
@@ -124,7 +145,7 @@ export default function ArchiveClient({ items }: { items: any[] }) {
 // -------------------------------------------------------------
 // LUXURY MARQUEE ENGINE
 // -------------------------------------------------------------
-function LuxuryMarquee({ data, speed, vertical = false, reverse = false }: { data: any[], speed: number, vertical?: boolean, reverse?: boolean }) {
+function LuxuryMarquee({ data, speed, vertical = false, reverse = false, mode }: { data: any[], speed: number, vertical?: boolean, reverse?: boolean, mode: 'scroll' | 'slide' }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   
@@ -132,7 +153,6 @@ function LuxuryMarquee({ data, speed, vertical = false, reverse = false }: { dat
   const currentSpeed = useRef(speed)
   const targetSpeed = useRef(speed)
   const isDragging = useRef(false)
-  const dragStartPos = useRef(0)
   const lastMousePos = useRef(0)
   const animationRef = useRef<number>(0)
 
@@ -202,9 +222,12 @@ function LuxuryMarquee({ data, speed, vertical = false, reverse = false }: { dat
     if (containerRef.current) containerRef.current.style.cursor = 'grab'
   }
 
+  const gapClass = vertical ? 'gap-6' : 'gap-12'
+  const flexDir = vertical ? 'flex-col' : 'flex-row items-center'
+
   return (
     <div 
-      className={`relative w-full h-full cursor-grab ${vertical ? 'overflow-hidden' : 'overflow-hidden flex items-center'}`}
+      className={`relative w-full h-full cursor-grab ${vertical ? 'overflow-hidden' : 'overflow-visible flex items-center'}`}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
@@ -212,17 +235,17 @@ function LuxuryMarquee({ data, speed, vertical = false, reverse = false }: { dat
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div ref={containerRef} className={`flex ${vertical ? 'flex-col gap-6 md:gap-12' : 'flex-row gap-6 md:gap-12 items-center'} w-full will-change-transform`}>
+      <div ref={containerRef} className={`flex ${flexDir} ${gapClass} w-full will-change-transform`}>
         {/* Render Original Group */}
-        <div ref={contentRef} className={`flex ${vertical ? 'flex-col gap-6 md:gap-12 w-full' : 'flex-row gap-6 md:gap-12 items-center shrink-0'}`}>
+        <div ref={contentRef} className={`flex ${flexDir} ${gapClass} ${vertical ? 'w-full' : 'shrink-0'}`}>
           {data.map((poster, index) => (
-            <PosterCard key={`${poster._id}-${index}`} poster={poster} vertical={vertical} />
+            <PosterCard key={`${poster._id}-${index}`} poster={poster} mode={mode} />
           ))}
         </div>
         {/* Render Duplicate Group for Seamless Infinity */}
-        <div className={`flex ${vertical ? 'flex-col gap-6 md:gap-12 w-full' : 'flex-row gap-6 md:gap-12 items-center shrink-0'}`}>
+        <div className={`flex ${flexDir} ${gapClass} ${vertical ? 'w-full' : 'shrink-0'}`}>
           {data.map((poster, index) => (
-            <PosterCard key={`${poster._id}-dup-${index}`} poster={poster} vertical={vertical} />
+            <PosterCard key={`${poster._id}-dup-${index}`} poster={poster} mode={mode} />
           ))}
         </div>
       </div>
@@ -230,15 +253,19 @@ function LuxuryMarquee({ data, speed, vertical = false, reverse = false }: { dat
   )
 }
 
-function PosterCard({ poster, vertical }: { poster: any, vertical: boolean }) {
-  // Pre-calculate aspect ratio so height is reserved before image loads. Prevents layout jumping!
+function PosterCard({ poster, mode }: { poster: any, mode: 'scroll' | 'slide' }) {
   const dim = poster.image?.asset?.metadata?.dimensions
   const aspectRatio = dim ? dim.width / dim.height : 1
 
+  // Width classes depend on the mode
+  // Scroll: 100% of the column width
+  // Slide: Fixed elegant width to show multiple across the screen
+  const widthClass = mode === 'scroll' ? 'w-full' : 'w-[20vw] min-w-[200px] shrink-0'
+
   return (
     <div 
-      className={`relative overflow-hidden bg-black/5 rounded-2xl group transition-transform duration-[1.5s] ease-out hover:scale-[1.03] hover:z-10 ${vertical ? 'w-full' : 'w-[75vw] md:w-[35vw] shrink-0'}`}
-      style={{ aspectRatio: vertical ? aspectRatio : undefined }}
+      className={`relative overflow-hidden bg-black/5 rounded-sm group transition-all duration-[1s] ease-out hover:scale-[1.05] hover:z-20 hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)] ${widthClass}`}
+      style={{ aspectRatio: mode === 'scroll' ? aspectRatio : undefined }}
     >
       {poster.image?.asset?.url ? (
         <img 

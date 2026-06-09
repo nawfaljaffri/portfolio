@@ -134,7 +134,7 @@ function LuxuryMarquee({ data, speed, vertical = false, reverse = false }: { dat
   const isDragging = useRef(false)
   const dragStartPos = useRef(0)
   const lastMousePos = useRef(0)
-  const animationRef = useRef<number>()
+  const animationRef = useRef<number>(0)
 
   const direction = reverse ? 1 : -1
 

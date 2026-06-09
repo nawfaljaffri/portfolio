@@ -51,30 +51,31 @@ const DIRECTORY: any[] = [
     type: 'folder',
     children: [
       {
-        name: 'neural-net-arch',
+        name: 'school-bus-tracker',
         type: 'project',
         date: '2024-03-15',
-        lang: 'Python / PyTorch',
-        status: 'ONLINE',
-        desc: 'Neural architecture search experiments.\nExplores evolutionary algorithms to\noptimize network topologies for low-power\nedge devices.',
-        links: '[GitHub] [Live Demo]'
+        lang: 'Map Integration',
+        status: 'ACTIVE',
+        desc: 'Traffic control & parent booking system to track children securely on their school routes.',
+        links: ''
       },
       {
-        name: 'spatial-os-web',
+        name: 'jern-language-app',
         type: 'project',
         date: '2024-02-28',
-        lang: 'TypeScript / WebGL',
+        lang: 'iOS / iPadOS',
         status: 'ONLINE',
-        desc: 'Browser-based operating system interface relying solely on canvas rendering.\nBuilt with custom shaders and immediate mode GUI concepts.',
-        links: '[GitHub]'
+        desc: 'Immersive language learning application built for dual-screen environments.',
+        links: '[App Store]'
       },
       {
-        name: 'poster-series-1',
+        name: 'masar-wayfinding',
         type: 'project',
         date: '2024-05-12',
-        lang: 'Illustrator / PS',
-        status: 'PUBLISHED',
-        desc: 'A series of brutalist posters exploring\nthe dichotomy of brutalism and digital noise.\nExhibited at Dubai Design Week.'
+        lang: 'React Native',
+        status: 'PROTOTYPE',
+        desc: 'Digital wayfinding solution mapping complex indoor university spaces.',
+        links: ''
       }
     ]
   },
@@ -739,7 +740,7 @@ function CRTScreen({
         ctx.font = `${fontSize}px ${activeFont.css}`;
         
         const logoX = 2 * charW;
-        const logoY = (offsetY + 3) * charH;
+        const logoY = (offsetY + 2) * charH;
         
         const texAspect = 2048 / 1024;
         const displayAspect = viewport.width / viewport.height;
@@ -762,8 +763,8 @@ function CRTScreen({
         
         ctx.fillStyle = activeTheme.dim;
         ctx.font = `${Math.floor(charH * 0.65)}px ${activeFont.css}`;
-        // Position subtitle exactly on the 4th grid row (`y = 3 * charH`)
-        ctx.fillText("            [ CREATIVE / ENGINEER ]", 0, 3 * charH);
+        // Position subtitle lower
+        ctx.fillText("            [ CREATIVE / ENGINEER ]", 0, 3.8 * charH);
         
         ctx.restore();
     }

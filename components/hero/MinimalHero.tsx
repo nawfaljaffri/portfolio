@@ -20,7 +20,7 @@ export default function MinimalHero() {
   }
 
   return (
-    <div className="relative w-full h-screen min-h-screen bg-white text-[#111] flex flex-col justify-between pt-8 md:pt-12 cursor-none">
+    <div className="relative w-full h-screen min-h-screen bg-white text-[#111] flex flex-col justify-between pt-8 md:pt-12 md:cursor-none">
       <CustomCursor />
       
       {/* Top Nav */}
@@ -46,7 +46,6 @@ export default function MinimalHero() {
         </div>
         <div className="col-span-1 text-right flex flex-col gap-2">
           <span>UAE, Dubai</span>
-          <span className="opacity-50">Local Time</span>
         </div>
       </motion.nav>
 

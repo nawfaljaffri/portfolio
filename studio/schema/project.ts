@@ -37,8 +37,24 @@ export default defineType({
       of: [{ type: 'string' }],
     }),
     defineField({
+      name: 'mockupDevice',
+      title: 'Mockup Device',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'iPhone', value: 'mockup-iphone' },
+          { title: 'iPad', value: 'mockup-ipad' },
+          { title: 'Terminal', value: 'terminal' },
+          { title: 'Pixel Art', value: 'pixel-art' },
+          { title: 'Full/None', value: 'full' }
+        ],
+        layout: 'radio'
+      },
+      initialValue: 'full'
+    }),
+    defineField({
       name: 'mainImage',
-      title: 'Main Image',
+      title: 'Main Image (for Mockup)',
       type: 'image',
       options: { hotspot: true },
     }),

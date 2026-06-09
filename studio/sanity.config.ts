@@ -5,7 +5,7 @@ import { schemaTypes } from './schema'
 export default defineConfig({
   name: 'default',
   title: 'Nawfal Portfolio',
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'dummy_project_id',
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'ix8hcmkh',
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   basePath: '/studio',
   plugins: [structureTool()],

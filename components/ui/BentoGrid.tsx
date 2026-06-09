@@ -102,25 +102,25 @@ export default function BentoGrid() {
             className={`group relative overflow-hidden rounded-[2.5rem] p-8 flex flex-col justify-between ${project.color} ${project.colSpan} ${project.rowSpan} transition-shadow duration-500 hover:shadow-xl cursor-pointer`}
           >
             {/* Text Content */}
-            <div className="z-10 relative">
+            <div className="z-20 relative pr-4">
               <span className="text-xs font-bold uppercase tracking-widest opacity-60 mb-2 block">
                 {project.category}
               </span>
               <h4 className="text-2xl font-bold tracking-tight mb-3">
                 {project.title}
               </h4>
-              <p className="text-sm font-medium opacity-80 max-w-sm">
+              <p className="text-sm font-medium opacity-80 max-w-sm md:max-w-[60%]">
                 {project.description}
               </p>
             </div>
 
             {/* Abstract Graphic Placeholder for Apps */}
-            {project.imageLayout !== 'terminal' && (
-              <div className="absolute -bottom-10 -right-10 w-3/4 h-3/4 bg-black/5 rounded-tl-[3rem] transform group-hover:-translate-y-4 group-hover:-translate-x-4 transition-transform duration-700 ease-out" />
+            {(project.imageLayout === 'full' || project.imageLayout === 'pixel-art') && (
+              <div className="absolute -bottom-10 -right-10 w-3/4 h-3/4 bg-black/5 rounded-tl-[3rem] transform group-hover:-translate-y-4 group-hover:-translate-x-4 transition-transform duration-700 ease-out z-0" />
             )}
 
             {project.imageLayout === 'terminal' && (
-              <div className="absolute -bottom-4 -right-4 w-64 h-48 bg-black border-[4px] border-gray-700 rounded-xl shadow-2xl transform group-hover:-translate-y-2 group-hover:-translate-x-2 transition-transform duration-700 ease-out flex flex-col overflow-hidden">
+              <div className="absolute -bottom-4 -right-4 w-64 h-48 bg-black border-[4px] border-gray-700 rounded-xl shadow-2xl transform group-hover:-translate-y-8 group-hover:-translate-x-4 transition-transform duration-700 ease-out flex flex-col overflow-hidden z-10">
                 <div className="h-6 w-full bg-gray-800 flex items-center px-2 gap-1">
                   <div className="w-2 h-2 rounded-full bg-red-500"></div>
                   <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
@@ -137,11 +137,21 @@ export default function BentoGrid() {
             )}
             
             {project.imageLayout === 'mockup-iphone' && (
-              <div className="absolute -bottom-16 right-8 w-40 h-80 bg-white border-[6px] border-black rounded-[2.5rem] shadow-lg transform group-hover:-translate-y-4 transition-transform duration-700 ease-out" />
+              <div className="absolute -bottom-24 right-8 w-40 h-80 bg-black border-[6px] border-black rounded-[2.5rem] shadow-lg transform group-hover:-translate-y-24 transition-transform duration-700 ease-out z-10 overflow-hidden flex flex-col items-center justify-start pt-4">
+                 {/* Internal Screen Area */}
+                 <div className="w-[90%] h-full bg-[#111] rounded-[2rem] border border-white/10 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs">
+                    ↓
+                 </div>
+              </div>
             )}
             
             {project.imageLayout === 'mockup-ipad' && (
-              <div className="absolute -bottom-20 -right-10 w-72 h-96 bg-white border-[8px] border-black rounded-[1.5rem] shadow-lg transform group-hover:-translate-y-6 transition-transform duration-700 ease-out" />
+              <div className="absolute -bottom-32 -right-10 w-72 h-96 bg-black border-[8px] border-black rounded-[1.5rem] shadow-lg transform group-hover:-translate-y-32 transition-transform duration-700 ease-out z-10 overflow-hidden flex items-center justify-center">
+                 {/* Internal Screen Area */}
+                 <div className="w-[95%] h-[95%] bg-[#111] rounded-[1rem] border border-white/10 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs">
+                    ↓
+                 </div>
+              </div>
             )}
           </motion.div>
         ))}

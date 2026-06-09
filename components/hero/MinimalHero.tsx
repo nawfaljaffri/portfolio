@@ -33,13 +33,13 @@ export default function MinimalHero() {
         <div className="col-span-1">
           <span className="font-black text-sm tracking-tight normal-case">Nawfal®</span>
         </div>
-        <div className="hidden md:flex flex-col gap-2">
+        <div className="col-span-1 flex flex-col gap-2">
           <a href="#projects" className="hover:opacity-50 transition-opacity cursor-pointer">Selected Works</a>
           <a href="#experience" className="hover:opacity-50 transition-opacity cursor-pointer">Experience</a>
           <a href="#about" className="hover:opacity-50 transition-opacity cursor-pointer">About</a>
           <Link href="/coding" className="hover:opacity-50 transition-opacity text-gray-500 cursor-pointer">Terminal</Link>
         </div>
-        <div className="hidden md:flex flex-col gap-2">
+        <div className="col-span-1 flex flex-col gap-2">
           <a href="mailto:nawfaljaffri@gmail.com" className="hover:opacity-50 transition-opacity cursor-pointer">Contact</a>
           <a href="https://www.linkedin.com/in/nawfaljaffri/" target="_blank" rel="noopener noreferrer" className="hover:opacity-50 transition-opacity cursor-pointer">LinkedIn</a>
           <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="hover:opacity-50 transition-opacity cursor-pointer">CV / Resume</a>

@@ -34,9 +34,10 @@ export default function MinimalHero() {
           <span className="font-black text-sm tracking-tight normal-case">Nawfal®</span>
         </div>
         <div className="col-span-1 flex flex-col gap-2">
-          <a href="#projects" className="hover:opacity-50 transition-opacity cursor-pointer">Selected Works</a>
-          <a href="#experience" className="hover:opacity-50 transition-opacity cursor-pointer">Experience</a>
-          <a href="#about" className="hover:opacity-50 transition-opacity cursor-pointer">About</a>
+          <a href="/#projects" className="hover:opacity-50 transition-opacity cursor-pointer">Selected Works</a>
+          <a href="/#experience" className="hover:opacity-50 transition-opacity cursor-pointer">Experience</a>
+          <Link href="/archive" className="hover:opacity-50 transition-opacity cursor-pointer">Archive</Link>
+          <a href="/#about" className="hover:opacity-50 transition-opacity cursor-pointer">About</a>
           <Link href="/coding" className="hover:opacity-50 transition-opacity text-gray-500 cursor-pointer">Terminal</Link>
         </div>
         <div className="col-span-1 flex flex-col gap-2">

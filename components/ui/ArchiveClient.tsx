@@ -7,24 +7,27 @@ import { urlForImage } from '@/lib/sanity/image'
 type ViewMode = 'grid' | 'scroll' | 'slide'
 
 export default function ArchiveClient({ items }: { items: any[] }) {
-  const [viewMode, setViewMode] = useState<ViewMode>('scroll')
+  const [viewMode, setViewMode] = useState<ViewMode>('slide')
 
-  // We duplicate items slightly just to ensure we have enough content to fill the screen initially
-  const paddedItems = [...items, ...items, ...items, ...items, ...items]
+  // Generate heavily duplicated arrays so the layouts look rich even with only 4 posters
+  const massiveItems = []
+  for (let i = 0; i < 20; i++) {
+    massiveItems.push(...items)
+  }
 
-  // Splitting into columns for the Scroll (Masonry) view
-  const scrollCol1 = paddedItems.filter((_, i) => i % 5 === 0)
-  const scrollCol2 = paddedItems.filter((_, i) => i % 5 === 1)
-  const scrollCol3 = paddedItems.filter((_, i) => i % 5 === 2)
-  const scrollCol4 = paddedItems.filter((_, i) => i % 5 === 3)
-  const scrollCol5 = paddedItems.filter((_, i) => i % 5 === 4)
+  // Generate 5 columns for the Scroll (Masonry) view
+  const scrollCol1 = massiveItems.filter((_, i) => i % 5 === 0)
+  const scrollCol2 = massiveItems.filter((_, i) => i % 5 === 1)
+  const scrollCol3 = massiveItems.filter((_, i) => i % 5 === 2)
+  const scrollCol4 = massiveItems.filter((_, i) => i % 5 === 3)
+  const scrollCol5 = massiveItems.filter((_, i) => i % 5 === 4)
 
   return (
     <main className="min-h-screen bg-white text-[#111] selection:bg-black selection:text-white pt-24 pb-32 overflow-hidden">
       <div className="w-full mx-auto px-6 md:px-12 flex flex-col h-screen">
         
         {/* Header */}
-        <div className="flex flex-col relative mb-12 shrink-0 max-w-screen-2xl mx-auto w-full">
+        <div className="flex flex-col relative mb-12 shrink-0 max-w-screen-2xl mx-auto w-full z-50">
           <Link href="/" className="absolute -top-16 left-0 flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:opacity-50 transition-opacity">
             <span className="text-lg leading-none">&larr;</span> Back Home
           </Link>
@@ -74,26 +77,26 @@ export default function ArchiveClient({ items }: { items: any[] }) {
                 <div 
                   style={{ 
                     display: 'grid', 
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', 
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', 
                     gap: '4rem 2rem' 
                   }}
                 >
-                  {items.map((poster, index) => (
+                  {massiveItems.slice(0, 40).map((poster, index) => (
                     <div key={`${poster._id}-${index}`} className="flex flex-col items-center group cursor-pointer">
                       {/* Number Top Left of Cell */}
-                      <div className="w-full text-left mb-6">
+                      <div className="w-full text-left mb-4">
                         <span className="text-[10px] font-bold tracking-widest opacity-40">
                           {(index + 1).toString().padStart(2, '0')}.
                         </span>
                       </div>
                       
                       {/* Tiny Image */}
-                      <div className="w-2/3 max-w-[150px] aspect-[3/4] relative transition-transform duration-700 ease-out group-hover:scale-110 group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)] bg-black/5">
+                      <div className="w-full aspect-[3/4] relative transition-transform duration-700 ease-out group-hover:scale-110 group-hover:shadow-2xl bg-black/5">
                         {poster.image?.asset?.url && (
                           <img 
                             src={urlForImage(poster.image).url()} 
                             alt={poster.title || 'Poster'} 
-                            className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
+                            className="w-full h-full object-cover"
                           />
                         )}
                       </div>
@@ -108,14 +111,13 @@ export default function ArchiveClient({ items }: { items: any[] }) {
               <div className="w-full h-full relative group">
                 <div 
                   className="items-start h-full"
-                  style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.5rem' }}
+                  style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '2rem' }}
                 >
-                  {/* We pass a custom mode identifier so PosterCard knows to use Apple-esque styling */}
-                  <LuxuryMarquee data={scrollCol1} speed={0.5} vertical={true} mode="scroll" />
-                  <LuxuryMarquee data={scrollCol2} speed={0.8} vertical={true} reverse={true} mode="scroll" />
-                  <LuxuryMarquee data={scrollCol3} speed={0.4} vertical={true} mode="scroll" />
-                  <LuxuryMarquee data={scrollCol4} speed={0.7} vertical={true} reverse={true} mode="scroll" />
-                  <LuxuryMarquee data={scrollCol5} speed={0.6} vertical={true} mode="scroll" />
+                  <LuxuryMarquee data={scrollCol1} speed={0.4} vertical={true} mode="scroll" />
+                  <LuxuryMarquee data={scrollCol2} speed={0.6} vertical={true} reverse={true} mode="scroll" />
+                  <LuxuryMarquee data={scrollCol3} speed={0.3} vertical={true} mode="scroll" />
+                  <LuxuryMarquee data={scrollCol4} speed={0.5} vertical={true} reverse={true} mode="scroll" />
+                  <LuxuryMarquee data={scrollCol5} speed={0.4} vertical={true} mode="scroll" />
                 </div>
                 {/* Edge Fades */}
                 <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white to-transparent pointer-events-none z-10" />
@@ -123,10 +125,10 @@ export default function ArchiveClient({ items }: { items: any[] }) {
               </div>
             )}
 
-            {/* SLIDE MODE (Edge-to-Edge Horizontal Strip - Many items) */}
+            {/* SLIDE MODE (Edge-to-Edge Horizontal Strip with Expanding Widths) */}
             {viewMode === 'slide' && (
-              <div className="absolute inset-0 flex items-center -mx-12 overflow-visible">
-                <LuxuryMarquee data={paddedItems} speed={1.2} vertical={false} mode="slide" />
+              <div className="absolute inset-0 flex items-center justify-center -mx-12 overflow-visible">
+                <LuxuryMarquee data={massiveItems.slice(0, 30)} speed={1.2} vertical={false} mode="slide" />
               </div>
             )}
 
@@ -137,6 +139,21 @@ export default function ArchiveClient({ items }: { items: any[] }) {
       <style dangerouslySetInnerHTML={{__html: `
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Custom physics for Slide mode expansions */
+        .slide-item {
+          width: 15vw;
+          min-width: 150px;
+          height: 45vh;
+          transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .slide-item:hover {
+          width: 45vw;
+          min-width: 450px;
+          transform: scale(1.02);
+          z-index: 20;
+          box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+        }
       `}} />
     </main>
   )
@@ -213,16 +230,16 @@ function LuxuryMarquee({ data, speed, vertical = false, reverse = false, mode }:
   }
 
   const handleMouseEnter = () => {
-    if (!isDragging.current) targetSpeed.current = speed * 0.1 // Slow down gracefully to 10% speed
+    if (!isDragging.current) targetSpeed.current = speed * 0.1 // Slow down gracefully
   }
 
   const handleMouseLeave = () => {
     isDragging.current = false
-    targetSpeed.current = speed // Accelerate gracefully back to 100% speed
+    targetSpeed.current = speed // Accelerate gracefully back
     if (containerRef.current) containerRef.current.style.cursor = 'grab'
   }
 
-  const gapClass = vertical ? 'gap-6' : 'gap-12'
+  const gapClass = vertical ? 'gap-8' : 'gap-4'
   const flexDir = vertical ? 'flex-col' : 'flex-row items-center'
 
   return (
@@ -257,25 +274,34 @@ function PosterCard({ poster, mode }: { poster: any, mode: 'scroll' | 'slide' })
   const dim = poster.image?.asset?.metadata?.dimensions
   const aspectRatio = dim ? dim.width / dim.height : 1
 
-  // Width classes depend on the mode
-  // Scroll: 100% of the column width
-  // Slide: Fixed elegant width to show multiple across the screen
-  const widthClass = mode === 'scroll' ? 'w-full' : 'w-[20vw] min-w-[200px] shrink-0'
+  if (mode === 'scroll') {
+    return (
+      <div 
+        className="relative overflow-hidden bg-black/5 rounded-sm group transition-all duration-[1s] ease-out hover:scale-[1.05] hover:z-20 hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)] w-full"
+        style={{ aspectRatio }}
+      >
+        {poster.image?.asset?.url && (
+          <img 
+            src={urlForImage(poster.image).url()} 
+            alt={poster.title || 'Poster'} 
+            className="w-full h-full object-cover pointer-events-none" 
+            draggable="false"
+          />
+        )}
+      </div>
+    )
+  }
 
+  // SLIDE MODE
   return (
-    <div 
-      className={`relative overflow-hidden bg-black/5 rounded-sm group transition-all duration-[1s] ease-out hover:scale-[1.05] hover:z-20 hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)] ${widthClass}`}
-      style={{ aspectRatio: mode === 'scroll' ? aspectRatio : undefined }}
-    >
-      {poster.image?.asset?.url ? (
+    <div className="relative overflow-hidden bg-black/5 rounded-md group slide-item cursor-pointer">
+      {poster.image?.asset?.url && (
         <img 
           src={urlForImage(poster.image).url()} 
           alt={poster.title || 'Poster'} 
-          className="w-full h-full object-cover pointer-events-none" 
+          className="w-full h-full object-cover pointer-events-none transition-transform duration-[2s] ease-out group-hover:scale-105" 
           draggable="false"
         />
-      ) : (
-        <div className="w-full h-full" />
       )}
     </div>
   )

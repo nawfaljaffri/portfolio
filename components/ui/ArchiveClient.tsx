@@ -152,16 +152,16 @@ function VerticalMarquee({ data, speed, reverse = false }: { data: any[], speed:
     <div className="h-full overflow-hidden w-full relative">
       <div 
         className={`flex flex-col gap-4 md:gap-8 w-full ${reverse ? 'animate-scroll-down' : 'animate-scroll-up'}`}
-        style={{ animationDuration: \`\${speed}s\` }}
+        style={{ animationDuration: `${speed}s` }}
       >
         <div className="flex flex-col gap-4 md:gap-8 w-full">
           {data.map((poster, index) => (
-            <PosterCard key={\`\${poster._id}-\${index}\`} poster={poster} />
+            <PosterCard key={`${poster._id}-${index}`} poster={poster} />
           ))}
         </div>
         <div className="flex flex-col gap-4 md:gap-8 w-full">
           {data.map((poster, index) => (
-            <PosterCard key={\`\${poster._id}-dup-\${index}\`} poster={poster} />
+            <PosterCard key={`${poster._id}-dup-${index}`} poster={poster} />
           ))}
         </div>
       </div>
@@ -174,18 +174,18 @@ function HorizontalMarquee({ data, speed }: { data: any[], speed: number }) {
     <div className="w-full overflow-hidden whitespace-nowrap flex items-center">
       <div 
         className="flex items-center gap-8 animate-scroll-left"
-        style={{ animationDuration: \`\${speed}s\` }}
+        style={{ animationDuration: `${speed}s` }}
       >
         <div className="flex items-center gap-8">
           {data.map((poster, index) => (
-            <div key={\`\${poster._id}-\${index}\`} className="w-[40vw] md:w-[25vw] shrink-0">
+            <div key={`${poster._id}-${index}`} className="w-[40vw] md:w-[25vw] shrink-0">
               <PosterCard poster={poster} />
             </div>
           ))}
         </div>
         <div className="flex items-center gap-8">
           {data.map((poster, index) => (
-            <div key={\`\${poster._id}-dup-\${index}\`} className="w-[40vw] md:w-[25vw] shrink-0">
+            <div key={`${poster._id}-dup-${index}`} className="w-[40vw] md:w-[25vw] shrink-0">
               <PosterCard poster={poster} />
             </div>
           ))}

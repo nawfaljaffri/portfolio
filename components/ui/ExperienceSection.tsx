@@ -173,13 +173,13 @@ export default function ExperienceSection() {
             {paddedExperience.map((item: any, i) => (
               <div 
                 key={i} 
-                className="p-4 md:p-6 w-full flex flex-col justify-center items-center"
+                className="p-8 md:p-12 lg:p-16 w-full flex flex-col justify-center items-center"
                 style={{ order: getOrder(i) }}
               >
                 {!item.isPlaceholder && (
-                  <div className="w-full bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-sm hover:shadow-xl hover:border-black/20 transition-all duration-300 relative group text-left">
+                  <div className="w-full bg-white/70 backdrop-blur-2xl border border-white shadow-xl hover:shadow-2xl hover:-translate-y-2 hover:bg-white transition-all duration-500 relative group text-left rounded-3xl p-6 md:p-8">
                     <div className="mb-6">
-                      <span className="text-[10px] font-bold uppercase tracking-widest opacity-50 bg-gray-100 px-2 py-1 rounded-sm">{item.location}</span>
+                      <span className="text-[10px] font-bold uppercase tracking-widest opacity-50 bg-black/5 px-2 py-1 rounded-sm">{item.location}</span>
                       <h4 className="text-xl md:text-2xl font-bold tracking-tight mt-3">{item.company}</h4>
                     </div>
                     

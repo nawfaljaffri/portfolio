@@ -1,134 +1,52 @@
 'use client'
 
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef } from 'react'
 import { motion, useScroll, useSpring } from 'framer-motion'
 
 const experience = [
-  {
-    company: "Susty",
-    location: "Dubai, UAE",
-    roles: [
-      { title: "Application Content Developer", date: "05/2025–Present" }
-    ]
-  },
-  {
-    company: "AIESEC in UAE",
-    location: "Abu Dhabi",
-    roles: [
-      { title: "Marketing Local Vice President", date: "05/2026–Present" }
-    ]
-  },
-  {
-    company: "University Of Birmingham Dubai",
-    location: "Dubai, UAE",
-    roles: [
-      { title: "Google Developer's Group Lead", date: "05/2026–Present" },
-      { title: "Founder & VP, Food and Health Society", date: "09/2025–06/2026" },
-      { title: "Lead Graphic Designer, Student Association", date: "09/2025–Present" }
-    ]
-  },
-  {
-    company: "Alyx Society",
-    location: "Dubai, UAE",
-    roles: [
-      { title: "Director of Event Management", date: "10/2023–11/2024" },
-      { title: "Media and Marketing Co-Head", date: "04/2023–10/2023" }
-    ]
-  },
-  {
-    company: "Unipreneur Inc.",
-    location: "Dubai, UAE",
-    roles: [
-      { title: "Event Co-ordinator & Ambassador", date: "10/2023–12/2024" }
-    ]
-  },
-  {
-    company: "QuixMun",
-    location: "Dubai, UAE",
-    roles: [
-      { title: "Head of Business Development", date: "08/2023–06/2024" }
-    ]
-  }
+  { company: "Susty", location: "Dubai, UAE", roles: [{ title: "Application Content Developer", date: "05/2025–Present" }] },
+  { company: "AIESEC in UAE", location: "Abu Dhabi", roles: [{ title: "Marketing Local Vice President", date: "05/2026–Present" }] },
+  { company: "University Of Birmingham Dubai", location: "Dubai, UAE", roles: [{ title: "Google Developer's Group Lead", date: "05/2026–Present" }, { title: "Founder & VP, Food and Health Society", date: "09/2025–06/2026" }, { title: "Lead Graphic Designer, Student Association", date: "09/2025–Present" }] },
+  { company: "Alyx Society", location: "Dubai, UAE", roles: [{ title: "Director of Event Management", date: "10/2023–11/2024" }, { title: "Media and Marketing Co-Head", date: "04/2023–10/2023" }] },
+  { company: "Unipreneur Inc.", location: "Dubai, UAE", roles: [{ title: "Event Co-ordinator & Ambassador", date: "10/2023–12/2024" }] },
+  { company: "QuixMun", location: "Dubai, UAE", roles: [{ title: "Head of Business Development", date: "08/2023–06/2024" }] }
 ]
 
+const ExperienceCard = ({ item }: { item: any }) => (
+  <div className="w-full bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative group text-left rounded-[2rem] p-6 z-30">
+    <div className="mb-4">
+      <span className="text-[9px] font-bold uppercase tracking-widest opacity-50 bg-black/5 px-2 py-1 rounded-sm">{item.location}</span>
+      <h4 className="text-xl font-bold tracking-tight mt-2 leading-tight">{item.company}</h4>
+    </div>
+    
+    <div className="flex flex-col gap-3">
+      {item.roles.map((role: any, roleIdx: number) => (
+        <div key={roleIdx} className={`flex flex-col gap-1 ${roleIdx !== 0 ? 'pt-3 border-t border-black/5' : ''}`}>
+          <p className="text-sm font-semibold opacity-90 leading-snug">{role.title}</p>
+          <span className="text-[9px] font-bold opacity-40 uppercase tracking-widest">{role.date}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+)
+
 export default function ExperienceSection() {
-  const sectionRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
+    target: containerRef,
     offset: ["start center", "end center"]
   })
 
-  // Smooth bouncy fill
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 60, damping: 20 })
 
-  const [cols, setCols] = useState(3)
-  const [mounted, setMounted] = useState(false)
-  const [size, setSize] = useState({ width: 0, height: 0 })
-
-  useEffect(() => {
-    setMounted(true)
-    const updateCols = () => {
-      if (window.innerWidth < 768) setCols(1)
-      else if (window.innerWidth < 1024) setCols(2)
-      else setCols(3)
-    }
-    updateCols()
-    window.addEventListener('resize', updateCols)
-    return () => window.removeEventListener('resize', updateCols)
-  }, [])
-
-  // Exact pixel measurement to prevent SVG vector-effect bugs with framer-motion pathLength
-  useEffect(() => {
-    if (!containerRef.current) return
-    const observer = new ResizeObserver(entries => {
-      setSize({
-        width: entries[0].contentRect.width,
-        height: entries[0].contentRect.height
-      })
-    })
-    observer.observe(containerRef.current)
-    return () => observer.disconnect()
-  }, [])
-
-  const paddedExperience = [...experience]
-  while (paddedExperience.length % cols !== 0) {
-    paddedExperience.push({ isPlaceholder: true } as any)
-  }
-
-  const rows = Math.ceil(paddedExperience.length / cols)
-
-  // Generate exact pixel coordinates for the snake path
-  let d = ""
-  if (size.width > 0 && size.height > 0) {
-    for (let i = 0; i < experience.length; i++) {
-      const r = Math.floor(i / cols)
-      const c = r % 2 === 0 ? (i % cols) : (cols - 1 - (i % cols))
-      const x = (c + 0.5) * (size.width / cols)
-      const y = (r + 0.5) * (size.height / rows)
-      if (i === 0) d += `M ${x} ${y} `
-      else d += `L ${x} ${y} `
-    }
-  }
-
-  const getOrder = (i: number) => {
-    const r = Math.floor(i / cols)
-    if (r % 2 === 0) return i
-    const start = r * cols
-    const offset = i - start
-    return start + (cols - 1 - offset)
-  }
-
-  if (!mounted) return <section className="min-h-screen" />
-
   return (
-    <section id="experience" className="relative w-full bg-white text-[#111] py-16 md:py-24" ref={sectionRef}>
+    <section id="experience" className="relative w-full bg-[#fcfcfc] text-[#111] py-24 md:py-32 border-t border-black/5">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         
         {/* Title Matching 'Selected Works' format */}
-        <div className="mb-16">
-          <h2 className="text-sm font-bold uppercase tracking-widest opacity-60 border-b border-black/10 pb-4 mb-4">
+        <div className="mb-24">
+          <h2 className="text-xs font-bold uppercase tracking-widest border-b border-black/10 pb-4 mb-4 opacity-80">
             Professional Timeline
           </h2>
           <h3 className="text-5xl md:text-7xl font-black tracking-tighter">Experience</h3>
@@ -136,67 +54,64 @@ export default function ExperienceSection() {
         
         <div className="relative w-full" ref={containerRef}>
           
-          {size.width > 0 && (
-            <>
-              {/* SVG Snake Line Background */}
-              <svg className="absolute inset-0 pointer-events-none z-0" width={size.width} height={size.height}>
-                <path 
-                  d={d} 
-                  fill="none" 
-                  stroke="#f3f4f6"
-                  strokeWidth="24"
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                />
-              </svg>
+          {/* Desktop Central Line */}
+          <div className="hidden md:block absolute left-1/2 top-4 bottom-4 w-3 bg-gray-200 -translate-x-1/2 rounded-full z-0" />
+          <motion.div 
+            className="hidden md:block absolute left-1/2 top-4 bottom-4 w-3 bg-black -translate-x-1/2 rounded-full origin-top z-10"
+            style={{ scaleY: smoothProgress }}
+          />
 
-              {/* SVG Snake Line Foreground (Animated) */}
-              <svg className="absolute inset-0 pointer-events-none z-10" width={size.width} height={size.height}>
-                <motion.path 
-                  d={d} 
-                  fill="none" 
-                  stroke="#111"
-                  strokeWidth="24"
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                  style={{ pathLength: smoothProgress }}
-                />
-              </svg>
-            </>
-          )}
+          {/* Mobile Left Line */}
+          <div className="md:hidden absolute left-4 top-4 bottom-4 w-2 bg-gray-200 -translate-x-1/2 rounded-full z-0" />
+          <motion.div 
+            className="md:hidden absolute left-4 top-4 bottom-4 w-2 bg-black -translate-x-1/2 rounded-full origin-top z-10"
+            style={{ scaleY: smoothProgress }}
+          />
 
-          {/* Grid of Cards */}
-          <div 
-            className="grid w-full relative z-20"
-            style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
-          >
-            {paddedExperience.map((item: any, i) => (
-              <div 
-                key={i} 
-                className="p-8 md:p-12 lg:p-16 w-full flex flex-col justify-center items-center"
-                style={{ order: getOrder(i) }}
-              >
-                {!item.isPlaceholder && (
-                  <div className="w-full bg-white/70 backdrop-blur-2xl border border-white shadow-xl hover:shadow-2xl hover:-translate-y-2 hover:bg-white transition-all duration-500 relative group text-left rounded-3xl p-6 md:p-8">
-                    <div className="mb-6">
-                      <span className="text-[10px] font-bold uppercase tracking-widest opacity-50 bg-black/5 px-2 py-1 rounded-sm">{item.location}</span>
-                      <h4 className="text-xl md:text-2xl font-bold tracking-tight mt-3">{item.company}</h4>
-                    </div>
-                    
-                    <div className="flex flex-col gap-4">
-                      {item.roles.map((role: any, roleIdx: number) => (
-                        <div key={roleIdx} className={`flex flex-col gap-1 ${roleIdx !== 0 ? 'pt-4 border-t border-black/5' : ''}`}>
-                          <p className="text-sm md:text-base font-semibold opacity-90">{role.title}</p>
-                          <span className="text-[10px] font-bold opacity-40 uppercase tracking-widest">{role.date}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+          {/* Mobile Layout (Standard 1 column) */}
+          <div className="md:hidden flex flex-col gap-12 w-full pl-10 relative z-20">
+            {experience.map((item, i) => (
+              <div key={i} className="relative w-full group">
+                <div className="absolute top-12 -left-10 w-10 h-1 bg-gray-200 group-hover:bg-black transition-colors duration-500 z-0" />
+                <div className="absolute top-12 -left-[20px] -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white border-[3px] border-gray-300 group-hover:border-black group-hover:scale-125 transition-all duration-500 z-20" />
+                <ExperienceCard item={item} />
               </div>
             ))}
           </div>
-          
+
+          {/* Desktop Layout (Masonry 2 column alternating) */}
+          <div className="hidden md:flex flex-row gap-16 relative z-20">
+            
+            {/* Left Column */}
+            <div className="flex-1 flex flex-col gap-12">
+              {experience.map((item, i) => {
+                if (i % 2 !== 0) return null
+                return (
+                  <div key={i} className="relative w-full group">
+                    <div className="absolute top-16 -right-8 w-8 h-1 bg-gray-200 group-hover:bg-black transition-colors duration-500 z-0" />
+                    <div className="absolute top-16 -right-8 translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white border-[4px] border-gray-200 group-hover:border-black group-hover:scale-125 transition-all duration-500 z-20" />
+                    <ExperienceCard item={item} />
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Right Column (Staggered) */}
+            <div className="flex-1 flex flex-col gap-12 pt-32">
+              {experience.map((item, i) => {
+                if (i % 2 === 0) return null
+                return (
+                  <div key={i} className="relative w-full group">
+                    <div className="absolute top-16 -left-8 w-8 h-1 bg-gray-200 group-hover:bg-black transition-colors duration-500 z-0" />
+                    <div className="absolute top-16 -left-8 -translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white border-[4px] border-gray-200 group-hover:border-black group-hover:scale-125 transition-all duration-500 z-20" />
+                    <ExperienceCard item={item} />
+                  </div>
+                )
+              })}
+            </div>
+
+          </div>
+
         </div>
       </div>
     </section>

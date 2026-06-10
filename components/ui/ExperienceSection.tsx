@@ -52,18 +52,20 @@ const experience = [
 ]
 
 export default function ExperienceSection() {
+  const sectionRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   
   const { scrollYProgress } = useScroll({
-    target: containerRef,
+    target: sectionRef,
     offset: ["start center", "end center"]
   })
 
-  // Add a premium spring physics to the line drawing
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 50, damping: 20 })
+  // Smooth bouncy fill
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 60, damping: 20 })
 
   const [cols, setCols] = useState(3)
   const [mounted, setMounted] = useState(false)
+  const [size, setSize] = useState({ width: 0, height: 0 })
 
   useEffect(() => {
     setMounted(true)
@@ -77,7 +79,19 @@ export default function ExperienceSection() {
     return () => window.removeEventListener('resize', updateCols)
   }, [])
 
-  // Pad the array so the Grid auto-placement always has complete rows
+  // Exact pixel measurement to prevent SVG vector-effect bugs with framer-motion pathLength
+  useEffect(() => {
+    if (!containerRef.current) return
+    const observer = new ResizeObserver(entries => {
+      setSize({
+        width: entries[0].contentRect.width,
+        height: entries[0].contentRect.height
+      })
+    })
+    observer.observe(containerRef.current)
+    return () => observer.disconnect()
+  }, [])
+
   const paddedExperience = [...experience]
   while (paddedExperience.length % cols !== 0) {
     paddedExperience.push({ isPlaceholder: true } as any)
@@ -85,90 +99,94 @@ export default function ExperienceSection() {
 
   const rows = Math.ceil(paddedExperience.length / cols)
 
-  // Generate the Snake Path coordinates
+  // Generate exact pixel coordinates for the snake path
   let d = ""
-  for (let i = 0; i < experience.length; i++) {
-    const r = Math.floor(i / cols)
-    const c = r % 2 === 0 ? (i % cols) : (cols - 1 - (i % cols))
-    const x = (c + 0.5) * (100 / cols)
-    const y = (r + 0.5) * (100 / rows)
-    if (i === 0) d += `M ${x} ${y} `
-    else d += `L ${x} ${y} `
+  if (size.width > 0 && size.height > 0) {
+    for (let i = 0; i < experience.length; i++) {
+      const r = Math.floor(i / cols)
+      const c = r % 2 === 0 ? (i % cols) : (cols - 1 - (i % cols))
+      const x = (c + 0.5) * (size.width / cols)
+      const y = (r + 0.5) * (size.height / rows)
+      if (i === 0) d += `M ${x} ${y} `
+      else d += `L ${x} ${y} `
+    }
   }
 
-  // Calculate the visual order for the grid items to match the snake path
   const getOrder = (i: number) => {
     const r = Math.floor(i / cols)
-    if (r % 2 === 0) return i // Left to Right
+    if (r % 2 === 0) return i
     const start = r * cols
     const offset = i - start
-    return start + (cols - 1 - offset) // Right to Left
+    return start + (cols - 1 - offset)
   }
 
-  if (!mounted) return <section className="h-screen" /> // Prevent hydration flash
+  if (!mounted) return <section className="min-h-screen" />
 
   return (
-    <section id="experience" className="relative w-full bg-white text-[#111] py-24 md:py-32">
+    <section id="experience" className="relative w-full bg-white text-[#111] py-16 md:py-24" ref={sectionRef}>
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         
-        {/* Title */}
-        <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-16 text-center uppercase">Experience</h2>
+        {/* Title Matching 'Selected Works' format */}
+        <div className="mb-16">
+          <h2 className="text-sm font-bold uppercase tracking-widest opacity-60 border-b border-black/10 pb-4 mb-4">
+            Professional Timeline
+          </h2>
+          <h3 className="text-5xl md:text-7xl font-black tracking-tighter">Experience</h3>
+        </div>
         
         <div className="relative w-full" ref={containerRef}>
           
-          {/* SVG Snake Line Background */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path 
-              d={d} 
-              fill="none" 
-              stroke="#f3f4f6" // Gray track
-              strokeWidth="12" 
-              vectorEffect="non-scaling-stroke"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-            />
-          </svg>
+          {size.width > 0 && (
+            <>
+              {/* SVG Snake Line Background */}
+              <svg className="absolute inset-0 pointer-events-none z-0" width={size.width} height={size.height}>
+                <path 
+                  d={d} 
+                  fill="none" 
+                  stroke="#f3f4f6"
+                  strokeWidth="24"
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                />
+              </svg>
 
-          {/* SVG Snake Line Foreground (Animated) */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <motion.path 
-              d={d} 
-              fill="none" 
-              stroke="#111" // Black fill
-              strokeWidth="12" 
-              vectorEffect="non-scaling-stroke"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              style={{ pathLength: smoothProgress }}
-            />
-          </svg>
+              {/* SVG Snake Line Foreground (Animated) */}
+              <svg className="absolute inset-0 pointer-events-none z-10" width={size.width} height={size.height}>
+                <motion.path 
+                  d={d} 
+                  fill="none" 
+                  stroke="#111"
+                  strokeWidth="24"
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                  style={{ pathLength: smoothProgress }}
+                />
+              </svg>
+            </>
+          )}
 
           {/* Grid of Cards */}
           <div 
-            className="grid w-full h-full relative z-20"
-            style={{ 
-              gridTemplateColumns: `repeat(${cols}, 1fr)`,
-              gridAutoRows: '1fr'
-            }}
+            className="grid w-full relative z-20"
+            style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
           >
             {paddedExperience.map((item: any, i) => (
               <div 
                 key={i} 
-                className="p-4 md:p-6 w-full h-full flex flex-col"
+                className="p-4 md:p-6 w-full flex flex-col justify-center items-center"
                 style={{ order: getOrder(i) }}
               >
                 {!item.isPlaceholder && (
-                  <div className="w-full h-full bg-white border-2 border-black/5 rounded-[2rem] p-6 shadow-xl hover:shadow-2xl hover:-translate-y-2 hover:border-black/20 transition-all duration-300 flex flex-col relative group">
-                    {/* Inner Content */}
-                    <div className="mb-4">
-                      <span className="text-[10px] font-bold uppercase tracking-widest opacity-50 bg-gray-100 px-2 py-1 rounded-md">{item.location}</span>
-                      <h4 className="text-xl md:text-2xl font-bold tracking-tight mt-3 leading-tight">{item.company}</h4>
+                  <div className="w-full bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-sm hover:shadow-xl hover:border-black/20 transition-all duration-300 relative group text-left">
+                    <div className="mb-6">
+                      <span className="text-[10px] font-bold uppercase tracking-widest opacity-50 bg-gray-100 px-2 py-1 rounded-sm">{item.location}</span>
+                      <h4 className="text-xl md:text-2xl font-bold tracking-tight mt-3">{item.company}</h4>
                     </div>
                     
-                    <div className="flex flex-col gap-3 flex-grow justify-end mt-4">
-                      {item.roles.map((role, roleIdx) => (
-                        <div key={roleIdx} className={`flex flex-col gap-1 ${roleIdx !== 0 ? 'pt-3 border-t border-black/5' : ''}`}>
-                          <p className="text-sm md:text-base font-semibold opacity-90 leading-snug">{role.title}</p>
+                    <div className="flex flex-col gap-4">
+                      {item.roles.map((role: any, roleIdx: number) => (
+                        <div key={roleIdx} className={`flex flex-col gap-1 ${roleIdx !== 0 ? 'pt-4 border-t border-black/5' : ''}`}>
+                          <p className="text-sm md:text-base font-semibold opacity-90">{role.title}</p>
                           <span className="text-[10px] font-bold opacity-40 uppercase tracking-widest">{role.date}</span>
                         </div>
                       ))}

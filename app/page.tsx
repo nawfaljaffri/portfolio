@@ -33,7 +33,7 @@ export default function Home() {
       <ExperienceSection />
 
       {/* Contact Section */}
-      <section className="w-full max-w-7xl mx-auto px-6 md:px-12 py-32 flex flex-col items-center justify-center text-center">
+      <section className="w-full max-w-7xl mx-auto px-6 md:px-12 py-16 flex flex-col items-center justify-center text-center">
         <h2 className="text-sm font-bold uppercase tracking-widest opacity-50 mb-6">What's Next?</h2>
         <h3 className="text-5xl md:text-8xl font-black tracking-tighter mb-8">Let's Work Together</h3>
         <p className="max-w-xl mx-auto text-lg opacity-80 mb-12">
@@ -48,7 +48,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer id="contact" className="w-full max-w-7xl mx-auto border-t border-gray-200 bg-white px-6 md:px-12 py-16 mt-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+      <footer id="contact" className="w-full max-w-7xl mx-auto border-t border-gray-200 bg-white px-6 md:px-12 py-8 mt-4 mb-0 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
         <div>
           <p className="font-black text-lg tracking-tight">Nawfal ©2026</p>
           <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mt-2">All rights reserved</p>

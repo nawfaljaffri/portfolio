@@ -28,25 +28,29 @@ export default function MinimalHero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
-        className="w-full px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-semibold uppercase tracking-widest z-20"
+        className="w-full px-6 md:px-12 flex flex-col md:flex-row justify-between items-start md:items-start gap-8 md:gap-4 text-xs font-semibold uppercase tracking-widest z-20"
       >
-        <div className="col-span-1">
+        <div className="flex justify-between w-full md:w-auto">
           <span className="font-black text-sm tracking-tight normal-case">Nawfal®</span>
+          <span className="md:hidden opacity-50">UAE, Dubai</span>
         </div>
-        <div className="col-span-1 flex flex-col gap-2">
+        
+        <div className="flex flex-col gap-2">
           <a href="/#projects" className="hover:opacity-50 transition-opacity cursor-pointer">Selected Works</a>
           <a href="/#experience" className="hover:opacity-50 transition-opacity cursor-pointer">Experience</a>
           <Link href="/archive" className="hover:opacity-50 transition-opacity cursor-pointer">Archive</Link>
           <a href="/#about" className="hover:opacity-50 transition-opacity cursor-pointer">About</a>
           <Link href="/coding" className="hover:opacity-50 transition-opacity text-gray-500 cursor-pointer">Terminal</Link>
         </div>
-        <div className="col-span-1 flex flex-col gap-2">
+        
+        <div className="flex flex-col gap-2">
           <a href="mailto:nawfaljaffri@gmail.com" className="hover:opacity-50 transition-opacity cursor-pointer">Contact</a>
           <a href="https://www.linkedin.com/in/nawfaljaffri/" target="_blank" rel="noopener noreferrer" className="hover:opacity-50 transition-opacity cursor-pointer">LinkedIn</a>
           <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="hover:opacity-50 transition-opacity cursor-pointer">CV / Resume</a>
         </div>
-        <div className="col-span-1 text-right flex flex-col gap-2">
-          <span>UAE, Dubai</span>
+        
+        <div className="hidden md:flex flex-col gap-2 text-right">
+          <span className="opacity-50">UAE, Dubai</span>
         </div>
       </motion.nav>
 

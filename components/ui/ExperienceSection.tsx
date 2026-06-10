@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll } from 'framer-motion'
 
 const experience = [
   {
@@ -52,48 +52,57 @@ const experience = [
 ]
 
 export default function ExperienceSection() {
-  const targetRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   
-  // Creates a horizontal scroll effect mapped to the vertical scroll of the targetRef container
+  // Track scroll progress within the container for the vertical timeline line
   const { scrollYProgress } = useScroll({
-    target: targetRef,
+    target: containerRef,
+    offset: ["start center", "end center"]
   })
 
-  // Map 0 -> 1 scroll progress to 0% -> -80% horizontal translation
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-80%"])
-
   return (
-    <section ref={targetRef} id="experience" className="relative h-[300vh] bg-white text-[#111]">
-      <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+    <section id="experience" className="relative w-full bg-white text-[#111] py-24 md:py-32">
+      <div className="max-w-4xl mx-auto px-6 md:px-12">
+        <h2 className="text-sm font-bold uppercase tracking-widest border-b border-black/10 pb-4 mb-16 text-left opacity-60">Timeline</h2>
         
-        {/* Absolute Background Title */}
-        <div className="absolute top-12 left-6 md:left-12 z-10 w-[90vw]">
-          <h2 className="text-sm font-bold uppercase tracking-widest border-b border-black/10 pb-4 mb-4 text-left">Timeline</h2>
-          <h3 className="text-4xl md:text-6xl font-semibold tracking-tight text-left">Professional Experience</h3>
-        </div>
+        <div className="relative" ref={containerRef}>
+          {/* Background Line */}
+          <div className="absolute left-[15px] md:left-[31px] top-4 bottom-4 w-[2px] bg-gray-100 rounded-full" />
+          
+          {/* Animated Foreground Progress Line */}
+          <motion.div 
+            className="absolute left-[15px] md:left-[31px] top-4 bottom-4 w-[2px] bg-black origin-top rounded-full"
+            style={{ scaleY: scrollYProgress }}
+          />
 
-        {/* Scrolling Cards */}
-        <motion.div style={{ x }} className="flex gap-8 pl-6 md:pl-12 pt-32 pr-[50vw]">
-          {experience.map((item, idx) => (
-            <div 
-              key={idx} 
-              className="group w-[85vw] md:w-[40vw] h-[60vh] bg-gray-50 hover:bg-black hover:text-white transition-colors duration-500 rounded-[2.5rem] p-8 md:p-12 flex flex-col justify-between shrink-0 shadow-sm border border-black/5"
-            >
-               <div>
-                  <span className="text-xs font-bold uppercase tracking-widest opacity-40 group-hover:opacity-60 transition-opacity">{item.location}</span>
-                  <h4 className="text-3xl md:text-5xl font-medium tracking-tight mt-4">{item.company}</h4>
-               </div>
-               <div className="flex flex-col gap-6 overflow-y-auto pr-4 custom-scrollbar">
-                 {item.roles.map((role, roleIdx) => (
-                   <div key={roleIdx} className={`flex flex-col ${roleIdx !== 0 ? 'pt-6 border-t border-black/10 group-hover:border-white/20' : ''} transition-colors duration-500`}>
-                     <p className="text-xl md:text-2xl font-medium opacity-90">{role.title}</p>
-                     <span className="text-xs font-bold opacity-40 uppercase tracking-widest mt-2">{role.date}</span>
-                   </div>
-                 ))}
-               </div>
-            </div>
-          ))}
-        </motion.div>
+          <div className="flex flex-col gap-12">
+            {experience.map((item, idx) => (
+              <div key={idx} className="relative pl-12 md:pl-24 group">
+                
+                {/* Timeline Dot */}
+                <div className="absolute left-[11px] md:left-[27px] top-[32px] w-[10px] h-[10px] rounded-full bg-white border-[2px] border-gray-300 z-10 transition-all duration-500 group-hover:scale-150 group-hover:border-black" />
+                
+                {/* Timeline Card */}
+                <div className="bg-gray-50 border border-black/5 rounded-3xl p-8 md:p-10 shadow-sm hover:shadow-xl hover:bg-white transition-all duration-500">
+                  <div className="mb-6">
+                    <span className="text-[10px] font-bold uppercase tracking-widest opacity-40 bg-black/5 px-2 py-1 rounded-sm">{item.location}</span>
+                    <h4 className="text-2xl md:text-4xl font-bold tracking-tight mt-4">{item.company}</h4>
+                  </div>
+                  
+                  <div className="flex flex-col gap-4">
+                    {item.roles.map((role, roleIdx) => (
+                      <div key={roleIdx} className={`flex flex-col md:flex-row md:items-end justify-between gap-2 ${roleIdx !== 0 ? 'pt-4 border-t border-black/5' : ''}`}>
+                        <p className="text-lg md:text-xl font-semibold opacity-90">{role.title}</p>
+                        <span className="text-xs font-bold opacity-40 uppercase tracking-widest shrink-0">{role.date}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   )

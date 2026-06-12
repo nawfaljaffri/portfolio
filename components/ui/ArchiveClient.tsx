@@ -22,8 +22,8 @@ export default function ArchiveClient({ items }: { items: any[] }) {
   const scrollCol5 = safeItems.filter((_, i) => i % 5 === 4)
 
   return (
-    <main className="min-h-screen bg-white text-[#111] selection:bg-black selection:text-white pt-24 pb-32">
-      <div className="w-full mx-auto px-6 md:px-12 flex flex-col h-screen">
+    <main className="h-[100dvh] overflow-hidden bg-white text-[#111] selection:bg-black selection:text-white pt-16 md:pt-24 flex flex-col">
+      <div className="w-full flex-grow mx-auto px-6 md:px-12 flex flex-col relative overflow-hidden pb-0">
         
         {/* Header */}
         <div className="flex flex-col relative mb-12 shrink-0 max-w-screen-2xl mx-auto w-full z-50">
@@ -46,7 +46,7 @@ export default function ArchiveClient({ items }: { items: any[] }) {
             <p className="text-sm">Go to <a href="/studio" className="underline hover:opacity-50">/studio</a> to add your first poster!</p>
           </div>
         ) : (
-          <div className="relative w-full flex-grow overflow-hidden max-w-screen-2xl mx-auto">
+          <div className="relative w-full h-full flex-grow overflow-hidden max-w-screen-2xl mx-auto">
             {/* SCROLL MODE (Luxurious Vertical Masonry - 5 Columns) */}
             <div className="w-full h-full relative group">
               <div 
@@ -61,7 +61,7 @@ export default function ArchiveClient({ items }: { items: any[] }) {
               </div>
               {/* Edge Fades */}
               <div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-b from-white to-transparent pointer-events-none z-10" />
-              <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-white to-transparent pointer-events-none z-10" />
+              <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-white to-transparent pointer-events-none z-10" />
             </div>
 
           </div>
@@ -168,6 +168,10 @@ function LuxuryMarquee({ data, speed, vertical = false, reverse = false }: { dat
       onPointerCancel={handlePointerUp}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onWheel={(e) => {
+        const delta = vertical ? e.deltaY : e.deltaX
+        pos.current -= delta * 1.5
+      }}
     >
       <div ref={containerRef} className={`flex ${flexDir} ${gapClass} w-full will-change-transform`}>
         {/* Render Original Group */}

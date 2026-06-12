@@ -18,10 +18,7 @@ export default function ArchiveClient({ items }: { items: any[] }) {
 
   return (
     <main className="min-h-screen bg-white text-[#111] selection:bg-black selection:text-white pt-16 md:pt-24 flex flex-col overflow-x-hidden">
-      
-      {/* Global Viewport Fades for that Premium Look (fades posters at screen edges) */}
-      <div className="fixed top-0 left-0 w-full h-32 bg-gradient-to-b from-white to-transparent pointer-events-none z-[45]" />
-      <div className="fixed bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent pointer-events-none z-[45]" />
+
 
       <div className="w-full mx-auto px-6 md:px-12 flex flex-col relative pb-32">
         
@@ -123,10 +120,12 @@ function PosterCard({ poster }: { poster: any }) {
     >
       {(poster.isLocal || poster.image?.asset?.url) && (
         <img 
-          src={poster.isLocal ? poster.url : urlForImage(poster.image).url()} 
+          src={poster.isLocal ? poster.url : urlForImage(poster.image).width(800).url()} 
           alt={poster.title || 'Poster'} 
           className="w-full h-full object-cover pointer-events-none" 
           draggable="false"
+          loading="lazy"
+          decoding="async"
         />
       )}
     </div>

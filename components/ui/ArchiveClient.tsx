@@ -1,14 +1,10 @@
 'use client'
 
-import React, { useState, useRef, useEffect, useMemo } from 'react'
+import React, { useRef, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { urlForImage } from '@/lib/sanity/image'
 
-type ViewMode = 'grid' | 'scroll' | 'slide'
-
 export default function ArchiveClient({ items }: { items: any[] }) {
-  const [viewMode, setViewMode] = useState<ViewMode>('grid')
-
   // Ensure we have enough items for marquee if they only have a few, but don't duplicate if they have a ton
   const safeItems = useMemo(() => {
     let res = [...items]
@@ -40,28 +36,6 @@ export default function ArchiveClient({ items }: { items: any[] }) {
               <h1 className="text-6xl md:text-9xl font-semibold tracking-tighter mb-4">Archive</h1>
               <p className="max-w-sm text-sm font-medium opacity-60">A curated collection of posters, graphic design concepts, and visual experiments.</p>
             </div>
-            
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-widest opacity-40 mr-4">View Mode</span>
-              <button 
-                onClick={() => setViewMode('grid')}
-                className={`px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-full transition-colors ${viewMode === 'grid' ? 'bg-black text-white' : 'hover:bg-gray-100'}`}
-              >
-                Grid
-              </button>
-              <button 
-                onClick={() => setViewMode('scroll')}
-                className={`px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-full transition-colors ${viewMode === 'scroll' ? 'bg-black text-white' : 'hover:bg-gray-100'}`}
-              >
-                Scroll
-              </button>
-              <button 
-                onClick={() => setViewMode('slide')}
-                className={`px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-full transition-colors ${viewMode === 'slide' ? 'bg-black text-white' : 'hover:bg-gray-100'}`}
-              >
-                Slide
-              </button>
-            </div>
           </div>
         </div>
 
@@ -73,67 +47,22 @@ export default function ArchiveClient({ items }: { items: any[] }) {
           </div>
         ) : (
           <div className="relative w-full flex-grow overflow-hidden max-w-screen-2xl mx-auto">
-            
-            {/* GRID MODE (Editorial static numbered tiny images) */}
-            {viewMode === 'grid' && (
-              <div className="w-full h-full overflow-y-auto pb-32 hide-scrollbar">
-                <div 
-                  style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', 
-                    gap: '4rem 2rem' 
-                  }}
-                >
-                  {items.map((poster, index) => (
-                    <div key={`${poster._id}-${index}`} className="flex flex-col items-center group cursor-pointer">
-                      {/* Number Top Left of Cell */}
-                      <div className="w-full text-left mb-4">
-                        <span className="text-[10px] font-bold tracking-widest opacity-40">
-                          {(index + 1).toString().padStart(2, '0')}.
-                        </span>
-                      </div>
-                      
-                      {/* Image */}
-                      <div className="w-full relative transition-transform duration-700 ease-out group-hover:scale-110 group-hover:shadow-2xl bg-black/5">
-                        {(poster.isLocal || poster.image?.asset?.url) && (
-                          <img 
-                            src={poster.isLocal ? poster.url : urlForImage(poster.image).url()} 
-                            alt={poster.title || 'Poster'} 
-                            className="w-full h-auto object-contain"
-                          />
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
             {/* SCROLL MODE (Luxurious Vertical Masonry - 5 Columns) */}
-            {viewMode === 'scroll' && (
-              <div className="w-full h-full relative group">
-                <div 
-                  className="items-start h-full"
-                  style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '2rem' }}
-                >
-                  <LuxuryMarquee data={scrollCol1} speed={0.4} vertical={true} mode="scroll" />
-                  <LuxuryMarquee data={scrollCol2} speed={0.6} vertical={true} reverse={true} mode="scroll" />
-                  <LuxuryMarquee data={scrollCol3} speed={0.3} vertical={true} mode="scroll" />
-                  <LuxuryMarquee data={scrollCol4} speed={0.5} vertical={true} reverse={true} mode="scroll" />
-                  <LuxuryMarquee data={scrollCol5} speed={0.4} vertical={true} mode="scroll" />
-                </div>
-                {/* Edge Fades */}
-                <div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-b from-white to-transparent pointer-events-none z-10" />
-                <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-white to-transparent pointer-events-none z-10" />
+            <div className="w-full h-full relative group">
+              <div 
+                className="items-start h-full"
+                style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '2rem' }}
+              >
+                <LuxuryMarquee data={scrollCol1} speed={0.4} vertical={true} />
+                <LuxuryMarquee data={scrollCol2} speed={0.6} vertical={true} reverse={true} />
+                <LuxuryMarquee data={scrollCol3} speed={0.3} vertical={true} />
+                <LuxuryMarquee data={scrollCol4} speed={0.5} vertical={true} reverse={true} />
+                <LuxuryMarquee data={scrollCol5} speed={0.4} vertical={true} />
               </div>
-            )}
-
-            {/* SLIDE MODE (Edge-to-Edge Horizontal Strip with Expanding Widths) */}
-            {viewMode === 'slide' && (
-              <div className="absolute inset-0 flex items-start pt-8 md:pt-16 justify-center -mx-12 overflow-visible">
-                <LuxuryMarquee data={safeItems} speed={1.2} vertical={false} mode="slide" />
-              </div>
-            )}
+              {/* Edge Fades */}
+              <div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-b from-white to-transparent pointer-events-none z-10" />
+              <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-white to-transparent pointer-events-none z-10" />
+            </div>
 
           </div>
         )}
@@ -142,19 +71,6 @@ export default function ArchiveClient({ items }: { items: any[] }) {
       <style dangerouslySetInnerHTML={{__html: `
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        /* Custom physics for Slide mode expansions */
-        .slide-item {
-          height: 40vh;
-          width: max-content;
-          display: flex;
-          transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .slide-item:hover {
-          transform: scale(1.05);
-          z-index: 20;
-          box-shadow: 0 30px 60px rgba(0,0,0,0.2);
-        }
       `}} />
     </main>
   )
@@ -163,7 +79,7 @@ export default function ArchiveClient({ items }: { items: any[] }) {
 // -------------------------------------------------------------
 // LUXURY MARQUEE ENGINE
 // -------------------------------------------------------------
-function LuxuryMarquee({ data, speed, vertical = false, reverse = false, mode }: { data: any[], speed: number, vertical?: boolean, reverse?: boolean, mode: 'scroll' | 'slide' }) {
+function LuxuryMarquee({ data, speed, vertical = false, reverse = false }: { data: any[], speed: number, vertical?: boolean, reverse?: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   
@@ -257,13 +173,13 @@ function LuxuryMarquee({ data, speed, vertical = false, reverse = false, mode }:
         {/* Render Original Group */}
         <div ref={contentRef} className={`flex ${flexDir} ${gapClass} ${vertical ? 'w-full' : 'shrink-0'}`}>
           {data.map((poster, index) => (
-            <PosterCard key={`${poster._id}-${index}`} poster={poster} mode={mode} />
+            <PosterCard key={`${poster._id}-${index}`} poster={poster} />
           ))}
         </div>
         {/* Render Duplicate Group for Seamless Infinity */}
         <div className={`flex ${flexDir} ${gapClass} ${vertical ? 'w-full' : 'shrink-0'}`}>
           {data.map((poster, index) => (
-            <PosterCard key={`${poster._id}-dup-${index}`} poster={poster} mode={mode} />
+            <PosterCard key={`${poster._id}-dup-${index}`} poster={poster} />
           ))}
         </div>
       </div>
@@ -271,36 +187,20 @@ function LuxuryMarquee({ data, speed, vertical = false, reverse = false, mode }:
   )
 }
 
-function PosterCard({ poster, mode }: { poster: any, mode: 'scroll' | 'slide' }) {
+function PosterCard({ poster }: { poster: any }) {
   const dim = poster.image?.asset?.metadata?.dimensions
   const aspectRatio = poster.isLocal ? 3/4 : (dim ? dim.width / dim.height : 1)
 
-  if (mode === 'scroll') {
-    return (
-      <div 
-        className="relative overflow-hidden bg-black/5 rounded-sm group transition-all duration-[1s] ease-out hover:scale-[1.05] hover:z-20 hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)] w-full"
-        style={{ aspectRatio }}
-      >
-        {(poster.isLocal || poster.image?.asset?.url) && (
-          <img 
-            src={poster.isLocal ? poster.url : urlForImage(poster.image).url()} 
-            alt={poster.title || 'Poster'} 
-            className="w-full h-full object-cover pointer-events-none" 
-            draggable="false"
-          />
-        )}
-      </div>
-    )
-  }
-
-  // SLIDE MODE
   return (
-    <div className="relative overflow-hidden bg-black/5 rounded-md group slide-item cursor-pointer flex-shrink-0">
+    <div 
+      className="relative overflow-hidden bg-black/5 rounded-sm group transition-all duration-[1s] ease-out hover:scale-[1.05] hover:z-20 hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)] w-full"
+      style={{ aspectRatio }}
+    >
       {(poster.isLocal || poster.image?.asset?.url) && (
         <img 
           src={poster.isLocal ? poster.url : urlForImage(poster.image).url()} 
           alt={poster.title || 'Poster'} 
-          className="h-full w-auto object-contain pointer-events-none transition-transform duration-[2s] ease-out group-hover:scale-105" 
+          className="w-full h-full object-cover pointer-events-none" 
           draggable="false"
         />
       )}

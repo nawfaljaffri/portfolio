@@ -18,7 +18,8 @@ export default function ArchiveClient({ items }: { items: any[] }) {
 
   return (
     <main className="min-h-screen bg-white text-[#111] selection:bg-black selection:text-white pt-16 md:pt-24 flex flex-col overflow-x-hidden">
-
+      {/* Bottom fade so posters disappear into a clean bottom line */}
+      <div className="fixed bottom-0 left-0 w-full h-48 bg-gradient-to-t from-white to-transparent pointer-events-none z-40" />
 
       <div className="w-full mx-auto px-6 md:px-12 flex flex-col relative pb-32">
         
@@ -48,12 +49,12 @@ export default function ArchiveClient({ items }: { items: any[] }) {
               className="items-start w-full"
               style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '2rem' }}
             >
-              {/* Added physical top margins to recreate the Version 1 stagger effect natively */}
-              <FloatingColumn data={scrollCol1} speed={1.0} phase={0} className="mt-0" />
-              <FloatingColumn data={scrollCol2} speed={0.8} phase={1} reverse={true} className="mt-12 md:mt-24" />
-              <FloatingColumn data={scrollCol3} speed={1.1} phase={2} className="mt-24 md:mt-48" />
-              <FloatingColumn data={scrollCol4} speed={0.9} phase={3} reverse={true} className="mt-12 md:mt-24" />
-              <FloatingColumn data={scrollCol5} speed={1.05} phase={4} className="mt-0" />
+              {/* Perfectly leveled at the top, random independent speeds, no alternating conveyor belt */}
+              <FloatingColumn data={scrollCol1} speed={1.0} phase={0} />
+              <FloatingColumn data={scrollCol2} speed={1.4} phase={0} />
+              <FloatingColumn data={scrollCol3} speed={0.8} phase={0} />
+              <FloatingColumn data={scrollCol4} speed={1.2} phase={0} />
+              <FloatingColumn data={scrollCol5} speed={0.9} phase={0} />
             </div>
           </div>
         )}

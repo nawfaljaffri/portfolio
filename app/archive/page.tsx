@@ -4,6 +4,7 @@ import { client } from '@/lib/sanity/client'
 import ArchiveClient from '@/components/ui/ArchiveClient'
 
 export const revalidate = 0 // Disable cache for instant updates during dev
+export const dynamic = 'force-dynamic'
 
 export default async function ArchivePage() {
   // Fetch posters from sanity

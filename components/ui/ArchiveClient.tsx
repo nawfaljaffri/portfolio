@@ -142,15 +142,13 @@ export default function ArchiveClient({ items }: { items: any[] }) {
         
         /* Custom physics for Slide mode expansions */
         .slide-item {
-          width: 15vw;
-          min-width: 150px;
           height: 40vh;
+          width: max-content;
+          display: flex;
           transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .slide-item:hover {
-          width: 30vw;
-          min-width: 300px;
-          transform: scale(1.02);
+          transform: scale(1.05);
           z-index: 20;
           box-shadow: 0 30px 60px rgba(0,0,0,0.2);
         }
@@ -294,12 +292,12 @@ function PosterCard({ poster, mode }: { poster: any, mode: 'scroll' | 'slide' })
 
   // SLIDE MODE
   return (
-    <div className="relative overflow-hidden bg-black/5 rounded-md group slide-item cursor-pointer">
+    <div className="relative overflow-hidden bg-black/5 rounded-md group slide-item cursor-pointer flex-shrink-0">
       {(poster.isLocal || poster.image?.asset?.url) && (
         <img 
           src={poster.isLocal ? poster.url : urlForImage(poster.image).url()} 
           alt={poster.title || 'Poster'} 
-          className="w-full h-full object-cover pointer-events-none transition-transform duration-[2s] ease-out group-hover:scale-105" 
+          className="h-full w-auto object-contain pointer-events-none transition-transform duration-[2s] ease-out group-hover:scale-105" 
           draggable="false"
         />
       )}

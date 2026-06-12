@@ -5,16 +5,19 @@ import Link from 'next/link'
 import { urlForImage } from '@/lib/sanity/image'
 
 export default function ArchiveClient({ items }: { items: any[] }) {
-  // Ensure we have enough items for marquee if they only have a few, but don't duplicate if they have a ton
+  // Ensure we have enough items for a MASSIVE feed to support the 8000px tall feed.
+  // We want ~20 items per column, so ~100 items total.
   const safeItems = useMemo(() => {
     let res = [...items]
-    while (res.length > 0 && res.length < 15) {
-      res.push(...items)
+    if (res.length > 0) {
+      while (res.length < 100) {
+        res.push(...items)
+      }
     }
     return res
   }, [items])
 
-  // Split into 5 staggered columns for Scroll Mode
+  // Split into 5 staggered columns
   const scrollCol1 = safeItems.filter((_, i) => i % 5 === 0)
   const scrollCol2 = safeItems.filter((_, i) => i % 5 === 1)
   const scrollCol3 = safeItems.filter((_, i) => i % 5 === 2)
@@ -22,14 +25,12 @@ export default function ArchiveClient({ items }: { items: any[] }) {
   const scrollCol5 = safeItems.filter((_, i) => i % 5 === 4)
 
   return (
-    <main className="h-[50000px] bg-white text-[#111] selection:bg-black selection:text-white">
-      {/* FIXED VIEWPORT FOR INFINITE MARQUEE */}
-      <div className="fixed inset-0 w-full h-[100dvh] flex flex-col pt-16 md:pt-24 pointer-events-none z-0">
-        <div className="w-full h-full mx-auto px-6 md:px-12 flex flex-col relative pb-0 pointer-events-auto">
-          
-          {/* Header */}
-          <div className="flex flex-col relative mb-12 shrink-0 max-w-screen-2xl mx-auto w-full z-50">
-            <Link href="/" className="absolute -top-16 left-0 flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:opacity-50 transition-opacity pointer-events-auto">
+    <main className="min-h-screen bg-white text-[#111] selection:bg-black selection:text-white pt-16 md:pt-24 flex flex-col">
+      <div className="w-full mx-auto px-6 md:px-12 flex flex-col relative pb-0">
+        
+        {/* Header - Natively in the document flow */}
+        <div className="flex flex-col relative mb-12 shrink-0 max-w-screen-2xl mx-auto w-full z-50">
+          <Link href="/" className="absolute -top-16 left-0 flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:opacity-50 transition-opacity">
             <span className="text-lg leading-none">&larr;</span> Back Home
           </Link>
           
@@ -48,76 +49,54 @@ export default function ArchiveClient({ items }: { items: any[] }) {
             <p className="text-sm">Go to <a href="/studio" className="underline hover:opacity-50">/studio</a> to add your first poster!</p>
           </div>
         ) : (
-          <div className="relative w-full h-full flex-grow overflow-hidden max-w-screen-2xl mx-auto">
+          <div className="relative w-full max-w-screen-2xl mx-auto h-[8000px] overflow-hidden mb-32">
             {/* SCROLL MODE (Luxurious Vertical Masonry - 5 Columns) */}
             <div className="w-full h-full relative group">
               <div 
                 className="items-start h-full"
                 style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '2rem' }}
               >
-                <LuxuryMarquee data={scrollCol1} speed={0.4} vertical={true} />
-                <LuxuryMarquee data={scrollCol2} speed={0.6} vertical={true} reverse={true} />
-                <LuxuryMarquee data={scrollCol3} speed={0.3} vertical={true} />
-                <LuxuryMarquee data={scrollCol4} speed={0.5} vertical={true} reverse={true} />
-                <LuxuryMarquee data={scrollCol5} speed={0.4} vertical={true} />
+                <LuxuryMarquee data={scrollCol1} speed={0.4} />
+                <LuxuryMarquee data={scrollCol2} speed={0.6} reverse={true} />
+                <LuxuryMarquee data={scrollCol3} speed={0.3} />
+                <LuxuryMarquee data={scrollCol4} speed={0.5} reverse={true} />
+                <LuxuryMarquee data={scrollCol5} speed={0.4} />
               </div>
-              {/* Edge Fades */}
-              <div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-b from-white to-transparent pointer-events-none z-10" />
-              <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-white to-transparent pointer-events-none z-10" />
+              
+              {/* Edge Fades - Positioned absolutely inside the 8000px wrapper */}
+              <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white to-transparent pointer-events-none z-10" />
+              <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent pointer-events-none z-10" />
             </div>
-
           </div>
         )}
       </div>
-    </div>
-
-      <style dangerouslySetInnerHTML={{__html: `
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      `}} />
     </main>
   )
 }
 
 // -------------------------------------------------------------
-// LUXURY MARQUEE ENGINE
+// LUXURY MARQUEE ENGINE (V3 - Pure Native Scroll Compatibility)
 // -------------------------------------------------------------
-function LuxuryMarquee({ data, speed, vertical = false, reverse = false }: { data: any[], speed: number, vertical?: boolean, reverse?: boolean }) {
+function LuxuryMarquee({ data, speed, reverse = false }: { data: any[], speed: number, reverse?: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   
   const pos = useRef(0)
   const currentSpeed = useRef(speed)
   const targetSpeed = useRef(speed)
-  const isDragging = useRef(false)
-  const lastMousePos = useRef(0)
+  const isHovered = useRef(false)
   const animationRef = useRef<number>(0)
-  const lastScrollY = useRef(typeof window !== 'undefined' ? window.scrollY : 0)
 
   const direction = reverse ? 1 : -1
 
   useEffect(() => {
-    lastScrollY.current = window.scrollY
-
     const loop = () => {
       // Lerp the speed for ultra-smooth slow down / speed up
       currentSpeed.current += (targetSpeed.current - currentSpeed.current) * 0.05
       
-      if (!isDragging.current) {
-        pos.current += currentSpeed.current * direction
-      }
+      pos.current += currentSpeed.current * direction
 
-      // NATIVE SCROLL SYNC
-      const currentScrollY = window.scrollY
-      const scrollDelta = currentScrollY - lastScrollY.current
-      lastScrollY.current = currentScrollY
-      
-      if (scrollDelta !== 0) {
-        // Multiplier creates parallax between columns while scrolling!
-        pos.current -= scrollDelta * (1 + speed)
-      }
-
-      const size = vertical ? contentRef.current?.scrollHeight : contentRef.current?.scrollWidth
+      const size = contentRef.current?.scrollHeight
       
       if (size && containerRef.current) {
         // Infinite Wrap Logic
@@ -127,9 +106,7 @@ function LuxuryMarquee({ data, speed, vertical = false, reverse = false }: { dat
           pos.current -= size
         }
 
-        containerRef.current.style.transform = vertical 
-          ? `translate3d(0, ${pos.current}px, 0)` 
-          : `translate3d(${pos.current}px, 0, 0)`
+        containerRef.current.style.transform = `translate3d(0, ${pos.current}px, 0)`
       }
 
       animationRef.current = requestAnimationFrame(loop)
@@ -137,63 +114,33 @@ function LuxuryMarquee({ data, speed, vertical = false, reverse = false }: { dat
 
     animationRef.current = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(animationRef.current!)
-  }, [direction, vertical, speed])
-
-  // Drag Interactions
-  const handlePointerDown = (e: React.PointerEvent) => {
-    isDragging.current = true
-    lastMousePos.current = vertical ? e.clientY : e.clientX
-    targetSpeed.current = 0
-    currentSpeed.current = 0
-    if (containerRef.current) containerRef.current.style.cursor = 'grabbing'
-  }
-
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (!isDragging.current) return
-    const currentMousePos = vertical ? e.clientY : e.clientX
-    const delta = currentMousePos - lastMousePos.current
-    pos.current += delta * 2 // Multiplier for faster scrubbing
-    lastMousePos.current = currentMousePos
-  }
-
-  const handlePointerUp = () => {
-    isDragging.current = false
-    targetSpeed.current = speed
-    if (containerRef.current) containerRef.current.style.cursor = 'grab'
-  }
+  }, [direction])
 
   const handleMouseEnter = () => {
-    if (!isDragging.current) targetSpeed.current = speed * 0.1 // Slow down gracefully
+    isHovered.current = true
+    targetSpeed.current = speed * 0.1 // Slow down gracefully
   }
 
   const handleMouseLeave = () => {
-    isDragging.current = false
+    isHovered.current = false
     targetSpeed.current = speed // Accelerate gracefully back
-    if (containerRef.current) containerRef.current.style.cursor = 'grab'
   }
-
-  const gapClass = vertical ? 'gap-8' : 'gap-8'
-  const flexDir = vertical ? 'flex-col' : 'flex-row items-center'
 
   return (
     <div 
-      className={`relative w-full h-full cursor-grab ${vertical ? 'overflow-hidden' : 'overflow-visible flex items-center'}`}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerUp}
+      className="relative w-full h-full overflow-hidden"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div ref={containerRef} className={`flex ${flexDir} ${gapClass} w-full will-change-transform`}>
+      <div ref={containerRef} className="flex flex-col gap-4 md:gap-8 w-full will-change-transform">
         {/* Render Original Group */}
-        <div ref={contentRef} className={`flex ${flexDir} ${gapClass} ${vertical ? 'w-full' : 'shrink-0'}`}>
+        <div ref={contentRef} className="flex flex-col gap-4 md:gap-8 w-full">
           {data.map((poster, index) => (
             <PosterCard key={`${poster._id}-${index}`} poster={poster} />
           ))}
         </div>
         {/* Render Duplicate Group for Seamless Infinity */}
-        <div className={`flex ${flexDir} ${gapClass} ${vertical ? 'w-full' : 'shrink-0'}`}>
+        <div className="flex flex-col gap-4 md:gap-8 w-full">
           {data.map((poster, index) => (
             <PosterCard key={`${poster._id}-dup-${index}`} poster={poster} />
           ))}

@@ -7,7 +7,7 @@ import { urlForImage } from '@/lib/sanity/image'
 type ViewMode = 'grid' | 'scroll' | 'slide'
 
 export default function ArchiveClient({ items }: { items: any[] }) {
-  const [viewMode, setViewMode] = useState<ViewMode>('slide')
+  const [viewMode, setViewMode] = useState<ViewMode>('grid')
 
   // Generate heavily duplicated arrays so the layouts look rich even with only 4 posters
   const massiveItems = []
@@ -92,9 +92,9 @@ export default function ArchiveClient({ items }: { items: any[] }) {
                       
                       {/* Tiny Image */}
                       <div className="w-full aspect-[3/4] relative transition-transform duration-700 ease-out group-hover:scale-110 group-hover:shadow-2xl bg-black/5">
-                        {poster.image?.asset?.url && (
+                        {(poster.isLocal || poster.image?.asset?.url) && (
                           <img 
-                            src={urlForImage(poster.image).url()} 
+                            src={poster.isLocal ? poster.url : urlForImage(poster.image).url()} 
                             alt={poster.title || 'Poster'} 
                             className="w-full h-full object-cover"
                           />
@@ -142,9 +142,9 @@ export default function ArchiveClient({ items }: { items: any[] }) {
         
         /* Custom physics for Slide mode expansions */
         .slide-item {
-          width: 15vw;
-          min-width: 150px;
-          height: 45vh;
+          width: 25vw;
+          min-width: 250px;
+          height: 60vh;
           transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .slide-item:hover {
@@ -239,7 +239,7 @@ function LuxuryMarquee({ data, speed, vertical = false, reverse = false, mode }:
     if (containerRef.current) containerRef.current.style.cursor = 'grab'
   }
 
-  const gapClass = vertical ? 'gap-8' : 'gap-4'
+  const gapClass = vertical ? 'gap-8' : 'gap-8'
   const flexDir = vertical ? 'flex-col' : 'flex-row items-center'
 
   return (
@@ -272,7 +272,7 @@ function LuxuryMarquee({ data, speed, vertical = false, reverse = false, mode }:
 
 function PosterCard({ poster, mode }: { poster: any, mode: 'scroll' | 'slide' }) {
   const dim = poster.image?.asset?.metadata?.dimensions
-  const aspectRatio = dim ? dim.width / dim.height : 1
+  const aspectRatio = poster.isLocal ? 3/4 : (dim ? dim.width / dim.height : 1)
 
   if (mode === 'scroll') {
     return (
@@ -280,9 +280,9 @@ function PosterCard({ poster, mode }: { poster: any, mode: 'scroll' | 'slide' })
         className="relative overflow-hidden bg-black/5 rounded-sm group transition-all duration-[1s] ease-out hover:scale-[1.05] hover:z-20 hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)] w-full"
         style={{ aspectRatio }}
       >
-        {poster.image?.asset?.url && (
+        {(poster.isLocal || poster.image?.asset?.url) && (
           <img 
-            src={urlForImage(poster.image).url()} 
+            src={poster.isLocal ? poster.url : urlForImage(poster.image).url()} 
             alt={poster.title || 'Poster'} 
             className="w-full h-full object-cover pointer-events-none" 
             draggable="false"
@@ -295,9 +295,9 @@ function PosterCard({ poster, mode }: { poster: any, mode: 'scroll' | 'slide' })
   // SLIDE MODE
   return (
     <div className="relative overflow-hidden bg-black/5 rounded-md group slide-item cursor-pointer">
-      {poster.image?.asset?.url && (
+      {(poster.isLocal || poster.image?.asset?.url) && (
         <img 
-          src={urlForImage(poster.image).url()} 
+          src={poster.isLocal ? poster.url : urlForImage(poster.image).url()} 
           alt={poster.title || 'Poster'} 
           className="w-full h-full object-cover pointer-events-none transition-transform duration-[2s] ease-out group-hover:scale-105" 
           draggable="false"

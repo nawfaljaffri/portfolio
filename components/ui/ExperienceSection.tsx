@@ -41,7 +41,7 @@ export default function ExperienceSection() {
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 60, damping: 20 })
 
   return (
-    <section id="experience" className="relative w-full bg-[#fcfcfc] text-[#111] py-24 md:py-32 border-t border-black/5">
+    <section id="experience" className="relative w-full py-24 md:py-32">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         
         {/* Title Matching 'Selected Works' format */}

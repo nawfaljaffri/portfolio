@@ -9,18 +9,21 @@ type ViewMode = 'grid' | 'scroll' | 'slide'
 export default function ArchiveClient({ items }: { items: any[] }) {
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
 
-  // Generate heavily duplicated arrays so the layouts look rich even with only 4 posters
-  const massiveItems = []
-  for (let i = 0; i < 20; i++) {
-    massiveItems.push(...items)
-  }
+  // Ensure we have enough items for marquee if they only have a few, but don't duplicate if they have a ton
+  const safeItems = useMemo(() => {
+    let res = [...items]
+    while (res.length > 0 && res.length < 15) {
+      res.push(...items)
+    }
+    return res
+  }, [items])
 
-  // Generate 5 columns for the Scroll (Masonry) view
-  const scrollCol1 = massiveItems.filter((_, i) => i % 5 === 0)
-  const scrollCol2 = massiveItems.filter((_, i) => i % 5 === 1)
-  const scrollCol3 = massiveItems.filter((_, i) => i % 5 === 2)
-  const scrollCol4 = massiveItems.filter((_, i) => i % 5 === 3)
-  const scrollCol5 = massiveItems.filter((_, i) => i % 5 === 4)
+  // Split into 5 staggered columns for Scroll Mode
+  const scrollCol1 = safeItems.filter((_, i) => i % 5 === 0)
+  const scrollCol2 = safeItems.filter((_, i) => i % 5 === 1)
+  const scrollCol3 = safeItems.filter((_, i) => i % 5 === 2)
+  const scrollCol4 = safeItems.filter((_, i) => i % 5 === 3)
+  const scrollCol5 = safeItems.filter((_, i) => i % 5 === 4)
 
   return (
     <main className="min-h-screen bg-white text-[#111] selection:bg-black selection:text-white pt-24 pb-32 overflow-hidden">
@@ -81,7 +84,7 @@ export default function ArchiveClient({ items }: { items: any[] }) {
                     gap: '4rem 2rem' 
                   }}
                 >
-                  {massiveItems.slice(0, 40).map((poster, index) => (
+                  {items.map((poster, index) => (
                     <div key={`${poster._id}-${index}`} className="flex flex-col items-center group cursor-pointer">
                       {/* Number Top Left of Cell */}
                       <div className="w-full text-left mb-4">
@@ -90,13 +93,13 @@ export default function ArchiveClient({ items }: { items: any[] }) {
                         </span>
                       </div>
                       
-                      {/* Tiny Image */}
-                      <div className="w-full aspect-[3/4] relative transition-transform duration-700 ease-out group-hover:scale-110 group-hover:shadow-2xl bg-black/5">
+                      {/* Image */}
+                      <div className="w-full relative transition-transform duration-700 ease-out group-hover:scale-110 group-hover:shadow-2xl bg-black/5">
                         {(poster.isLocal || poster.image?.asset?.url) && (
                           <img 
                             src={poster.isLocal ? poster.url : urlForImage(poster.image).url()} 
                             alt={poster.title || 'Poster'} 
-                            className="w-full h-full object-cover"
+                            className="w-full h-auto object-contain"
                           />
                         )}
                       </div>
@@ -128,7 +131,7 @@ export default function ArchiveClient({ items }: { items: any[] }) {
             {/* SLIDE MODE (Edge-to-Edge Horizontal Strip with Expanding Widths) */}
             {viewMode === 'slide' && (
               <div className="absolute inset-0 flex items-start pt-8 md:pt-16 justify-center -mx-12 overflow-visible">
-                <LuxuryMarquee data={massiveItems.slice(0, 30)} speed={1.2} vertical={false} mode="slide" />
+                <LuxuryMarquee data={safeItems} speed={1.2} vertical={false} mode="slide" />
               </div>
             )}
 
@@ -217,7 +220,7 @@ function LuxuryMarquee({ data, speed, vertical = false, reverse = false, mode }:
     if (!isDragging.current) return
     const currentMousePos = vertical ? e.clientY : e.clientX
     const delta = currentMousePos - lastMousePos.current
-    pos.current += delta
+    pos.current += delta * 2 // Multiplier for faster scrubbing
     lastMousePos.current = currentMousePos
   }
 

@@ -22,12 +22,14 @@ export default function ArchiveClient({ items }: { items: any[] }) {
   const scrollCol5 = safeItems.filter((_, i) => i % 5 === 4)
 
   return (
-    <main className="h-[100dvh] overflow-hidden bg-white text-[#111] selection:bg-black selection:text-white pt-16 md:pt-24 flex flex-col">
-      <div className="w-full flex-grow mx-auto px-6 md:px-12 flex flex-col relative overflow-hidden pb-0">
-        
-        {/* Header */}
-        <div className="flex flex-col relative mb-12 shrink-0 max-w-screen-2xl mx-auto w-full z-50">
-          <Link href="/" className="absolute -top-16 left-0 flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:opacity-50 transition-opacity">
+    <main className="h-[50000px] bg-white text-[#111] selection:bg-black selection:text-white">
+      {/* FIXED VIEWPORT FOR INFINITE MARQUEE */}
+      <div className="fixed inset-0 w-full h-[100dvh] flex flex-col pt-16 md:pt-24 pointer-events-none z-0">
+        <div className="w-full h-full mx-auto px-6 md:px-12 flex flex-col relative pb-0 pointer-events-auto">
+          
+          {/* Header */}
+          <div className="flex flex-col relative mb-12 shrink-0 max-w-screen-2xl mx-auto w-full z-50">
+            <Link href="/" className="absolute -top-16 left-0 flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:opacity-50 transition-opacity pointer-events-auto">
             <span className="text-lg leading-none">&larr;</span> Back Home
           </Link>
           
@@ -67,6 +69,7 @@ export default function ArchiveClient({ items }: { items: any[] }) {
           </div>
         )}
       </div>
+    </div>
 
       <style dangerouslySetInnerHTML={{__html: `
         .hide-scrollbar::-webkit-scrollbar { display: none; }
@@ -89,16 +92,29 @@ function LuxuryMarquee({ data, speed, vertical = false, reverse = false }: { dat
   const isDragging = useRef(false)
   const lastMousePos = useRef(0)
   const animationRef = useRef<number>(0)
+  const lastScrollY = useRef(typeof window !== 'undefined' ? window.scrollY : 0)
 
   const direction = reverse ? 1 : -1
 
   useEffect(() => {
+    lastScrollY.current = window.scrollY
+
     const loop = () => {
       // Lerp the speed for ultra-smooth slow down / speed up
       currentSpeed.current += (targetSpeed.current - currentSpeed.current) * 0.05
       
       if (!isDragging.current) {
         pos.current += currentSpeed.current * direction
+      }
+
+      // NATIVE SCROLL SYNC
+      const currentScrollY = window.scrollY
+      const scrollDelta = currentScrollY - lastScrollY.current
+      lastScrollY.current = currentScrollY
+      
+      if (scrollDelta !== 0) {
+        // Multiplier creates parallax between columns while scrolling!
+        pos.current -= scrollDelta * (1 + speed)
       }
 
       const size = vertical ? contentRef.current?.scrollHeight : contentRef.current?.scrollWidth
@@ -121,7 +137,7 @@ function LuxuryMarquee({ data, speed, vertical = false, reverse = false }: { dat
 
     animationRef.current = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(animationRef.current!)
-  }, [direction, vertical])
+  }, [direction, vertical, speed])
 
   // Drag Interactions
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -168,10 +184,6 @@ function LuxuryMarquee({ data, speed, vertical = false, reverse = false }: { dat
       onPointerCancel={handlePointerUp}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onWheel={(e) => {
-        const delta = vertical ? e.deltaY : e.deltaX
-        pos.current -= delta * 1.5
-      }}
     >
       <div ref={containerRef} className={`flex ${flexDir} ${gapClass} w-full will-change-transform`}>
         {/* Render Original Group */}

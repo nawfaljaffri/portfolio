@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { urlForImage } from '@/lib/sanity/image'
 
@@ -26,7 +26,7 @@ export default function ArchiveClient({ items }: { items: any[] }) {
   const scrollCol5 = safeItems.filter((_, i) => i % 5 === 4)
 
   return (
-    <main className="min-h-screen bg-white text-[#111] selection:bg-black selection:text-white pt-24 pb-32 overflow-hidden">
+    <main className="min-h-screen bg-white text-[#111] selection:bg-black selection:text-white pt-24 pb-32">
       <div className="w-full mx-auto px-6 md:px-12 flex flex-col h-screen">
         
         {/* Header */}
@@ -123,8 +123,8 @@ export default function ArchiveClient({ items }: { items: any[] }) {
                   <LuxuryMarquee data={scrollCol5} speed={0.4} vertical={true} mode="scroll" />
                 </div>
                 {/* Edge Fades */}
-                <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white to-transparent pointer-events-none z-10" />
-                <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent pointer-events-none z-10" />
+                <div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-b from-white to-transparent pointer-events-none z-10" />
+                <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-white to-transparent pointer-events-none z-10" />
               </div>
             )}
 

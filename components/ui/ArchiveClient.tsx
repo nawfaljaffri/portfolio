@@ -127,7 +127,7 @@ export default function ArchiveClient({ items }: { items: any[] }) {
 
             {/* SLIDE MODE (Edge-to-Edge Horizontal Strip with Expanding Widths) */}
             {viewMode === 'slide' && (
-              <div className="absolute inset-0 flex items-center justify-center -mx-12 overflow-visible">
+              <div className="absolute inset-0 flex items-start pt-8 md:pt-16 justify-center -mx-12 overflow-visible">
                 <LuxuryMarquee data={massiveItems.slice(0, 30)} speed={1.2} vertical={false} mode="slide" />
               </div>
             )}

@@ -32,7 +32,7 @@ export default async function ArchivePage() {
         _id: `local-${i}`,
         isLocal: true,
         title: file.replace(/\.[^/.]+$/, ""),
-        url: `/bulk-posters/${file}`,
+        url: `/bulk-posters/${encodeURIComponent(file)}`,
       }))
     }
   } catch (err) {

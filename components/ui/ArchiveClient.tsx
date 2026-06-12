@@ -142,14 +142,14 @@ export default function ArchiveClient({ items }: { items: any[] }) {
         
         /* Custom physics for Slide mode expansions */
         .slide-item {
-          width: 25vw;
-          min-width: 250px;
-          height: 60vh;
+          width: 15vw;
+          min-width: 150px;
+          height: 40vh;
           transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .slide-item:hover {
-          width: 45vw;
-          min-width: 450px;
+          width: 30vw;
+          min-width: 300px;
           transform: scale(1.02);
           z-index: 20;
           box-shadow: 0 30px 60px rgba(0,0,0,0.2);

@@ -5,17 +5,9 @@ import Link from 'next/link'
 import { urlForImage } from '@/lib/sanity/image'
 
 export default function ArchiveClient({ items }: { items: any[] }) {
-  // Ensure we have enough items for a MASSIVE feed to support the 8000px tall feed.
-  // We want ~20 items per column, so ~100 items total.
-  const safeItems = useMemo(() => {
-    let res = [...items]
-    if (res.length > 0) {
-      while (res.length < 100) {
-        res.push(...items)
-      }
-    }
-    return res
-  }, [items])
+  // NO DUPLICATION. We use the exact items provided. 
+  // This completely fixes the "way too long", "odd columns looping twice", and "slower loading" issues.
+  const safeItems = items;
 
   // Split into 5 staggered columns
   const scrollCol1 = safeItems.filter((_, i) => i % 5 === 0)
@@ -25,8 +17,13 @@ export default function ArchiveClient({ items }: { items: any[] }) {
   const scrollCol5 = safeItems.filter((_, i) => i % 5 === 4)
 
   return (
-    <main className="min-h-screen bg-white text-[#111] selection:bg-black selection:text-white pt-16 md:pt-24 flex flex-col">
-      <div className="w-full mx-auto px-6 md:px-12 flex flex-col relative pb-0">
+    <main className="min-h-screen bg-white text-[#111] selection:bg-black selection:text-white pt-16 md:pt-24 flex flex-col overflow-x-hidden">
+      
+      {/* Global Viewport Fades for that Premium Look (fades posters at screen edges) */}
+      <div className="fixed top-0 left-0 w-full h-32 bg-gradient-to-b from-white to-transparent pointer-events-none z-[45]" />
+      <div className="fixed bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent pointer-events-none z-[45]" />
+
+      <div className="w-full mx-auto px-6 md:px-12 flex flex-col relative pb-32">
         
         {/* Header - Natively in the document flow */}
         <div className="flex flex-col relative mb-12 shrink-0 max-w-screen-2xl mx-auto w-full z-50">
@@ -49,23 +46,17 @@ export default function ArchiveClient({ items }: { items: any[] }) {
             <p className="text-sm">Go to <a href="/studio" className="underline hover:opacity-50">/studio</a> to add your first poster!</p>
           </div>
         ) : (
-          <div className="relative w-full max-w-screen-2xl mx-auto h-[8000px] overflow-hidden mb-32">
-            {/* SCROLL MODE (Luxurious Vertical Masonry - 5 Columns) */}
-            <div className="w-full h-full relative group">
-              <div 
-                className="items-start h-full"
-                style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '2rem' }}
-              >
-                <LuxuryMarquee data={scrollCol1} speed={0.4} />
-                <LuxuryMarquee data={scrollCol2} speed={0.6} reverse={true} />
-                <LuxuryMarquee data={scrollCol3} speed={0.3} />
-                <LuxuryMarquee data={scrollCol4} speed={0.5} reverse={true} />
-                <LuxuryMarquee data={scrollCol5} speed={0.4} />
-              </div>
-              
-              {/* Edge Fades - Positioned absolutely inside the 8000px wrapper */}
-              <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white to-transparent pointer-events-none z-10" />
-              <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent pointer-events-none z-10" />
+          <div className="relative w-full max-w-screen-2xl mx-auto mt-8 z-10">
+            <div 
+              className="items-start w-full"
+              style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '2rem' }}
+            >
+              {/* Added physical top margins to recreate the Version 1 stagger effect natively */}
+              <FloatingColumn data={scrollCol1} speed={1.0} phase={0} className="mt-0" />
+              <FloatingColumn data={scrollCol2} speed={0.8} phase={1} reverse={true} className="mt-12 md:mt-24" />
+              <FloatingColumn data={scrollCol3} speed={1.1} phase={2} className="mt-24 md:mt-48" />
+              <FloatingColumn data={scrollCol4} speed={0.9} phase={3} reverse={true} className="mt-12 md:mt-24" />
+              <FloatingColumn data={scrollCol5} speed={1.05} phase={4} className="mt-0" />
             </div>
           </div>
         )}
@@ -75,38 +66,28 @@ export default function ArchiveClient({ items }: { items: any[] }) {
 }
 
 // -------------------------------------------------------------
-// LUXURY MARQUEE ENGINE (V3 - Pure Native Scroll Compatibility)
+// FLOATING COLUMN ENGINE (V4 - Native Scroll + Sine Wave Bobbing)
 // -------------------------------------------------------------
-function LuxuryMarquee({ data, speed, reverse = false }: { data: any[], speed: number, reverse?: boolean }) {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const contentRef = useRef<HTMLDivElement>(null)
+function FloatingColumn({ data, speed, phase, reverse = false, className = '' }: { data: any[], speed: number, phase: number, reverse?: boolean, className?: string }) {
+  const columnRef = useRef<HTMLDivElement>(null)
   
-  const pos = useRef(0)
-  const currentSpeed = useRef(speed)
-  const targetSpeed = useRef(speed)
   const isHovered = useRef(false)
+  const time = useRef(phase)
   const animationRef = useRef<number>(0)
-
-  const direction = reverse ? 1 : -1
 
   useEffect(() => {
     const loop = () => {
-      // Lerp the speed for ultra-smooth slow down / speed up
-      currentSpeed.current += (targetSpeed.current - currentSpeed.current) * 0.05
+      // If hovered, slow down the time progression to practically a halt
+      const timeIncrement = isHovered.current ? 0.001 : 0.005;
+      time.current += timeIncrement * speed;
       
-      pos.current += currentSpeed.current * direction
-
-      const size = contentRef.current?.scrollHeight
+      // Calculate floating offset using a sine wave
+      // Amplitude of 50px means it travels 100px total (up 50, down 50) over a long period.
+      // It gently bobs in place, never infinitely scrolling away, completely fixing the loop bug!
+      const offset = Math.sin(time.current) * 50 * (reverse ? -1 : 1);
       
-      if (size && containerRef.current) {
-        // Infinite Wrap Logic
-        if (pos.current <= -size) {
-          pos.current += size
-        } else if (pos.current > 0) {
-          pos.current -= size
-        }
-
-        containerRef.current.style.transform = `translate3d(0, ${pos.current}px, 0)`
+      if (columnRef.current) {
+        columnRef.current.style.transform = `translate3d(0, ${offset}px, 0)`;
       }
 
       animationRef.current = requestAnimationFrame(loop)
@@ -114,37 +95,18 @@ function LuxuryMarquee({ data, speed, reverse = false }: { data: any[], speed: n
 
     animationRef.current = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(animationRef.current!)
-  }, [direction])
-
-  const handleMouseEnter = () => {
-    isHovered.current = true
-    targetSpeed.current = speed * 0.1 // Slow down gracefully
-  }
-
-  const handleMouseLeave = () => {
-    isHovered.current = false
-    targetSpeed.current = speed // Accelerate gracefully back
-  }
+  }, [speed, reverse])
 
   return (
     <div 
-      className="relative w-full h-full overflow-hidden"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      className={`relative w-full h-full ${className}`}
+      onMouseEnter={() => { isHovered.current = true }}
+      onMouseLeave={() => { isHovered.current = false }}
     >
-      <div ref={containerRef} className="flex flex-col gap-4 md:gap-8 w-full will-change-transform">
-        {/* Render Original Group */}
-        <div ref={contentRef} className="flex flex-col gap-4 md:gap-8 w-full">
-          {data.map((poster, index) => (
-            <PosterCard key={`${poster._id}-${index}`} poster={poster} />
-          ))}
-        </div>
-        {/* Render Duplicate Group for Seamless Infinity */}
-        <div className="flex flex-col gap-4 md:gap-8 w-full">
-          {data.map((poster, index) => (
-            <PosterCard key={`${poster._id}-dup-${index}`} poster={poster} />
-          ))}
-        </div>
+      <div ref={columnRef} className="flex flex-col gap-4 md:gap-8 w-full will-change-transform">
+        {data.map((poster, index) => (
+          <PosterCard key={`${poster._id}-${index}`} poster={poster} />
+        ))}
       </div>
     </div>
   )

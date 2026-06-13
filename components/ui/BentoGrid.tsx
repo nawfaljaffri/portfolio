@@ -71,7 +71,7 @@ const projects: Project[] = [
     category: 'Web Dev',
     description: 'Fully functional retro operating system built in React with interactive command line mechanics.',
     color: 'bg-orange-50 text-[#111]',
-    colSpan: 'md:col-span-1',
+    colSpan: 'md:col-span-2',
     rowSpan: 'md:row-span-1',
     imageLayout: 'terminal'
   }
@@ -79,7 +79,7 @@ const projects: Project[] = [
 
 export default function BentoGrid() {
   return (
-    <section id="projects" className="w-full max-w-7xl mx-auto px-6 md:px-12 py-32 bg-white text-[#111]">
+    <section id="projects" className="w-full max-w-7xl mx-auto px-6 md:px-12 py-24 bg-white text-[#111]">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -87,7 +87,9 @@ export default function BentoGrid() {
         transition={{ duration: 0.8 }}
         className="mb-16"
       >
-        <h2 className="text-sm font-bold uppercase tracking-widest border-b border-black pb-4 mb-4">Computer Science & Design</h2>
+        <h2 className="text-xs font-bold uppercase tracking-widest border-t border-gray-200 pt-4 mb-4 text-gray-400">
+          Computer Science & Design
+        </h2>
         <h3 className="text-4xl md:text-6xl font-medium tracking-tight">Selected Works</h3>
       </motion.div>
 

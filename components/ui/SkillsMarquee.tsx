@@ -11,8 +11,10 @@ const skills = [
 export default function SkillsMarquee() {
   return (
     <section className="w-full py-24 overflow-hidden bg-white flex flex-col justify-center">
-      <div className="mb-12 px-6 md:px-12 text-center">
-        <span className="text-xs font-bold uppercase tracking-widest opacity-40 text-[#111]">Toolkit & Languages</span>
+      <div className="mb-16 px-6 md:px-12 max-w-7xl mx-auto w-full">
+        <h2 className="text-xs font-bold uppercase tracking-widest border-t border-gray-200 pt-4 mb-4 text-gray-400">
+          Toolkit & Languages
+        </h2>
       </div>
       
       <div className="relative flex overflow-x-hidden w-full">

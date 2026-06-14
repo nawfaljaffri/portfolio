@@ -928,6 +928,7 @@ export default function WebGLTerminalPage() {
   const cursorRef = useRef(0)
   const setRedrawFn = useRef<(() => void) | null>(null)
   const gridSizeRef = useRef({ cols: 142, rows: 32, charW: 14.4, charH: 32 })
+  const lastClickGridY = useRef(0)
 
   useEffect(() => {
     const t = THEMES[uiState.themeIdx]
@@ -1111,14 +1112,8 @@ if (!uiState.isBooted) {
         if (setRedrawFn.current) setRedrawFn.current()
     }
 
-    if (isClick && inputRef.current) {
-        // Only focus keyboard if clicking on the terminal input line
-        if (gridY >= 26) {
-            inputRef.current.focus()
-        } else {
-            // Dismiss keyboard if they click anywhere else
-            inputRef.current.blur()
-        }
+    if (isClick) {
+        lastClickGridY.current = gridY;
     }
 
 if (!uiState.isBooted) {
@@ -1241,7 +1236,6 @@ if (!uiState.isBooted) {
                                 const newPath = [...s.navPath.slice(0, depth), idx];
                                 return { ...s, focusDepth: Math.max(s.focusDepth, depth), navPath: newPath, scrollOffset: 0 }
                             })
-                            if (inputRef.current) inputRef.current.focus()
                         }
                     }
                 }
@@ -1287,6 +1281,13 @@ if (!uiState.isBooted) {
         onPointerMove={(e) => handlePointerInteraction(e, false)}
         onPointerUp={() => { 
           activeSliderRef.current = -1;
+        }}
+        onClick={() => {
+          if (lastClickGridY.current >= 26 && inputRef.current) {
+            inputRef.current.focus();
+          } else if (inputRef.current) {
+            inputRef.current.blur();
+          }
         }}
         onPointerLeave={() => { activeSliderRef.current = -1 }}
       >

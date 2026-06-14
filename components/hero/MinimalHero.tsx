@@ -32,15 +32,14 @@ export default function MinimalHero() {
       >
         <div className="flex justify-between w-full md:w-auto">
           <span className="font-black text-sm tracking-tight normal-case">Nawfal®</span>
-          <span className="md:hidden opacity-50">UAE, Dubai</span>
+          <span className="md:hidden opacity-50">DUBAI, UAE</span>
         </div>
         
         <div className="flex flex-col gap-2">
-          <a href="/#projects" className="hover:opacity-50 transition-opacity cursor-pointer">Selected Works</a>
+          <a href="/#projects" className="hover:opacity-50 transition-opacity cursor-pointer">Projects</a>
           <a href="/#experience" className="hover:opacity-50 transition-opacity cursor-pointer">Experience</a>
           <Link href="/archive" className="hover:opacity-50 transition-opacity cursor-pointer">Archive</Link>
           <a href="/#about" className="hover:opacity-50 transition-opacity cursor-pointer">About</a>
-          <Link href="/coding" className="hover:opacity-50 transition-opacity text-gray-500 cursor-pointer">Terminal</Link>
         </div>
         
         <div className="flex flex-col gap-2">
@@ -50,7 +49,7 @@ export default function MinimalHero() {
         </div>
         
         <div className="hidden md:flex flex-col gap-2 text-right">
-          <span className="opacity-50">UAE, Dubai</span>
+          <span className="opacity-50">DUBAI, UAE</span>
         </div>
       </motion.nav>
 

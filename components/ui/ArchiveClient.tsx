@@ -3,6 +3,8 @@
 import React, { useRef, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { urlForImage } from '@/lib/sanity/image'
+import { AnimatePresence, motion } from 'framer-motion'
+import { X, Settings2 } from 'lucide-react'
 
 export default function ArchiveClient({ items }: { items: any[] }) {
   // Split the ORIGINAL items into 5 distinct buckets FIRST.
@@ -14,6 +16,9 @@ export default function ArchiveClient({ items }: { items: any[] }) {
   const baseCol5 = items.filter((_, i) => i % 5 === 4)
 
   const [viewMode, setViewMode] = React.useState<'scroll' | 'grid'>('scroll')
+  const [selectedPoster, setSelectedPoster] = React.useState<any | null>(null)
+  const [showSettings, setShowSettings] = React.useState(false)
+  const [gridCols, setGridCols] = React.useState<2|4|6|8>(6)
 
   useEffect(() => {
     // Force smooth scroll plugins to recalculate height when the layout radically changes
@@ -40,6 +45,43 @@ export default function ArchiveClient({ items }: { items: any[] }) {
             {/* View Mode Toggle */}
             <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest">
               <span className="opacity-50 hidden md:block">View Mode</span>
+              
+              {/* Settings Dropdown */}
+              <div className="relative">
+                <button 
+                  onClick={() => setShowSettings(!showSettings)}
+                  className="p-2 rounded-full hover:bg-gray-100 transition-colors opacity-50 hover:opacity-100"
+                >
+                  <Settings2 size={16} />
+                </button>
+                
+                <AnimatePresence>
+                  {showSettings && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      className="absolute right-0 top-full mt-2 bg-white border border-black/10 shadow-2xl rounded-xl p-4 z-[60] min-w-[200px]"
+                    >
+                      <div className="flex flex-col gap-3">
+                        <span className="text-[10px] uppercase tracking-widest opacity-50 font-bold">Grid Columns</span>
+                        <div className="flex gap-2">
+                          {[2, 4, 6, 8].map(num => (
+                            <button
+                              key={num}
+                              onClick={() => setGridCols(num as any)}
+                              className={`w-8 h-8 rounded-md text-xs font-bold transition-colors ${gridCols === num ? 'bg-black text-white' : 'bg-gray-100 hover:bg-gray-200 text-black'}`}
+                            >
+                              {num}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
               <div className="flex gap-2">
                 <button 
                   onClick={() => setViewMode('grid')}
@@ -82,27 +124,81 @@ export default function ArchiveClient({ items }: { items: any[] }) {
                 style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '2rem' }}
               >
                 {/* Alternating directions, identical speed, mathematically perfect seamless wrap */}
-                <LuxuryMarquee data={baseCol1} speed={1.2} reverse={true} />
-                <LuxuryMarquee data={baseCol2} speed={1.2} reverse={false} />
-                <LuxuryMarquee data={baseCol3} speed={1.2} reverse={true} />
-                <LuxuryMarquee data={baseCol4} speed={1.2} reverse={false} />
-                <LuxuryMarquee data={baseCol5} speed={1.2} reverse={true} />
+                <LuxuryMarquee data={baseCol1} speed={1.2} reverse={true} onSelectPoster={setSelectedPoster} />
+                <LuxuryMarquee data={baseCol2} speed={1.2} reverse={false} onSelectPoster={setSelectedPoster} />
+                <LuxuryMarquee data={baseCol3} speed={1.2} reverse={true} onSelectPoster={setSelectedPoster} />
+                <LuxuryMarquee data={baseCol4} speed={1.2} reverse={false} onSelectPoster={setSelectedPoster} />
+                <LuxuryMarquee data={baseCol5} speed={1.2} reverse={true} onSelectPoster={setSelectedPoster} />
               </div>
             </div>
           </div>
         ) : (
           <div className="w-full max-w-screen-2xl mx-auto z-10 pt-4 pb-32">
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-x-6 gap-y-12">
+            <div 
+              className="grid gap-x-6 gap-y-12"
+              style={{ 
+                gridTemplateColumns: `repeat(var(--custom-cols, 2), minmax(0, 1fr))` 
+              }}
+              // Tailwind doesn't support dynamic variables in pure classes easily without arbitrary values,
+              // so we use CSS variables and update them inline for responsiveness.
+              ref={(el) => {
+                if (el) {
+                  // Default to 2 on mobile, 4 on tablet, custom on desktop
+                  if (typeof window !== 'undefined') {
+                    if (window.innerWidth >= 1024) el.style.setProperty('--custom-cols', gridCols.toString());
+                    else if (window.innerWidth >= 768) el.style.setProperty('--custom-cols', '4');
+                    else el.style.setProperty('--custom-cols', '2');
+                  }
+                }
+              }}
+            >
               {items.map((poster, idx) => (
                 <div key={poster._id || idx} className="flex flex-col gap-3">
                   <span className="text-[10px] font-mono opacity-50">{(idx + 1).toString().padStart(2, '0')}</span>
-                  <PosterCard poster={poster} />
+                  <PosterCard poster={poster} onClick={() => setSelectedPoster(poster)} />
                 </div>
               ))}
             </div>
           </div>
         )}
       </div>
+
+      {/* Lightbox / Modal */}
+      <AnimatePresence>
+        {selectedPoster && (
+          <motion.div
+            initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+            animate={{ opacity: 1, backdropFilter: 'blur(8px)' }}
+            exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 md:p-12 cursor-zoom-out"
+            onClick={() => setSelectedPoster(null)}
+          >
+            <button 
+              className="absolute top-6 left-6 z-[110] w-12 h-12 rounded-full bg-white/20 backdrop-blur-xl flex items-center justify-center text-white hover:bg-white/40 transition-colors" 
+              onClick={() => setSelectedPoster(null)}
+            >
+              <X size={24} />
+            </button>
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative max-h-full max-w-full flex flex-col items-center justify-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img 
+                src={selectedPoster.isLocal ? selectedPoster.url : urlForImage(selectedPoster.image).width(1200).url()} 
+                alt={selectedPoster.title || 'Poster Preview'}
+                className="max-h-[85vh] md:max-h-[90vh] max-w-[90vw] object-contain rounded-md shadow-2xl pointer-events-none"
+              />
+              {selectedPoster.title && (
+                <p className="mt-6 text-white text-lg md:text-xl font-medium tracking-wide drop-shadow-md">{selectedPoster.title}</p>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   )
 }
@@ -110,7 +206,7 @@ export default function ArchiveClient({ items }: { items: any[] }) {
 // -------------------------------------------------------------
 // LUXURY MARQUEE ENGINE (V6 - Mathematically Flawless Loop + No Column Mixing)
 // -------------------------------------------------------------
-function LuxuryMarquee({ data, speed, reverse = false }: { data: any[], speed: number, reverse?: boolean }) {
+function LuxuryMarquee({ data, speed, reverse = false, onSelectPoster }: { data: any[], speed: number, reverse?: boolean, onSelectPoster: (p: any) => void }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const copy2Ref = useRef<HTMLDivElement>(null)
   const isHovered = useRef(false)
@@ -170,12 +266,12 @@ function LuxuryMarquee({ data, speed, reverse = false }: { data: any[], speed: n
       <div ref={containerRef} className="flex flex-col gap-4 md:gap-8 w-full will-change-transform">
         <div className="flex flex-col gap-4 md:gap-8 w-full">
           {paddedData.map((poster, index) => (
-            <PosterCard key={`copy1-${poster._id}-${index}`} poster={poster} />
+            <PosterCard key={`copy1-${poster._id}-${index}`} poster={poster} onClick={() => onSelectPoster(poster)} />
           ))}
         </div>
         <div ref={copy2Ref} className="flex flex-col gap-4 md:gap-8 w-full">
           {paddedData.map((poster, index) => (
-            <PosterCard key={`copy2-${poster._id}-${index}`} poster={poster} />
+            <PosterCard key={`copy2-${poster._id}-${index}`} poster={poster} onClick={() => onSelectPoster(poster)} />
           ))}
         </div>
       </div>
@@ -183,20 +279,21 @@ function LuxuryMarquee({ data, speed, reverse = false }: { data: any[], speed: n
   )
 }
 
-function PosterCard({ poster }: { poster: any }) {
+function PosterCard({ poster, onClick }: { poster: any, onClick?: () => void }) {
   // Use a standard portrait poster aspect ratio for the grey container
   const containerRatio = 3/4 
 
   return (
     <div 
-      className="relative overflow-hidden bg-[#f0f0f0] rounded-sm group transition-all duration-700 ease-out hover:scale-[1.03] hover:z-20 hover:shadow-2xl w-full flex items-center justify-center p-4 md:p-6"
+      onClick={onClick}
+      className="relative overflow-hidden bg-[#f0f0f0] rounded-sm group transition-all duration-700 ease-out hover:scale-[1.03] hover:z-20 hover:shadow-2xl w-full flex items-center justify-center p-4 md:p-6 cursor-pointer"
       style={{ aspectRatio: containerRatio }}
     >
       {(poster.isLocal || poster.image?.asset?.url) && (
         <img 
           src={poster.isLocal ? poster.url : urlForImage(poster.image).width(800).url()} 
           alt={poster.title || 'Poster'} 
-          className="w-full h-full object-contain pointer-events-none drop-shadow-md" 
+          className="w-full h-full object-contain pointer-events-none drop-shadow-md transition-transform duration-700 group-hover:scale-[1.02]" 
           draggable="false"
           loading="lazy"
           decoding="async"

@@ -4,7 +4,7 @@ import React, { useRef, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { urlForImage } from '@/lib/sanity/image'
 import { AnimatePresence, motion } from 'framer-motion'
-import { X, Settings2 } from 'lucide-react'
+import { X, Settings2, ArrowLeft } from 'lucide-react'
 
 export default function ArchiveClient({ items }: { items: any[] }) {
   const [viewMode, setViewMode] = React.useState<'scroll' | 'grid'>('scroll')
@@ -31,8 +31,9 @@ export default function ArchiveClient({ items }: { items: any[] }) {
         
         {/* Header - Back to clean text, no white background block */}
         <div className="flex flex-col relative mb-12 shrink-0 max-w-screen-2xl mx-auto w-full z-50">
-          <Link href="/" className="absolute -top-16 left-0 flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:opacity-50 transition-opacity">
-            <span className="text-lg leading-none">&larr;</span> Back Home
+          <Link href="/" className="absolute -top-16 left-0 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest bg-gray-100 hover:bg-gray-200 text-black px-4 py-2 rounded-full transition-colors">
+            <ArrowLeft size={14} strokeWidth={2.5} />
+            <span>Back Home</span>
           </Link>
           
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 w-full border-b border-black/10 pb-8">
@@ -187,7 +188,7 @@ export default function ArchiveClient({ items }: { items: any[] }) {
             >
               {items.map((poster, idx) => (
                 <div key={poster._id || idx} className="flex flex-col gap-3">
-                  <span className="text-[10px] font-mono opacity-50">{(idx + 1).toString().padStart(2, '0')}</span>
+                  <span className="text-[10px] font-medium opacity-50" style={{ fontFamily: 'Helvetica, Arial, sans-serif' }}>{(idx + 1).toString().padStart(2, '0')}</span>
                   <PosterCard poster={poster} onClick={() => setSelectedPoster(poster)} />
                 </div>
               ))}

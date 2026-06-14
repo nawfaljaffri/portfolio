@@ -15,6 +15,11 @@ export default function ArchiveClient({ items }: { items: any[] }) {
 
   const [viewMode, setViewMode] = React.useState<'scroll' | 'grid'>('scroll')
 
+  useEffect(() => {
+    // Force smooth scroll plugins to recalculate height when the layout radically changes
+    window.dispatchEvent(new Event('resize'))
+  }, [viewMode])
+
   return (
     <main className="min-h-screen bg-white text-[#111] selection:bg-black selection:text-white pt-16 md:pt-24 flex flex-col overflow-x-hidden relative">
       
@@ -179,19 +184,19 @@ function LuxuryMarquee({ data, speed, reverse = false }: { data: any[], speed: n
 }
 
 function PosterCard({ poster }: { poster: any }) {
-  const dim = poster.image?.asset?.metadata?.dimensions
-  const aspectRatio = poster.isLocal ? 3/4 : (dim ? dim.width / dim.height : 1)
+  // Use a standard portrait poster aspect ratio for the grey container
+  const containerRatio = 3/4 
 
   return (
     <div 
-      className="relative overflow-hidden bg-[#f0f0f0] rounded-sm group transition-all duration-700 ease-out hover:scale-[1.03] hover:z-20 hover:shadow-2xl w-full"
-      style={{ aspectRatio }}
+      className="relative overflow-hidden bg-[#f0f0f0] rounded-sm group transition-all duration-700 ease-out hover:scale-[1.03] hover:z-20 hover:shadow-2xl w-full flex items-center justify-center p-4 md:p-6"
+      style={{ aspectRatio: containerRatio }}
     >
       {(poster.isLocal || poster.image?.asset?.url) && (
         <img 
           src={poster.isLocal ? poster.url : urlForImage(poster.image).width(800).url()} 
           alt={poster.title || 'Poster'} 
-          className="w-full h-full object-cover pointer-events-none" 
+          className="w-full h-full object-contain pointer-events-none drop-shadow-md" 
           draggable="false"
           loading="lazy"
           decoding="async"

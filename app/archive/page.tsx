@@ -6,7 +6,7 @@ export const revalidate = 60
 
 async function getPosters() {
   return client.fetch(`
-    *[_type == "poster"] | order(_createdAt desc) {
+    *[_type == "poster"] | order(coalesce(order, 999) asc, _createdAt desc) {
       _id,
       title,
       image {

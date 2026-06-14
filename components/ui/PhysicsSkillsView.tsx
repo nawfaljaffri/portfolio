@@ -24,42 +24,40 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
     engine.gravity.y = 1.5 // Stronger gravity for snappier falls
     engineRef.current = engine
     
-    // Create walls
+    // Create walls - Extremely thick to prevent explosive tunneling
     const wallOptions = { isStatic: true, render: { visible: false } }
-    // Add extra thickness to walls to prevent tunneling. Add ceiling to keep them contained.
-    const ground = Bodies.rectangle(width / 2, height + 50, width * 2, 100, wallOptions)
-    const ceiling = Bodies.rectangle(width / 2, -50, width * 2, 100, wallOptions)
-    const leftWall = Bodies.rectangle(-50, height / 2, 100, height * 2, wallOptions)
-    const rightWall = Bodies.rectangle(width + 50, height / 2, 100, height * 2, wallOptions)
+    const ground = Bodies.rectangle(width / 2, height + 500, width * 5, 1000, wallOptions)
+    const ceiling = Bodies.rectangle(width / 2, -500, width * 5, 1000, wallOptions)
+    const leftWall = Bodies.rectangle(-500, height / 2, 1000, height * 5, wallOptions)
+    const rightWall = Bodies.rectangle(width + 500, height / 2, 1000, height * 5, wallOptions)
     
     Composite.add(engine.world, [ground, ceiling, leftWall, rightWall])
 
     // Create pill bodies
     const pillBodies: { body: Matter.Body, id: string, skill: string }[] = []
-    
-    // Scramble skills to drop them randomly
     const shuffledSkills = [...skills].sort(() => 0.5 - Math.random())
     
     shuffledSkills.forEach((skill, i) => {
-      // Estimate width: ~10px per character + 48px padding
       const estimatedWidth = skill.length * 10 + 48
       const estimatedHeight = 44
       
-      const x = Math.random() * (width - estimatedWidth) + estimatedWidth / 2
-      // Spawn them randomly within the upper bounds of the container
-      const y = Math.random() * (height / 2)
+      // Distribute evenly to prevent overlapping explosions on mount
+      const columns = Math.max(2, Math.floor(width / 120))
+      const col = i % columns
+      const row = Math.floor(i / columns)
+      
+      const x = col * (width / columns) + (width / columns / 2) + (Math.random() * 20 - 10)
+      const y = row * 50 + 50 + (Math.random() * 20 - 10)
       
       const body = Bodies.rectangle(x, y, estimatedWidth, estimatedHeight, {
         chamfer: { radius: estimatedHeight / 2 },
-        restitution: 0.2, // Low bounce (rigid plastic feel)
+        restitution: 0.2, // Low bounce
         friction: 0.1,
         frictionAir: 0.005, // Less floaty
         density: 0.002,
       })
       
-      // Add random slight rotation
       Body.setAngle(body, (Math.random() - 0.5) * 0.5)
-      
       const id = `pill-${i}`
       pillBodies.push({ body, id, skill })
       Composite.add(engine.world, body)
@@ -67,6 +65,25 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
     
     pillBodiesRef.current = pillBodies
     setElements(pillBodies)
+
+    // Handle dynamic resizing (e.g. device rotation or split screen)
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        const newWidth = entry.contentRect.width
+        // Update horizontal wall positions
+        Body.setPosition(rightWall, { x: newWidth + 500, y: height / 2 })
+        Body.setPosition(ground, { x: newWidth / 2, y: height + 500 })
+        Body.setPosition(ceiling, { x: newWidth / 2, y: -500 })
+        
+        // Push any escaped pills back inside
+        pillBodiesRef.current.forEach(({ body }) => {
+          if (body.position.x > newWidth) {
+            Body.setPosition(body, { x: newWidth - 50, y: body.position.y })
+          }
+        })
+      }
+    })
+    resizeObserver.observe(sceneRef.current)
 
     // Sync DOM elements with Physics bodies
     Events.on(engine, 'afterUpdate', () => {

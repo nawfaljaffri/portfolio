@@ -13,6 +13,8 @@ export default function ArchiveClient({ items }: { items: any[] }) {
   const baseCol4 = items.filter((_, i) => i % 5 === 3)
   const baseCol5 = items.filter((_, i) => i % 5 === 4)
 
+  const [viewMode, setViewMode] = React.useState<'scroll' | 'grid'>('scroll')
+
   return (
     <main className="min-h-screen bg-white text-[#111] selection:bg-black selection:text-white pt-16 md:pt-24 flex flex-col overflow-x-hidden relative">
       
@@ -29,6 +31,25 @@ export default function ArchiveClient({ items }: { items: any[] }) {
               <h1 className="text-6xl md:text-9xl font-semibold tracking-tighter mb-4">Archive</h1>
               <p className="max-w-sm text-sm font-medium opacity-60">A curated collection of posters, graphic design concepts, and visual experiments.</p>
             </div>
+
+            {/* View Mode Toggle */}
+            <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest">
+              <span className="opacity-50 hidden md:block">View Mode</span>
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => setViewMode('grid')}
+                  className={`px-4 py-2 rounded-full transition-colors ${viewMode === 'grid' ? 'bg-black text-white' : 'hover:bg-gray-100'}`}
+                >
+                  Grid
+                </button>
+                <button 
+                  onClick={() => setViewMode('scroll')}
+                  className={`px-4 py-2 rounded-full transition-colors ${viewMode === 'scroll' ? 'bg-black text-white' : 'hover:bg-gray-100'}`}
+                >
+                  Scroll
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -38,7 +59,7 @@ export default function ArchiveClient({ items }: { items: any[] }) {
             <p className="font-bold">No posters found.</p>
             <p className="text-sm">Go to <a href="/studio" className="underline hover:opacity-50">/studio</a> to add your first poster!</p>
           </div>
-        ) : (
+        ) : viewMode === 'scroll' ? (
           <div className="relative w-full max-w-screen-2xl mx-auto z-10">
             {/* 
               The Beautiful Container Logic:
@@ -62,6 +83,17 @@ export default function ArchiveClient({ items }: { items: any[] }) {
                 <LuxuryMarquee data={baseCol4} speed={1.2} reverse={false} />
                 <LuxuryMarquee data={baseCol5} speed={1.2} reverse={true} />
               </div>
+            </div>
+          </div>
+        ) : (
+          <div className="w-full max-w-screen-2xl mx-auto z-10 pt-4 pb-32">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-x-6 gap-y-12">
+              {items.map((poster, idx) => (
+                <div key={poster._id || idx} className="flex flex-col gap-3">
+                  <span className="text-[10px] font-mono opacity-50">{(idx + 1).toString().padStart(2, '0')}</span>
+                  <PosterCard poster={poster} />
+                </div>
+              ))}
             </div>
           </div>
         )}

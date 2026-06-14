@@ -188,7 +188,7 @@ export default function ArchiveClient({ items }: { items: any[] }) {
             >
               {items.map((poster, idx) => (
                 <div key={poster._id || idx} className="flex flex-col gap-3">
-                  <span className="text-[10px] font-medium opacity-50" style={{ fontFamily: 'Helvetica, Arial, sans-serif' }}>{(idx + 1).toString().padStart(2, '0')}</span>
+                  <span className="text-xs font-semibold opacity-40" style={{ fontFamily: 'Helvetica, Arial, sans-serif' }}>{(idx + 1).toString().padStart(2, '0')}</span>
                   <PosterCard poster={poster} onClick={() => setSelectedPoster(poster)} />
                 </div>
               ))}

@@ -947,7 +947,8 @@ export default function WebGLTerminalPage() {
   useEffect(() => {
     const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-    if (inputRef.current) inputRef.current.focus()
+    // Do not auto-focus on load to prevent mobile keyboard from popping up
+    // if (inputRef.current) inputRef.current.focus()
     return () => { document.body.style.overflow = prev }
   }, [])
 
@@ -1091,8 +1092,6 @@ if (!uiState.isBooted) {
   }
 
   const handlePointerInteraction = (e: any, isClick: boolean) => {
-    if (isClick && inputRef.current) inputRef.current.focus()
-
     const COLS = gridSizeRef.current.cols
     const ROWS = gridSizeRef.current.rows
 
@@ -1110,6 +1109,16 @@ if (!uiState.isBooted) {
     if (!isClick && (prevHoverX !== gridX || prevHoverY !== gridY)) {
         hoverRef.current = { x: gridX, y: gridY }
         if (setRedrawFn.current) setRedrawFn.current()
+    }
+
+    if (isClick && inputRef.current) {
+        // Only focus keyboard if clicking on the terminal input line
+        if (gridY >= 26) {
+            inputRef.current.focus()
+        } else {
+            // Dismiss keyboard if they click anywhere else
+            inputRef.current.blur()
+        }
     }
 
 if (!uiState.isBooted) {
@@ -1257,11 +1266,27 @@ if (!uiState.isBooted) {
             setUiState(s => ({ ...s, scrollOffset: Math.max(0, s.scrollOffset + (e.deltaY > 0 ? 0.3 : -0.3)) }));
           }
         }}
+        onTouchStart={(e) => {
+          // @ts-ignore - store initial touch position on the element
+          e.currentTarget._touchStartY = e.touches[0].clientY;
+        }}
+        onTouchMove={(e) => {
+          // @ts-ignore
+          const startY = e.currentTarget._touchStartY;
+          if (startY !== undefined && !uiState.settingsOpen) {
+            const currentY = e.touches[0].clientY;
+            const deltaY = startY - currentY;
+            // @ts-ignore
+            e.currentTarget._touchStartY = currentY; // reset for continuous scroll
+            if (Math.abs(deltaY) > 0) {
+              setUiState(s => ({ ...s, scrollOffset: Math.max(0, s.scrollOffset + deltaY * 0.05) }));
+            }
+          }
+        }}
         onPointerDown={(e) => handlePointerInteraction(e, true)}
         onPointerMove={(e) => handlePointerInteraction(e, false)}
         onPointerUp={() => { 
           activeSliderRef.current = -1;
-          if (inputRef.current) inputRef.current.focus();
         }}
         onPointerLeave={() => { activeSliderRef.current = -1 }}
       >
@@ -1282,7 +1307,6 @@ if (!uiState.isBooted) {
         onKeyDown={handleKeyDown}
         onKeyUp={syncCursor}
         onMouseUp={syncCursor}
-        autoFocus
       />
       </div>
     </div>

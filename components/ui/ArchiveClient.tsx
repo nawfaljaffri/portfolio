@@ -42,56 +42,101 @@ export default function ArchiveClient({ items }: { items: any[] }) {
             </div>
 
             {/* View Mode Toggle */}
-            <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest">
+            <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest relative z-50">
               <span className="opacity-50 hidden md:block">View Mode</span>
               
               {/* Settings Dropdown */}
               <div className="relative">
                 <button 
                   onClick={() => setShowSettings(!showSettings)}
-                  className="p-2 rounded-full hover:bg-gray-100 transition-colors opacity-50 hover:opacity-100"
+                  className={`p-2 rounded-full transition-colors ${showSettings ? 'opacity-100 bg-gray-100' : 'opacity-50 hover:opacity-100 hover:bg-gray-100/50'}`}
                 >
-                  <Settings2 size={16} />
+                  <Settings2 size={16} strokeWidth={2.5} />
                 </button>
                 
                 <AnimatePresence>
                   {showSettings && (
                     <motion.div 
-                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      className="absolute right-0 top-full mt-2 bg-white border border-black/10 shadow-2xl rounded-xl p-4 z-[60] min-w-[200px]"
+                      initial={{ opacity: 0, y: 15, scale: 0.9, filter: 'blur(4px)' }}
+                      animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95, filter: 'blur(2px)' }}
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      className="absolute right-0 top-full mt-4 bg-white/80 backdrop-blur-2xl border border-black/[0.05] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] rounded-2xl p-5 z-[60] min-w-[240px]"
                     >
-                      <div className="flex flex-col gap-3 w-full">
+                      <div className="flex flex-col gap-4 w-full">
                         <div className="flex justify-between items-center">
                           <span className="text-[10px] uppercase tracking-widest opacity-50 font-bold">Columns</span>
-                          <span className="text-[10px] font-bold">{gridCols}</span>
+                          <span className="text-xs font-bold">{gridCols}</span>
                         </div>
+                        
                         <input 
                           type="range" 
                           min="1" 
                           max="10" 
                           value={gridCols} 
                           onChange={(e) => setGridCols(parseInt(e.target.value))}
-                          className="w-full accent-black cursor-pointer"
+                          className="w-full h-1.5 rounded-full appearance-none cursor-pointer outline-none slider-thumb-black"
+                          style={{ background: `linear-gradient(to right, black ${((gridCols - 1) / 9) * 100}%, rgba(0,0,0,0.1) ${((gridCols - 1) / 9) * 100}%)` }}
                         />
+                        <style dangerouslySetInnerHTML={{__html: `
+                          .slider-thumb-black::-webkit-slider-thumb {
+                            appearance: none;
+                            width: 18px;
+                            height: 18px;
+                            background: black;
+                            border-radius: 50%;
+                            cursor: pointer;
+                            transition: transform 0.15s ease;
+                            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                          }
+                          .slider-thumb-black::-webkit-slider-thumb:hover {
+                            transform: scale(1.15);
+                          }
+                          .slider-thumb-black::-moz-range-thumb {
+                            width: 18px;
+                            height: 18px;
+                            background: black;
+                            border-radius: 50%;
+                            cursor: pointer;
+                            border: none;
+                            transition: transform 0.15s ease;
+                            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                          }
+                          .slider-thumb-black::-moz-range-thumb:hover {
+                            transform: scale(1.15);
+                          }
+                        `}} />
                       </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex gap-1 relative bg-black/5 p-1 rounded-full">
                 <button 
                   onClick={() => setViewMode('grid')}
-                  className={`px-4 py-2 rounded-full transition-colors ${viewMode === 'grid' ? 'bg-black text-white' : 'hover:bg-gray-100'}`}
+                  className={`relative px-5 py-2 rounded-full text-xs font-bold transition-colors z-10 ${viewMode === 'grid' ? 'text-white' : 'text-black hover:text-black/70'}`}
                 >
+                  {viewMode === 'grid' && (
+                    <motion.div
+                      layoutId="viewModePill"
+                      className="absolute inset-0 bg-black rounded-full -z-10 shadow-md"
+                      transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                    />
+                  )}
                   Grid
                 </button>
                 <button 
                   onClick={() => setViewMode('scroll')}
-                  className={`px-4 py-2 rounded-full transition-colors ${viewMode === 'scroll' ? 'bg-black text-white' : 'hover:bg-gray-100'}`}
+                  className={`relative px-5 py-2 rounded-full text-xs font-bold transition-colors z-10 ${viewMode === 'scroll' ? 'text-white' : 'text-black hover:text-black/70'}`}
                 >
+                  {viewMode === 'scroll' && (
+                    <motion.div
+                      layoutId="viewModePill"
+                      className="absolute inset-0 bg-black rounded-full -z-10 shadow-md"
+                      transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                    />
+                  )}
                   Scroll
                 </button>
               </div>

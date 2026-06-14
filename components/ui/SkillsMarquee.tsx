@@ -14,8 +14,9 @@ export default function SkillsMarquee() {
 
   useEffect(() => {
     const checkDevice = () => {
-      // Treat iPads (up to 1366px) and phones as touch/physics devices
-      setIsTouchDevice(window.innerWidth < 1367)
+      // Strictly use touch capability to ensure small laptops get the desktop marquee
+      const isTouch = window.matchMedia('(pointer: coarse)').matches
+      setIsTouchDevice(isTouch)
     }
     
     checkDevice()

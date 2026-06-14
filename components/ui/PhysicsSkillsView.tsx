@@ -17,7 +17,7 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
     const { Engine, Render, Runner, World, Bodies, Composite, Events, Body } = Matter
 
     const width = sceneRef.current.clientWidth
-    const height = 500 // Fixed height for mobile view
+    const height = 400 // Fixed height for mobile view
     
     // Create engine
     const engine = Engine.create()
@@ -25,13 +25,12 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
     
     // Create walls
     const wallOptions = { isStatic: true, render: { visible: false } }
-    // Add extra thickness to walls to prevent tunneling
+    // Add extra thickness to walls to prevent tunneling. No ceiling so they can be thrown up and fall back down.
     const ground = Bodies.rectangle(width / 2, height + 50, width * 2, 100, wallOptions)
-    const ceiling = Bodies.rectangle(width / 2, -150, width * 2, 100, wallOptions)
     const leftWall = Bodies.rectangle(-50, height / 2, 100, height * 2, wallOptions)
     const rightWall = Bodies.rectangle(width + 50, height / 2, 100, height * 2, wallOptions)
     
-    Composite.add(engine.world, [ground, ceiling, leftWall, rightWall])
+    Composite.add(engine.world, [ground, leftWall, rightWall])
 
     // Create pill bodies
     const pillBodies: { body: Matter.Body, id: string, skill: string }[] = []
@@ -45,8 +44,8 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
       const estimatedHeight = 44
       
       const x = Math.random() * (width - estimatedWidth) + estimatedWidth / 2
-      // Drop from way above the screen to let them settle
-      const y = Math.random() * -800 - 100 
+      // Spawn them randomly within the upper bounds of the container
+      const y = Math.random() * (height / 2)
       
       const body = Bodies.rectangle(x, y, estimatedWidth, estimatedHeight, {
         chamfer: { radius: estimatedHeight / 2 },
@@ -161,8 +160,8 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
   return (
     <div 
       ref={sceneRef} 
-      className="relative w-full overflow-hidden border-t border-b border-gray-100 bg-white" 
-      style={{ height: '500px' }}
+      className="relative w-full overflow-hidden bg-white" 
+      style={{ height: '400px' }}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerUp}
@@ -185,11 +184,6 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
           {skill}
         </div>
       ))}
-      
-      {/* Background hint text */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
-        <span className="font-black text-4xl tracking-tighter uppercase">Drag & Throw</span>
-      </div>
     </div>
   )
 }

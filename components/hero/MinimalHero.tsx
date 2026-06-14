@@ -45,7 +45,7 @@ export default function MinimalHero() {
         <div className="flex flex-col gap-2">
           <a href="mailto:nawfaljaffri@gmail.com" className="hover:opacity-50 transition-opacity cursor-pointer">Contact</a>
           <a href="https://www.linkedin.com/in/nawfaljaffri/" target="_blank" rel="noopener noreferrer" className="hover:opacity-50 transition-opacity cursor-pointer">LinkedIn</a>
-          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="hover:opacity-50 transition-opacity cursor-pointer">CV / Resume</a>
+          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="hover:opacity-50 transition-opacity cursor-pointer">Resume</a>
         </div>
         
         <div className="hidden md:flex flex-col gap-2 text-right">

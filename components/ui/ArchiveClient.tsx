@@ -12,6 +12,17 @@ export default function ArchiveClient({ items }: { items: any[] }) {
   const [showSettings, setShowSettings] = React.useState(false)
   const [gridCols, setGridCols] = React.useState(6)
 
+  // Set default columns based on device size only once on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth < 768) {
+        setGridCols(2) // Phones
+      } else if (window.innerWidth < 1024) {
+        setGridCols(3) // iPads/Tablets
+      }
+    }
+  }, [])
+
   // Dynamically split items into exactly N columns based on the slider setting
   const scrollColumns = useMemo(() => {
     return Array.from({ length: gridCols }, (_, colIndex) => 
@@ -62,8 +73,7 @@ export default function ArchiveClient({ items }: { items: any[] }) {
                       animate={{ opacity: 1, scale: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.9, y: -5 }}
                       transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                      style={{ originX: 1, originY: 0 }}
-                      className="absolute right-0 top-full mt-2 bg-white border border-gray-200 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] rounded-2xl p-5 z-[60] min-w-[240px]"
+                      className="absolute left-0 md:left-auto md:right-0 top-full mt-2 origin-top-left md:origin-top-right bg-white border border-gray-200 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] rounded-2xl p-5 z-[60] min-w-[240px]"
                     >
                       <div className="flex flex-col gap-4 w-full">
                         <div className="flex justify-between items-center">

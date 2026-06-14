@@ -10,7 +10,7 @@ export default function ArchiveClient({ items }: { items: any[] }) {
   const [viewMode, setViewMode] = React.useState<'scroll' | 'grid'>('scroll')
   const [selectedPoster, setSelectedPoster] = React.useState<any | null>(null)
   const [showSettings, setShowSettings] = React.useState(false)
-  const [gridCols, setGridCols] = React.useState(5)
+  const [gridCols, setGridCols] = React.useState(6)
 
   // Dynamically split items into exactly N columns based on the slider setting
   const scrollColumns = useMemo(() => {
@@ -58,11 +58,12 @@ export default function ArchiveClient({ items }: { items: any[] }) {
                 <AnimatePresence>
                   {showSettings && (
                     <motion.div 
-                      initial={{ opacity: 0, y: 15, scale: 0.9, filter: 'blur(4px)' }}
-                      animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-                      exit={{ opacity: 0, y: 10, scale: 0.95, filter: 'blur(2px)' }}
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                      className="absolute right-0 top-full mt-4 bg-white/80 backdrop-blur-2xl border border-black/[0.05] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] rounded-2xl p-5 z-[60] min-w-[240px]"
+                      initial={{ opacity: 0, scale: 0.9, y: -5 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.9, y: -5 }}
+                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                      style={{ originX: 1, originY: 0 }}
+                      className="absolute right-0 top-full mt-2 bg-white border border-gray-200 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] rounded-2xl p-5 z-[60] min-w-[240px]"
                     >
                       <div className="flex flex-col gap-4 w-full">
                         <div className="flex justify-between items-center">

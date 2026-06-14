@@ -33,7 +33,9 @@ export default function SkillsMarquee() {
       </div>
       
       {isTouchDevice ? (
-        <PhysicsSkillsView skills={skills} />
+        <div className="px-6 md:px-12 max-w-7xl mx-auto w-full">
+          <PhysicsSkillsView skills={skills} />
+        </div>
       ) : (
         <div className="relative flex overflow-x-hidden w-full">
           <div className="animate-marquee whitespace-nowrap flex items-center gap-4 px-4">

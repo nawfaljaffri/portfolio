@@ -21,6 +21,7 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
     
     // Create engine
     const engine = Engine.create()
+    engine.gravity.y = 1.5 // Stronger gravity for snappier falls
     engineRef.current = engine
     
     // Create walls
@@ -52,7 +53,7 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
         chamfer: { radius: estimatedHeight / 2 },
         restitution: 0.2, // Low bounce (rigid plastic feel)
         friction: 0.1,
-        frictionAir: 0.01,
+        frictionAir: 0.005, // Less floaty
         density: 0.002,
       })
       
@@ -90,9 +91,8 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
       
       // If we scroll quickly, apply a force to all bodies
       if (Math.abs(velocity) > 2) {
-        // Inertia: if we scroll down (positive velocity), the viewport moves down,
-        // so objects in the viewport should fly UP (negative force).
-        const forceMagnitude = -velocity * 0.0005
+        // Always fly UP when scrolling fast in either direction, simulating a rollercoaster lift
+        const forceMagnitude = -Math.abs(velocity) * 0.0008
         
         pillBodies.forEach(({ body }) => {
           Body.applyForce(body, body.position, { 

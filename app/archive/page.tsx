@@ -1,8 +1,7 @@
 import { client } from '@/lib/sanity/client'
 import ArchiveClient from '@/components/ui/ArchiveClient'
 
-// Revalidate occasionally, no need to force-dynamic since they're in Sanity now
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 async function getPosters() {
   return client.fetch(`

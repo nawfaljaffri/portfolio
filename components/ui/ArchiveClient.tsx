@@ -7,18 +7,17 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { X, Settings2 } from 'lucide-react'
 
 export default function ArchiveClient({ items }: { items: any[] }) {
-  // Split the ORIGINAL items into 5 distinct buckets FIRST.
-  // This guarantees that no poster is ever repeated across different columns!
-  const baseCol1 = items.filter((_, i) => i % 5 === 0)
-  const baseCol2 = items.filter((_, i) => i % 5 === 1)
-  const baseCol3 = items.filter((_, i) => i % 5 === 2)
-  const baseCol4 = items.filter((_, i) => i % 5 === 3)
-  const baseCol5 = items.filter((_, i) => i % 5 === 4)
-
   const [viewMode, setViewMode] = React.useState<'scroll' | 'grid'>('scroll')
   const [selectedPoster, setSelectedPoster] = React.useState<any | null>(null)
   const [showSettings, setShowSettings] = React.useState(false)
-  const [gridCols, setGridCols] = React.useState<2|4|6|8>(6)
+  const [gridCols, setGridCols] = React.useState(5)
+
+  // Dynamically split items into exactly N columns based on the slider setting
+  const scrollColumns = useMemo(() => {
+    return Array.from({ length: gridCols }, (_, colIndex) => 
+      items.filter((_, i) => i % gridCols === colIndex)
+    )
+  }, [items, gridCols])
 
   useEffect(() => {
     // Force smooth scroll plugins to recalculate height when the layout radically changes
@@ -63,19 +62,19 @@ export default function ArchiveClient({ items }: { items: any[] }) {
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
                       className="absolute right-0 top-full mt-2 bg-white border border-black/10 shadow-2xl rounded-xl p-4 z-[60] min-w-[200px]"
                     >
-                      <div className="flex flex-col gap-3">
-                        <span className="text-[10px] uppercase tracking-widest opacity-50 font-bold">Grid Columns</span>
-                        <div className="flex gap-2">
-                          {[2, 4, 6, 8].map(num => (
-                            <button
-                              key={num}
-                              onClick={() => setGridCols(num as any)}
-                              className={`w-8 h-8 rounded-md text-xs font-bold transition-colors ${gridCols === num ? 'bg-black text-white' : 'bg-gray-100 hover:bg-gray-200 text-black'}`}
-                            >
-                              {num}
-                            </button>
-                          ))}
+                      <div className="flex flex-col gap-3 w-full">
+                        <div className="flex justify-between items-center">
+                          <span className="text-[10px] uppercase tracking-widest opacity-50 font-bold">Columns</span>
+                          <span className="text-[10px] font-bold">{gridCols}</span>
                         </div>
+                        <input 
+                          type="range" 
+                          min="1" 
+                          max="10" 
+                          value={gridCols} 
+                          onChange={(e) => setGridCols(parseInt(e.target.value))}
+                          className="w-full accent-black cursor-pointer"
+                        />
                       </div>
                     </motion.div>
                   )}
@@ -120,37 +119,26 @@ export default function ArchiveClient({ items }: { items: any[] }) {
               <div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-white to-transparent pointer-events-none z-40" />
               
               <div 
-                className="w-full h-full"
-                style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '2rem' }}
+                className="w-full h-full grid gap-4 md:gap-8"
+                style={{ gridTemplateColumns: `repeat(${gridCols}, minmax(0, 1fr))` }}
               >
-                {/* Alternating directions, identical speed, mathematically perfect seamless wrap */}
-                <LuxuryMarquee data={baseCol1} speed={1.2} reverse={true} onSelectPoster={setSelectedPoster} />
-                <LuxuryMarquee data={baseCol2} speed={1.2} reverse={false} onSelectPoster={setSelectedPoster} />
-                <LuxuryMarquee data={baseCol3} speed={1.2} reverse={true} onSelectPoster={setSelectedPoster} />
-                <LuxuryMarquee data={baseCol4} speed={1.2} reverse={false} onSelectPoster={setSelectedPoster} />
-                <LuxuryMarquee data={baseCol5} speed={1.2} reverse={true} onSelectPoster={setSelectedPoster} />
+                {scrollColumns.map((colData, idx) => (
+                  <LuxuryMarquee 
+                    key={`mq-${gridCols}-${idx}`} // Remount cleanly if columns change
+                    data={colData} 
+                    speed={1.2} 
+                    reverse={idx % 2 === 0} 
+                    onSelectPoster={setSelectedPoster} 
+                  />
+                ))}
               </div>
             </div>
           </div>
         ) : (
           <div className="w-full max-w-screen-2xl mx-auto z-10 pt-4 pb-32">
             <div 
-              className="grid gap-x-6 gap-y-12"
-              style={{ 
-                gridTemplateColumns: `repeat(var(--custom-cols, 2), minmax(0, 1fr))` 
-              }}
-              // Tailwind doesn't support dynamic variables in pure classes easily without arbitrary values,
-              // so we use CSS variables and update them inline for responsiveness.
-              ref={(el) => {
-                if (el) {
-                  // Default to 2 on mobile, 4 on tablet, custom on desktop
-                  if (typeof window !== 'undefined') {
-                    if (window.innerWidth >= 1024) el.style.setProperty('--custom-cols', gridCols.toString());
-                    else if (window.innerWidth >= 768) el.style.setProperty('--custom-cols', '4');
-                    else el.style.setProperty('--custom-cols', '2');
-                  }
-                }
-              }}
+              className="grid gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-12"
+              style={{ gridTemplateColumns: `repeat(${gridCols}, minmax(0, 1fr))` }}
             >
               {items.map((poster, idx) => (
                 <div key={poster._id || idx} className="flex flex-col gap-3">
@@ -188,13 +176,10 @@ export default function ArchiveClient({ items }: { items: any[] }) {
               onClick={(e) => e.stopPropagation()}
             >
               <img 
-                src={selectedPoster.isLocal ? selectedPoster.url : urlForImage(selectedPoster.image).width(1200).url()} 
-                alt={selectedPoster.title || 'Poster Preview'}
+                src={selectedPoster.isLocal ? selectedPoster.url : urlForImage(selectedPoster.image).width(800).url()} 
+                alt="Poster Preview"
                 className="max-h-[85vh] md:max-h-[90vh] max-w-[90vw] object-contain rounded-md shadow-2xl pointer-events-none"
               />
-              {selectedPoster.title && (
-                <p className="mt-6 text-white text-lg md:text-xl font-medium tracking-wide drop-shadow-md">{selectedPoster.title}</p>
-              )}
             </motion.div>
           </motion.div>
         )}

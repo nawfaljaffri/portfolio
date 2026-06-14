@@ -12,22 +12,29 @@ export default function ArchiveClient({ items }: { items: any[] }) {
   const [showSettings, setShowSettings] = React.useState(false)
   const [gridCols, setGridCols] = React.useState(6)
 
-  // Set default columns based on device size only once on mount
+  // Live update columns based on device size and orientation
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      const isLandscape = w > h;
-      
-      if (w < 768) {
-        setGridCols(2); // Phones
-      } else if (w < 1367) { 
-        // 768px to 1366px covers virtually all iPads (Mini to Pro)
-        setGridCols(isLandscape ? 5 : 4);
-      } else {
-        setGridCols(6); // Desktops
+    const handleResize = () => {
+      if (typeof window !== 'undefined') {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        const isLandscape = w > h;
+        
+        if (w < 768) {
+          setGridCols(2); // Phones
+        } else if (w < 1367) { 
+          // 768px to 1366px covers virtually all iPads (Mini to Pro)
+          setGridCols(isLandscape ? 5 : 4);
+        } else {
+          setGridCols(6); // Desktops
+        }
       }
     }
+
+    handleResize(); // Run once on mount
+    window.addEventListener('resize', handleResize);
+    
+    return () => window.removeEventListener('resize', handleResize);
   }, [])
 
   // Dynamically split items into exactly N columns based on the slider setting

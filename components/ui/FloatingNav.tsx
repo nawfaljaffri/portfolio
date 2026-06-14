@@ -131,7 +131,7 @@ export default function FloatingNav() {
                   key={idx} 
                   href={item.href}
                   onClick={(e) => handleSmoothScroll(e, item.id)}
-                  className={`relative px-3 sm:px-4 md:px-5 py-2 text-[11px] sm:text-[13px] md:text-sm font-bold tracking-wide rounded-full transition-colors duration-300 ${
+                  className={`relative px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-bold tracking-wide rounded-full transition-colors duration-300 ${
                     isActive ? 'text-black' : 'text-black/50 hover:text-black/80'
                   }`}
                 >

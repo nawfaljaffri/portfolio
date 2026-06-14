@@ -65,7 +65,7 @@ export default function MinimalHero() {
           <div className="overflow-hidden pb-2 pr-2 md:pr-4">
             <motion.span 
               variants={wordAnim}
-              className="inline-block transition-all duration-500"
+              className="inline-block will-change-transform"
             >
               Nawfal
             </motion.span>
@@ -73,7 +73,7 @@ export default function MinimalHero() {
           <div className="overflow-hidden pb-2 pr-2 md:pr-4">
             <motion.span 
               variants={wordAnim}
-              className="inline-block transition-all duration-500"
+              className="inline-block will-change-transform"
             >
               Jaffri
             </motion.span>

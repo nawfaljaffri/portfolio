@@ -15,10 +15,17 @@ export default function ArchiveClient({ items }: { items: any[] }) {
   // Set default columns based on device size only once on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      if (window.innerWidth < 768) {
-        setGridCols(2) // Phones
-      } else if (window.innerWidth < 1024) {
-        setGridCols(3) // iPads/Tablets
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const isLandscape = w > h;
+      
+      if (w < 768) {
+        setGridCols(2); // Phones
+      } else if (w < 1367) { 
+        // 768px to 1366px covers virtually all iPads (Mini to Pro)
+        setGridCols(isLandscape ? 5 : 4);
+      } else {
+        setGridCols(6); // Desktops
       }
     }
   }, [])

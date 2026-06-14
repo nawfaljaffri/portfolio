@@ -25,8 +25,8 @@ export default function SkillsMarquee() {
   }, [])
 
   return (
-    <section className="w-full py-12 md:py-24 overflow-hidden bg-white flex flex-col justify-center">
-      <div className="mb-8 md:mb-16 px-6 md:px-12 max-w-7xl mx-auto w-full">
+    <section className={`w-full overflow-hidden bg-white flex flex-col justify-center ${isTouchDevice ? 'py-4' : 'py-12 md:py-24'}`}>
+      <div className={`px-6 md:px-12 max-w-7xl mx-auto w-full ${isTouchDevice ? 'mb-2' : 'mb-8 md:mb-16'}`}>
         <h2 className="text-xs font-bold uppercase tracking-widest border-t border-gray-200 pt-4 mb-4 text-gray-400">
           Toolkit & Languages
         </h2>

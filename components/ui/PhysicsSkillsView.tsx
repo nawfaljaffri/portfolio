@@ -25,12 +25,13 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
     
     // Create walls
     const wallOptions = { isStatic: true, render: { visible: false } }
-    // Add extra thickness to walls to prevent tunneling. No ceiling so they can be thrown up and fall back down.
+    // Add extra thickness to walls to prevent tunneling. Add ceiling to keep them contained.
     const ground = Bodies.rectangle(width / 2, height + 50, width * 2, 100, wallOptions)
+    const ceiling = Bodies.rectangle(width / 2, -50, width * 2, 100, wallOptions)
     const leftWall = Bodies.rectangle(-50, height / 2, 100, height * 2, wallOptions)
     const rightWall = Bodies.rectangle(width + 50, height / 2, 100, height * 2, wallOptions)
     
-    Composite.add(engine.world, [ground, leftWall, rightWall])
+    Composite.add(engine.world, [ground, ceiling, leftWall, rightWall])
 
     // Create pill bodies
     const pillBodies: { body: Matter.Body, id: string, skill: string }[] = []
@@ -89,8 +90,9 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
       
       // If we scroll quickly, apply a force to all bodies
       if (Math.abs(velocity) > 2) {
-        // Force direction opposes scroll direction
-        const forceMagnitude = velocity * 0.0003
+        // Inertia: if we scroll down (positive velocity), the viewport moves down,
+        // so objects in the viewport should fly UP (negative force).
+        const forceMagnitude = -velocity * 0.0005
         
         pillBodies.forEach(({ body }) => {
           Body.applyForce(body, body.position, { 

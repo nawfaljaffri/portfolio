@@ -1,48 +1,11 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { motion, Variants } from 'framer-motion'
 import Link from 'next/link'
 import CustomCursor from '@/components/ui/CustomCursor'
 
-const DraggableLetter = ({ char, index }: { char: string, index: number }) => {
-  const [rotation] = useState(() => (Math.random() - 0.5) * 30)
-  
-  return (
-    <motion.span
-      drag
-      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-      dragElastic={0.8}
-      dragTransition={{ bounceStiffness: 400, bounceDamping: 10 }}
-      whileHover={{ scale: 1.15, rotate: rotation, color: '#666' }}
-      whileDrag={{ scale: 1.3, rotate: rotation * 2, cursor: 'grabbing', color: '#000', zIndex: 50 }}
-      className="inline-block cursor-grab transition-colors duration-200"
-      style={{ display: 'inline-block' }}
-    >
-      {char === ' ' ? '\u00A0' : char}
-    </motion.span>
-  )
-}
-
 export default function MinimalHero() {
-  const [time, setTime] = useState<string>('')
-
-  useEffect(() => {
-    const updateTime = () => {
-      const formatter = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'Asia/Dubai',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true
-      })
-      setTime(formatter.format(new Date()))
-    }
-    updateTime()
-    const int = setInterval(updateTime, 1000)
-    return () => clearInterval(int)
-  }, [])
-
   const container: Variants = {
     hidden: { opacity: 0 },
     show: {
@@ -69,17 +32,15 @@ export default function MinimalHero() {
       >
         <div className="flex justify-between w-full md:w-auto">
           <span className="font-black text-sm tracking-tight normal-case">Nawfal®</span>
-          <div className="md:hidden flex flex-col items-end opacity-50">
-            <span>Dubai, UAE</span>
-            <span className="text-[10px] font-mono mt-1">{time || '00:00:00 AM'}</span>
-          </div>
+          <span className="md:hidden opacity-50">UAE, Dubai</span>
         </div>
         
         <div className="flex flex-col gap-2">
-          <a href="/#projects" className="hover:opacity-50 transition-opacity cursor-pointer">Projects</a>
+          <a href="/#projects" className="hover:opacity-50 transition-opacity cursor-pointer">Selected Works</a>
           <a href="/#experience" className="hover:opacity-50 transition-opacity cursor-pointer">Experience</a>
           <Link href="/archive" className="hover:opacity-50 transition-opacity cursor-pointer">Archive</Link>
           <a href="/#about" className="hover:opacity-50 transition-opacity cursor-pointer">About</a>
+          <Link href="/coding" className="hover:opacity-50 transition-opacity text-gray-500 cursor-pointer">Terminal</Link>
         </div>
         
         <div className="flex flex-col gap-2">
@@ -89,8 +50,7 @@ export default function MinimalHero() {
         </div>
         
         <div className="hidden md:flex flex-col gap-2 text-right">
-          <span className="opacity-50">Dubai, UAE</span>
-          <span className="opacity-50 text-[10px] font-mono">{time || '00:00:00 AM'}</span>
+          <span className="opacity-50">UAE, Dubai</span>
         </div>
       </motion.nav>
 
@@ -100,22 +60,24 @@ export default function MinimalHero() {
           variants={container}
           initial="hidden"
           animate="show"
-          className="font-black text-[#111] leading-none tracking-tighter flex flex-wrap gap-x-4 md:gap-x-8"
+          className="font-black text-[#111] leading-none tracking-tighter flex flex-wrap gap-x-4 md:gap-x-8 group"
           style={{ fontSize: 'clamp(4rem, 12vw, 15rem)' }}
         >
-          <div className="overflow-visible pb-2 pr-2 md:pr-4 flex">
-            <motion.div variants={wordAnim} className="flex">
-              {"Nawfal".split('').map((char, i) => (
-                <DraggableLetter key={`nawfal-${i}`} char={char} index={i} />
-              ))}
-            </motion.div>
+          <div className="overflow-hidden pb-2 pr-2 md:pr-4">
+            <motion.span 
+              variants={wordAnim}
+              className="inline-block transition-all duration-500 group-hover:text-black/50 hover:!text-black"
+            >
+              Nawfal
+            </motion.span>
           </div>
-          <div className="overflow-visible pb-2 pr-2 md:pr-4 flex">
-            <motion.div variants={wordAnim} className="flex">
-              {"Jaffri".split('').map((char, i) => (
-                <DraggableLetter key={`jaffri-${i}`} char={char} index={i} />
-              ))}
-            </motion.div>
+          <div className="overflow-hidden pb-2 pr-2 md:pr-4">
+            <motion.span 
+              variants={wordAnim}
+              className="inline-block transition-all duration-500 group-hover:text-black/50 hover:!text-black"
+            >
+              Jaffri
+            </motion.span>
           </div>
         </motion.div>
       </div>

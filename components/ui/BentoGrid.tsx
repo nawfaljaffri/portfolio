@@ -23,7 +23,7 @@ const projects: Project[] = [
     title: '8-Bit Adventure',
     category: 'Game Dev',
     description: 'Custom pixel-art game exploring algorithmic logic and physics.',
-    color: 'bg-[#0A0A0A] text-white',
+    color: 'bg-[#FAFAFA] border border-gray-100 text-[#111]',
     colSpan: 'md:col-span-2',
     rowSpan: 'md:row-span-1',
     imageLayout: 'pixel-art',
@@ -34,7 +34,7 @@ const projects: Project[] = [
     title: 'Language Learner',
     category: 'iOS / iPadOS',
     description: 'Immersive language learning application built for dual-screen environments.',
-    color: 'bg-[#F2F2F2] text-[#111]',
+    color: 'bg-[#F5F5F5] border border-gray-100 text-[#111]',
     colSpan: 'md:col-span-1',
     rowSpan: 'md:row-span-2',
     imageLayout: 'mockup-ipad',
@@ -56,7 +56,7 @@ const projects: Project[] = [
     title: 'Finance Tracker',
     category: 'Fintech',
     description: 'Clean financial tracking and budgeting with a minimalist approach.',
-    color: 'bg-[#F5F5F5] text-[#111]',
+    color: 'bg-[#F9F9F9] border border-gray-100 text-[#111]',
     colSpan: 'md:col-span-1',
     rowSpan: 'md:row-span-1',
     imageLayout: 'mockup-iphone',
@@ -67,7 +67,7 @@ const projects: Project[] = [
     title: 'School Bus Tracker',
     category: 'Map Integration',
     description: 'Traffic control & parent booking system to track children securely on their school routes.',
-    color: 'bg-[#F9F9F9] border border-gray-100 text-[#111]',
+    color: 'bg-[#F5F5F5] border border-gray-100 text-[#111]',
     colSpan: 'md:col-span-1',
     rowSpan: 'md:row-span-1',
     imageLayout: 'mockup-iphone',
@@ -78,7 +78,7 @@ const projects: Project[] = [
     title: 'CRT Terminal OS',
     category: 'Web Dev',
     description: 'Fully functional retro operating system built in React with interactive command line mechanics.',
-    color: 'bg-[#050505] border border-white/5 text-white',
+    color: 'bg-[#FAFAFA] border border-gray-100 text-[#111]',
     colSpan: 'md:col-span-2',
     rowSpan: 'md:row-span-1',
     imageLayout: 'terminal',
@@ -132,7 +132,7 @@ export default function BentoGrid() {
               className={`group relative overflow-hidden rounded-[2.5rem] p-8 flex flex-col justify-start ${project.color} ${project.colSpan} ${project.rowSpan} transition-all duration-500 hover:shadow-2xl ${project.liveLink ? 'cursor-pointer' : ''}`}
             >
               {/* Text Content - Tightly restricted width to NEVER overlap the bottom-right graphics */}
-              <div className={`z-20 relative pointer-events-none flex flex-col items-start ${project.colSpan === 'md:col-span-2' ? 'w-[75%] md:w-[50%]' : 'w-[80%] md:w-[65%]'}`}>
+              <div className={`z-20 relative pointer-events-none flex flex-col items-start ${project.colSpan === 'md:col-span-2' ? 'w-[75%] md:w-[40%]' : 'w-[80%] md:w-[65%]'}`}>
                 <span className="text-xs font-bold uppercase tracking-widest opacity-50 mb-2 block">
                   {project.category}
                 </span>
@@ -153,12 +153,12 @@ export default function BentoGrid() {
               
               {/* Abstract Full / Pixel Art - Nice curved shape hugging the corner */}
               {(project.imageLayout === 'full' || project.imageLayout === 'pixel-art') && (
-                <div className="absolute -bottom-10 -right-10 w-[85%] h-[85%] bg-current opacity-[0.03] rounded-tl-[3rem] transform group-hover:-translate-y-4 group-hover:-translate-x-4 transition-transform duration-700 ease-out z-0" />
+                <div className="absolute -bottom-10 -right-10 w-[85%] h-[85%] bg-black opacity-[0.03] rounded-tl-[3rem] transform group-hover:-translate-y-4 group-hover:-translate-x-4 transition-transform duration-700 ease-out z-0" />
               )}
 
               {/* Terminal Frame - Anchored strictly to the bottom right and bleeding off */}
               {project.imageLayout === 'terminal' && (
-                <div className="absolute -bottom-16 -right-12 md:-bottom-24 md:-right-16 w-[360px] h-[260px] md:w-[540px] md:h-[380px] bg-black border-[2px] md:border-[4px] border-[#222] rounded-xl md:rounded-2xl shadow-2xl transform group-hover:-translate-y-6 group-hover:-translate-x-6 transition-transform duration-700 ease-out flex flex-col overflow-hidden z-10">
+                <div className="absolute -bottom-16 -right-12 md:-bottom-20 md:-right-16 w-[360px] h-[260px] md:w-[480px] md:h-[340px] bg-black border-[2px] md:border-[4px] border-[#222] rounded-xl md:rounded-2xl shadow-2xl transform group-hover:-translate-y-6 group-hover:-translate-x-6 transition-transform duration-700 ease-out flex flex-col overflow-hidden z-10">
                   {/* MacOS style window bar */}
                   <div className="h-5 md:h-8 w-full bg-[#1A1A1A] flex items-center px-3 gap-1.5 md:gap-2 shrink-0 border-b border-white/10">
                     <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#FF5F56]"></div>
@@ -176,8 +176,6 @@ export default function BentoGrid() {
                         preload="metadata"
                         className="w-full h-full object-cover opacity-90"
                       />
-                      {/* Subtle CRT Scanline Overlay */}
-                      <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] z-20"></div>
                     </div>
                   ) : (
                     <div className="flex-1 bg-black p-4 text-[#00FF41] font-mono text-[10px] md:text-xs leading-relaxed opacity-80">
@@ -230,7 +228,7 @@ export default function BentoGrid() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[999] flex items-center justify-center p-4 sm:p-6 md:p-12 bg-[#050505]/80 backdrop-blur-xl"
+            className="fixed inset-0 z-[999] flex items-center justify-center p-4 sm:p-6 md:p-12 bg-black/40 backdrop-blur-3xl"
             onClick={() => setSelectedProject(null)}
           >
             <motion.div
@@ -238,16 +236,18 @@ export default function BentoGrid() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-7xl h-full max-h-[90vh] bg-[#111] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+              className="relative w-full max-w-7xl h-full max-h-[90vh] bg-[#111]/90 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#1A1A1A] z-10 shrink-0">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#1A1A1A]/50 backdrop-blur-md z-10 shrink-0">
                 <div className="flex flex-col">
-                  <h3 className="text-lg font-bold text-white tracking-tight">{selectedProject.title}</h3>
+                  <h3 className="text-lg font-bold text-white tracking-tight" style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}>
+                    {selectedProject.title}
+                  </h3>
                   {selectedProject.technologies && (
-                    <div className="flex items-center mt-1">
-                      <span className="text-[11px] font-medium text-white/40 uppercase tracking-widest">
+                    <div className="flex items-center mt-0.5">
+                      <span className="text-[13px] font-medium text-white/50" style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}>
                         {selectedProject.technologies}
                       </span>
                     </div>

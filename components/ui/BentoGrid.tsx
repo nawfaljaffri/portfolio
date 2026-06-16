@@ -119,7 +119,8 @@ export default function BentoGrid() {
           <h3 className="text-4xl md:text-6xl font-medium tracking-tight text-[#111]">Selected Works</h3>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[350px]">
+        {/* Increased row height to give items more breathing room */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[380px]">
           {projects.map((project, idx) => (
             <motion.div
               key={project.id}
@@ -128,10 +129,10 @@ export default function BentoGrid() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.7, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
               onClick={() => project.liveLink && setSelectedProject(project)}
-              className={`group relative overflow-hidden rounded-[2.5rem] p-8 flex flex-col justify-between ${project.color} ${project.colSpan} ${project.rowSpan} transition-all duration-500 hover:shadow-2xl ${project.liveLink ? 'cursor-pointer' : ''}`}
+              className={`group relative overflow-hidden rounded-[2.5rem] p-8 flex flex-col justify-start ${project.color} ${project.colSpan} ${project.rowSpan} transition-all duration-500 hover:shadow-2xl ${project.liveLink ? 'cursor-pointer' : ''}`}
             >
-              {/* Text Content - Restricted Width to prevent overlapping graphics */}
-              <div className={`z-20 relative pr-4 pointer-events-none ${project.colSpan === 'md:col-span-2' ? 'md:w-1/2' : 'w-full'}`}>
+              {/* Text Content - Tightly restricted width to NEVER overlap the bottom-right graphics */}
+              <div className={`z-20 relative pointer-events-none flex flex-col items-start ${project.colSpan === 'md:col-span-2' ? 'w-[75%] md:w-[50%]' : 'w-[80%] md:w-[65%]'}`}>
                 <span className="text-xs font-bold uppercase tracking-widest opacity-50 mb-2 block">
                   {project.category}
                 </span>
@@ -150,14 +151,14 @@ export default function BentoGrid() {
 
               {/* Graphic Placeholders & Videos */}
               
-              {/* Abstract Full / Pixel Art */}
+              {/* Abstract Full / Pixel Art - Nice curved shape hugging the corner */}
               {(project.imageLayout === 'full' || project.imageLayout === 'pixel-art') && (
-                <div className="absolute -bottom-10 -right-10 w-3/4 h-3/4 bg-current opacity-[0.03] rounded-tl-[3rem] transform group-hover:-translate-y-4 group-hover:-translate-x-4 transition-transform duration-700 ease-out z-0" />
+                <div className="absolute -bottom-10 -right-10 w-[85%] h-[85%] bg-current opacity-[0.03] rounded-tl-[3rem] transform group-hover:-translate-y-4 group-hover:-translate-x-4 transition-transform duration-700 ease-out z-0" />
               )}
 
-              {/* Terminal Frame - Properly Proportioned */}
+              {/* Terminal Frame - Anchored strictly to the bottom right and bleeding off */}
               {project.imageLayout === 'terminal' && (
-                <div className="absolute -bottom-8 -right-8 w-[320px] h-[240px] md:w-[420px] md:h-[300px] bg-black border-[2px] md:border-[4px] border-[#222] rounded-xl md:rounded-2xl shadow-2xl transform group-hover:-translate-y-4 group-hover:-translate-x-4 transition-transform duration-700 ease-out flex flex-col overflow-hidden z-10">
+                <div className="absolute -bottom-16 -right-12 md:-bottom-24 md:-right-16 w-[360px] h-[260px] md:w-[540px] md:h-[380px] bg-black border-[2px] md:border-[4px] border-[#222] rounded-xl md:rounded-2xl shadow-2xl transform group-hover:-translate-y-6 group-hover:-translate-x-6 transition-transform duration-700 ease-out flex flex-col overflow-hidden z-10">
                   {/* MacOS style window bar */}
                   <div className="h-5 md:h-8 w-full bg-[#1A1A1A] flex items-center px-3 gap-1.5 md:gap-2 shrink-0 border-b border-white/10">
                     <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#FF5F56]"></div>
@@ -190,12 +191,12 @@ export default function BentoGrid() {
                 </div>
               )}
               
-              {/* iPhone Mockup - Realistic Proportions (19.5:9 ratio) */}
+              {/* iPhone Mockup - Smaller, tucked tightly into the bottom right corner */}
               {project.imageLayout === 'mockup-iphone' && (
-                <div className="absolute -bottom-16 right-6 md:right-8 w-[180px] h-[390px] md:w-[200px] md:h-[433px] bg-black border-[6px] border-[#111] rounded-[2.5rem] shadow-2xl transform group-hover:-translate-y-8 transition-transform duration-700 ease-out z-10 overflow-hidden flex flex-col items-center justify-start pt-3">
-                  <div className="w-[93%] h-[97%] bg-[#1A1A1A] rounded-[2rem] border border-white/5 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs overflow-hidden relative">
+                <div className="absolute -bottom-16 -right-6 md:-bottom-20 md:-right-8 w-[140px] h-[303px] md:w-[160px] md:h-[346px] bg-black border-[5px] md:border-[6px] border-[#111] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl transform group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 overflow-hidden flex flex-col items-center justify-start pt-2 md:pt-3">
+                  <div className="w-[92%] h-[97%] bg-[#1A1A1A] rounded-[1.6rem] md:rounded-[2rem] border border-white/5 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs overflow-hidden relative">
                     {/* Dynamic Island Notch */}
-                    <div className="absolute top-2 w-[35%] h-[18px] bg-black rounded-full z-20"></div>
+                    <div className="absolute top-1.5 md:top-2 w-[35%] h-[12px] md:h-[14px] bg-black rounded-full z-20"></div>
                     {project.videoSrc ? (
                       <video src={project.videoSrc} autoPlay loop muted playsInline className="w-full h-full object-cover" />
                     ) : (
@@ -205,9 +206,9 @@ export default function BentoGrid() {
                 </div>
               )}
               
-              {/* iPad Mockup */}
+              {/* iPad Mockup - Anchored deep into the bottom right corner */}
               {project.imageLayout === 'mockup-ipad' && (
-                <div className="absolute -bottom-24 -right-12 w-[320px] h-[460px] md:w-[380px] md:h-[540px] bg-[#111] border-[10px] md:border-[12px] border-[#111] rounded-[1.5rem] md:rounded-[2rem] shadow-2xl transform group-hover:-translate-y-16 transition-transform duration-700 ease-out z-10 overflow-hidden flex items-center justify-center">
+                <div className="absolute -bottom-24 -right-16 w-[300px] h-[430px] md:w-[360px] md:h-[510px] bg-[#111] border-[10px] md:border-[12px] border-[#111] rounded-[1.5rem] md:rounded-[2rem] shadow-2xl transform group-hover:-translate-y-12 transition-transform duration-700 ease-out z-10 overflow-hidden flex items-center justify-center">
                   <div className="w-[96%] h-[97%] bg-[#1A1A1A] rounded-[1rem] md:rounded-[1.2rem] border border-white/5 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs overflow-hidden">
                     {project.videoSrc ? (
                       <video src={project.videoSrc} autoPlay loop muted playsInline className="w-full h-full object-cover" />

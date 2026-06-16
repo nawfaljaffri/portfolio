@@ -14,19 +14,20 @@ type Project = {
   imageLayout?: 'mockup-iphone' | 'mockup-ipad' | 'full' | 'pixel-art' | 'terminal'
   videoSrc?: string
   liveLink?: string
+  technologies?: string
 }
 
-// Updated Colors: Sleek, premium monochrome palette replacing pastels
 const projects: Project[] = [
   {
-    id: '1',
-    title: 'School Bus Tracker',
-    category: 'Map Integration',
-    description: 'Traffic control & parent booking system to track children securely on their school routes.',
-    color: 'bg-[#F9F9F9] border border-gray-100 text-[#111]',
+    id: '5',
+    title: '8-Bit Adventure',
+    category: 'Game Dev',
+    description: 'Custom pixel-art game exploring algorithmic logic and physics.',
+    color: 'bg-[#0A0A0A] text-white',
     colSpan: 'md:col-span-2',
     rowSpan: 'md:row-span-1',
-    imageLayout: 'full'
+    imageLayout: 'pixel-art',
+    technologies: 'C++, SDL2, WebAssembly'
   },
   {
     id: '2',
@@ -36,7 +37,8 @@ const projects: Project[] = [
     color: 'bg-[#F2F2F2] text-[#111]',
     colSpan: 'md:col-span-1',
     rowSpan: 'md:row-span-2',
-    imageLayout: 'mockup-ipad'
+    imageLayout: 'mockup-ipad',
+    technologies: 'Swift, SwiftUI, CoreData'
   },
   {
     id: '3',
@@ -46,7 +48,8 @@ const projects: Project[] = [
     color: 'bg-[#FAFAFA] border border-gray-100 text-[#111]',
     colSpan: 'md:col-span-1',
     rowSpan: 'md:row-span-1',
-    imageLayout: 'mockup-iphone'
+    imageLayout: 'mockup-iphone',
+    technologies: 'React Native, Firebase'
   },
   {
     id: '4',
@@ -56,29 +59,32 @@ const projects: Project[] = [
     color: 'bg-[#F5F5F5] text-[#111]',
     colSpan: 'md:col-span-1',
     rowSpan: 'md:row-span-1',
-    imageLayout: 'mockup-iphone'
+    imageLayout: 'mockup-iphone',
+    technologies: 'Next.js, Tailwind, Prisma'
   },
   {
-    id: '5',
-    title: '8-Bit Adventure',
-    category: 'Game Dev',
-    description: 'Custom pixel-art game exploring algorithmic logic and physics.',
-    color: 'bg-[#1A1A1A] text-white',
+    id: '1',
+    title: 'School Bus Tracker',
+    category: 'Map Integration',
+    description: 'Traffic control & parent booking system to track children securely on their school routes.',
+    color: 'bg-[#F9F9F9] border border-gray-100 text-[#111]',
     colSpan: 'md:col-span-1',
     rowSpan: 'md:row-span-1',
-    imageLayout: 'pixel-art'
+    imageLayout: 'mockup-iphone',
+    technologies: 'Mapbox, React, Node.js'
   },
   {
     id: '6',
     title: 'CRT Terminal OS',
     category: 'Web Dev',
     description: 'Fully functional retro operating system built in React with interactive command line mechanics.',
-    color: 'bg-[#0A0A0A] border border-white/5 text-white',
+    color: 'bg-[#050505] border border-white/5 text-white',
     colSpan: 'md:col-span-2',
     rowSpan: 'md:row-span-1',
     imageLayout: 'terminal',
     videoSrc: '/projects/crtos.mp4',
-    liveLink: 'https://crt-terminal-os-web.vercel.app'
+    liveLink: 'https://crt-terminal-os-web.vercel.app',
+    technologies: 'React, Framer Motion, TypeScript'
   }
 ]
 
@@ -124,15 +130,15 @@ export default function BentoGrid() {
               onClick={() => project.liveLink && setSelectedProject(project)}
               className={`group relative overflow-hidden rounded-[2.5rem] p-8 flex flex-col justify-between ${project.color} ${project.colSpan} ${project.rowSpan} transition-all duration-500 hover:shadow-2xl ${project.liveLink ? 'cursor-pointer' : ''}`}
             >
-              {/* Text Content */}
-              <div className="z-20 relative pr-4 pointer-events-none">
+              {/* Text Content - Restricted Width to prevent overlapping graphics */}
+              <div className={`z-20 relative pr-4 pointer-events-none ${project.colSpan === 'md:col-span-2' ? 'md:w-1/2' : 'w-full'}`}>
                 <span className="text-xs font-bold uppercase tracking-widest opacity-50 mb-2 block">
                   {project.category}
                 </span>
                 <h4 className="text-2xl font-bold tracking-tight mb-3">
                   {project.title}
                 </h4>
-                <p className="text-sm font-medium opacity-70 max-w-sm md:max-w-[60%] leading-relaxed">
+                <p className="text-sm font-medium opacity-70 leading-relaxed">
                   {project.description}
                 </p>
                 {project.liveLink && (
@@ -149,9 +155,9 @@ export default function BentoGrid() {
                 <div className="absolute -bottom-10 -right-10 w-3/4 h-3/4 bg-current opacity-[0.03] rounded-tl-[3rem] transform group-hover:-translate-y-4 group-hover:-translate-x-4 transition-transform duration-700 ease-out z-0" />
               )}
 
-              {/* Terminal Frame - Made Larger and Prettier */}
+              {/* Terminal Frame - Properly Proportioned */}
               {project.imageLayout === 'terminal' && (
-                <div className="absolute -bottom-6 -right-6 md:-bottom-10 md:-right-10 w-[300px] h-[220px] md:w-[480px] md:h-[340px] bg-black border-[2px] md:border-[4px] border-[#222] rounded-xl md:rounded-2xl shadow-2xl transform group-hover:-translate-y-6 group-hover:-translate-x-6 transition-transform duration-700 ease-out flex flex-col overflow-hidden z-10">
+                <div className="absolute -bottom-8 -right-8 w-[320px] h-[240px] md:w-[420px] md:h-[300px] bg-black border-[2px] md:border-[4px] border-[#222] rounded-xl md:rounded-2xl shadow-2xl transform group-hover:-translate-y-4 group-hover:-translate-x-4 transition-transform duration-700 ease-out flex flex-col overflow-hidden z-10">
                   {/* MacOS style window bar */}
                   <div className="h-5 md:h-8 w-full bg-[#1A1A1A] flex items-center px-3 gap-1.5 md:gap-2 shrink-0 border-b border-white/10">
                     <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#FF5F56]"></div>
@@ -184,12 +190,12 @@ export default function BentoGrid() {
                 </div>
               )}
               
-              {/* iPhone Mockup */}
+              {/* iPhone Mockup - Realistic Proportions (19.5:9 ratio) */}
               {project.imageLayout === 'mockup-iphone' && (
-                <div className="absolute -bottom-24 right-8 w-48 h-[400px] bg-black border-[8px] border-[#111] rounded-[3rem] shadow-2xl transform group-hover:-translate-y-24 transition-transform duration-700 ease-out z-10 overflow-hidden flex flex-col items-center justify-start pt-4">
-                  <div className="w-[92%] h-[97%] bg-[#1A1A1A] rounded-[2.2rem] border border-white/5 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs overflow-hidden relative">
+                <div className="absolute -bottom-16 right-6 md:right-8 w-[180px] h-[390px] md:w-[200px] md:h-[433px] bg-black border-[6px] border-[#111] rounded-[2.5rem] shadow-2xl transform group-hover:-translate-y-8 transition-transform duration-700 ease-out z-10 overflow-hidden flex flex-col items-center justify-start pt-3">
+                  <div className="w-[93%] h-[97%] bg-[#1A1A1A] rounded-[2rem] border border-white/5 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs overflow-hidden relative">
                     {/* Dynamic Island Notch */}
-                    <div className="absolute top-2 w-1/3 h-5 bg-black rounded-full z-20"></div>
+                    <div className="absolute top-2 w-[35%] h-[18px] bg-black rounded-full z-20"></div>
                     {project.videoSrc ? (
                       <video src={project.videoSrc} autoPlay loop muted playsInline className="w-full h-full object-cover" />
                     ) : (
@@ -201,8 +207,8 @@ export default function BentoGrid() {
               
               {/* iPad Mockup */}
               {project.imageLayout === 'mockup-ipad' && (
-                <div className="absolute -bottom-32 -right-12 w-[350px] h-[480px] bg-[#111] border-[12px] border-[#111] rounded-[2rem] shadow-2xl transform group-hover:-translate-y-32 transition-transform duration-700 ease-out z-10 overflow-hidden flex items-center justify-center">
-                  <div className="w-[96%] h-[97%] bg-[#1A1A1A] rounded-[1.2rem] border border-white/5 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs overflow-hidden">
+                <div className="absolute -bottom-24 -right-12 w-[320px] h-[460px] md:w-[380px] md:h-[540px] bg-[#111] border-[10px] md:border-[12px] border-[#111] rounded-[1.5rem] md:rounded-[2rem] shadow-2xl transform group-hover:-translate-y-16 transition-transform duration-700 ease-out z-10 overflow-hidden flex items-center justify-center">
+                  <div className="w-[96%] h-[97%] bg-[#1A1A1A] rounded-[1rem] md:rounded-[1.2rem] border border-white/5 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs overflow-hidden">
                     {project.videoSrc ? (
                       <video src={project.videoSrc} autoPlay loop muted playsInline className="w-full h-full object-cover" />
                     ) : (
@@ -216,7 +222,7 @@ export default function BentoGrid() {
         </div>
       </section>
 
-      {/* Interactive Live Embed Modal - Increased z-index to z-[999] to sit above FloatingNav */}
+      {/* Interactive Live Embed Modal */}
       <AnimatePresence>
         {selectedProject && selectedProject.liveLink && (
           <motion.div
@@ -234,16 +240,17 @@ export default function BentoGrid() {
               className="relative w-full max-w-7xl h-full max-h-[90vh] bg-[#111] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Modal Header - Sleek Dark Theme */}
+              {/* Modal Header */}
               <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#1A1A1A] z-10 shrink-0">
                 <div className="flex flex-col">
                   <h3 className="text-lg font-bold text-white tracking-tight">{selectedProject.title}</h3>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                    <span className="text-[10px] font-medium text-white/50 uppercase tracking-widest">
-                      Live Preview
-                    </span>
-                  </div>
+                  {selectedProject.technologies && (
+                    <div className="flex items-center mt-1">
+                      <span className="text-[11px] font-medium text-white/40 uppercase tracking-widest">
+                        {selectedProject.technologies}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className="flex items-center gap-3 sm:gap-4">
                   <a 

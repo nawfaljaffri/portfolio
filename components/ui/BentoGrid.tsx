@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 type Project = {
@@ -16,13 +16,14 @@ type Project = {
   liveLink?: string
 }
 
+// Updated Colors: Sleek, premium monochrome palette replacing pastels
 const projects: Project[] = [
   {
     id: '1',
     title: 'School Bus Tracker',
     category: 'Map Integration',
     description: 'Traffic control & parent booking system to track children securely on their school routes.',
-    color: 'bg-blue-50',
+    color: 'bg-[#F9F9F9] border border-gray-100 text-[#111]',
     colSpan: 'md:col-span-2',
     rowSpan: 'md:row-span-1',
     imageLayout: 'full'
@@ -32,7 +33,7 @@ const projects: Project[] = [
     title: 'Language Learner',
     category: 'iOS / iPadOS',
     description: 'Immersive language learning application built for dual-screen environments.',
-    color: 'bg-green-50',
+    color: 'bg-[#F2F2F2] text-[#111]',
     colSpan: 'md:col-span-1',
     rowSpan: 'md:row-span-2',
     imageLayout: 'mockup-ipad'
@@ -42,7 +43,7 @@ const projects: Project[] = [
     title: 'Social Questionnaire',
     category: 'Social App',
     description: 'Tinder-style card swipe mechanics for friends to ask deep questions and connect.',
-    color: 'bg-yellow-50',
+    color: 'bg-[#FAFAFA] border border-gray-100 text-[#111]',
     colSpan: 'md:col-span-1',
     rowSpan: 'md:row-span-1',
     imageLayout: 'mockup-iphone'
@@ -52,7 +53,7 @@ const projects: Project[] = [
     title: 'Finance Tracker',
     category: 'Fintech',
     description: 'Clean financial tracking and budgeting with a minimalist approach.',
-    color: 'bg-purple-50',
+    color: 'bg-[#F5F5F5] text-[#111]',
     colSpan: 'md:col-span-1',
     rowSpan: 'md:row-span-1',
     imageLayout: 'mockup-iphone'
@@ -62,7 +63,7 @@ const projects: Project[] = [
     title: '8-Bit Adventure',
     category: 'Game Dev',
     description: 'Custom pixel-art game exploring algorithmic logic and physics.',
-    color: 'bg-red-50',
+    color: 'bg-[#1A1A1A] text-white',
     colSpan: 'md:col-span-1',
     rowSpan: 'md:row-span-1',
     imageLayout: 'pixel-art'
@@ -72,7 +73,7 @@ const projects: Project[] = [
     title: 'CRT Terminal OS',
     category: 'Web Dev',
     description: 'Fully functional retro operating system built in React with interactive command line mechanics.',
-    color: 'bg-orange-50 text-[#111]',
+    color: 'bg-[#0A0A0A] border border-white/5 text-white',
     colSpan: 'md:col-span-2',
     rowSpan: 'md:row-span-1',
     imageLayout: 'terminal',
@@ -84,9 +85,21 @@ const projects: Project[] = [
 export default function BentoGrid() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (selectedProject) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [selectedProject])
+
   return (
     <>
-      <section id="projects" className="w-full max-w-7xl mx-auto px-6 md:px-12 py-24 bg-white text-[#111]">
+      <section id="projects" className="w-full max-w-7xl mx-auto px-6 md:px-12 py-24 bg-white">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -97,7 +110,7 @@ export default function BentoGrid() {
           <h2 className="text-xs font-bold uppercase tracking-widest border-t border-gray-200 pt-4 mb-4 text-gray-400">
             Computer Science & Design
           </h2>
-          <h3 className="text-4xl md:text-6xl font-medium tracking-tight">Selected Works</h3>
+          <h3 className="text-4xl md:text-6xl font-medium tracking-tight text-[#111]">Selected Works</h3>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[350px]">
@@ -109,37 +122,41 @@ export default function BentoGrid() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.7, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
               onClick={() => project.liveLink && setSelectedProject(project)}
-              className={`group relative overflow-hidden rounded-[2.5rem] p-8 flex flex-col justify-between ${project.color} ${project.colSpan} ${project.rowSpan} transition-shadow duration-500 hover:shadow-xl ${project.liveLink ? 'cursor-pointer' : ''}`}
+              className={`group relative overflow-hidden rounded-[2.5rem] p-8 flex flex-col justify-between ${project.color} ${project.colSpan} ${project.rowSpan} transition-all duration-500 hover:shadow-2xl ${project.liveLink ? 'cursor-pointer' : ''}`}
             >
               {/* Text Content */}
-              <div className="z-20 relative pr-4">
-                <span className="text-xs font-bold uppercase tracking-widest opacity-60 mb-2 block">
+              <div className="z-20 relative pr-4 pointer-events-none">
+                <span className="text-xs font-bold uppercase tracking-widest opacity-50 mb-2 block">
                   {project.category}
                 </span>
                 <h4 className="text-2xl font-bold tracking-tight mb-3">
                   {project.title}
                 </h4>
-                <p className="text-sm font-medium opacity-80 max-w-sm md:max-w-[60%]">
+                <p className="text-sm font-medium opacity-70 max-w-sm md:max-w-[60%] leading-relaxed">
                   {project.description}
                 </p>
                 {project.liveLink && (
-                  <span className="inline-block mt-4 text-xs font-bold bg-black/5 px-3 py-1.5 rounded-full transform opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-2 transition-all duration-300">
+                  <span className={`inline-block mt-6 text-xs font-bold px-4 py-2 rounded-full transform opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-2 transition-all duration-300 shadow-sm ${project.color.includes('text-white') ? 'bg-white/10 text-white backdrop-blur-md border border-white/10' : 'bg-black/5 text-black border border-black/5'}`}>
                     Click to explore →
                   </span>
                 )}
               </div>
 
-              {/* Abstract Graphic Placeholder for Apps */}
+              {/* Graphic Placeholders & Videos */}
+              
+              {/* Abstract Full / Pixel Art */}
               {(project.imageLayout === 'full' || project.imageLayout === 'pixel-art') && (
-                <div className="absolute -bottom-10 -right-10 w-3/4 h-3/4 bg-black/5 rounded-tl-[3rem] transform group-hover:-translate-y-4 group-hover:-translate-x-4 transition-transform duration-700 ease-out z-0" />
+                <div className="absolute -bottom-10 -right-10 w-3/4 h-3/4 bg-current opacity-[0.03] rounded-tl-[3rem] transform group-hover:-translate-y-4 group-hover:-translate-x-4 transition-transform duration-700 ease-out z-0" />
               )}
 
+              {/* Terminal Frame - Made Larger and Prettier */}
               {project.imageLayout === 'terminal' && (
-                <div className="absolute -bottom-4 -right-4 w-64 h-48 bg-black border-[4px] border-gray-700 rounded-xl shadow-2xl transform group-hover:-translate-y-8 group-hover:-translate-x-4 transition-transform duration-700 ease-out flex flex-col overflow-hidden z-10">
-                  <div className="h-6 w-full bg-gray-800 flex items-center px-2 gap-1">
-                    <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                    <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                <div className="absolute -bottom-6 -right-6 md:-bottom-10 md:-right-10 w-[300px] h-[220px] md:w-[480px] md:h-[340px] bg-black border-[2px] md:border-[4px] border-[#222] rounded-xl md:rounded-2xl shadow-2xl transform group-hover:-translate-y-6 group-hover:-translate-x-6 transition-transform duration-700 ease-out flex flex-col overflow-hidden z-10">
+                  {/* MacOS style window bar */}
+                  <div className="h-5 md:h-8 w-full bg-[#1A1A1A] flex items-center px-3 gap-1.5 md:gap-2 shrink-0 border-b border-white/10">
+                    <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#FF5F56]"></div>
+                    <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#FFBD2E]"></div>
+                    <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#27C93F]"></div>
                   </div>
                   {project.videoSrc ? (
                     <div className="flex-1 w-full bg-black relative">
@@ -150,11 +167,13 @@ export default function BentoGrid() {
                         muted
                         playsInline
                         preload="metadata"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover opacity-90"
                       />
+                      {/* Subtle CRT Scanline Overlay */}
+                      <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] z-20"></div>
                     </div>
                   ) : (
-                    <div className="flex-1 bg-black p-2 text-green-500 font-mono text-[8px] leading-tight opacity-80">
+                    <div className="flex-1 bg-black p-4 text-[#00FF41] font-mono text-[10px] md:text-xs leading-relaxed opacity-80">
                       guest@nawfal:~$ boot<br/>
                       Loading system modules...<br/>
                       [OK] Kernel init<br/>
@@ -165,22 +184,30 @@ export default function BentoGrid() {
                 </div>
               )}
               
+              {/* iPhone Mockup */}
               {project.imageLayout === 'mockup-iphone' && (
-                <div className="absolute -bottom-24 right-8 w-40 h-80 bg-black border-[6px] border-black rounded-[2.5rem] shadow-lg transform group-hover:-translate-y-24 transition-transform duration-700 ease-out z-10 overflow-hidden flex flex-col items-center justify-start pt-4">
-                  <div className="w-[90%] h-full bg-[#111] rounded-[2rem] border border-white/10 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs overflow-hidden">
+                <div className="absolute -bottom-24 right-8 w-48 h-[400px] bg-black border-[8px] border-[#111] rounded-[3rem] shadow-2xl transform group-hover:-translate-y-24 transition-transform duration-700 ease-out z-10 overflow-hidden flex flex-col items-center justify-start pt-4">
+                  <div className="w-[92%] h-[97%] bg-[#1A1A1A] rounded-[2.2rem] border border-white/5 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs overflow-hidden relative">
+                    {/* Dynamic Island Notch */}
+                    <div className="absolute top-2 w-1/3 h-5 bg-black rounded-full z-20"></div>
                     {project.videoSrc ? (
                       <video src={project.videoSrc} autoPlay loop muted playsInline className="w-full h-full object-cover" />
-                    ) : '↓'}
+                    ) : (
+                      <span className="opacity-50">↓</span>
+                    )}
                   </div>
                 </div>
               )}
               
+              {/* iPad Mockup */}
               {project.imageLayout === 'mockup-ipad' && (
-                <div className="absolute -bottom-32 -right-10 w-72 h-96 bg-black border-[8px] border-black rounded-[1.5rem] shadow-lg transform group-hover:-translate-y-32 transition-transform duration-700 ease-out z-10 overflow-hidden flex items-center justify-center">
-                  <div className="w-[95%] h-[95%] bg-[#111] rounded-[1rem] border border-white/10 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs overflow-hidden">
+                <div className="absolute -bottom-32 -right-12 w-[350px] h-[480px] bg-[#111] border-[12px] border-[#111] rounded-[2rem] shadow-2xl transform group-hover:-translate-y-32 transition-transform duration-700 ease-out z-10 overflow-hidden flex items-center justify-center">
+                  <div className="w-[96%] h-[97%] bg-[#1A1A1A] rounded-[1.2rem] border border-white/5 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs overflow-hidden">
                     {project.videoSrc ? (
                       <video src={project.videoSrc} autoPlay loop muted playsInline className="w-full h-full object-cover" />
-                    ) : '↓'}
+                    ) : (
+                      <span className="opacity-50">↓</span>
+                    )}
                   </div>
                 </div>
               )}
@@ -189,14 +216,14 @@ export default function BentoGrid() {
         </div>
       </section>
 
-      {/* Interactive Live Embed Modal */}
+      {/* Interactive Live Embed Modal - Increased z-index to z-[999] to sit above FloatingNav */}
       <AnimatePresence>
         {selectedProject && selectedProject.liveLink && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-12 bg-black/60 backdrop-blur-md"
+            className="fixed inset-0 z-[999] flex items-center justify-center p-4 sm:p-6 md:p-12 bg-[#050505]/80 backdrop-blur-xl"
             onClick={() => setSelectedProject(null)}
           >
             <motion.div
@@ -204,29 +231,32 @@ export default function BentoGrid() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-6xl h-full max-h-[90vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col"
+              className="relative w-full max-w-7xl h-full max-h-[90vh] bg-[#111] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Modal Header */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-white/95 backdrop-blur-sm z-10 shrink-0">
-                <div>
-                  <h3 className="text-xl font-bold">{selectedProject.title}</h3>
-                  <p className="text-xs font-medium text-gray-500 uppercase tracking-widest mt-1">
-                    {selectedProject.category}
-                  </p>
+              {/* Modal Header - Sleek Dark Theme */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#1A1A1A] z-10 shrink-0">
+                <div className="flex flex-col">
+                  <h3 className="text-lg font-bold text-white tracking-tight">{selectedProject.title}</h3>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <span className="text-[10px] font-medium text-white/50 uppercase tracking-widest">
+                      Live Preview
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 sm:gap-4">
+                <div className="flex items-center gap-3 sm:gap-4">
                   <a 
                     href={selectedProject.liveLink} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="px-4 py-2 bg-black text-white text-xs sm:text-sm font-bold rounded-full hover:bg-black/80 transition-colors hidden sm:inline-block"
+                    className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white border border-white/10 text-xs sm:text-sm font-bold rounded-full transition-colors hidden sm:inline-block"
                   >
-                    Open in New Tab
+                    Open in New Tab ↗
                   </a>
                   <button 
                     onClick={() => setSelectedProject(null)}
-                    className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-black rounded-full transition-colors font-bold"
+                    className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors font-bold"
                   >
                     ✕
                   </button>
@@ -234,7 +264,7 @@ export default function BentoGrid() {
               </div>
               
               {/* Modal Iframe */}
-              <div className="flex-1 w-full bg-gray-50 relative overflow-hidden">
+              <div className="flex-1 w-full bg-[#0A0A0A] relative overflow-hidden">
                 <iframe 
                   src={selectedProject.liveLink}
                   className="absolute inset-0 w-full h-full border-none"

@@ -43,7 +43,7 @@ export default function Home() {
           Whether you have an ambitious idea or a massive project, I'm currently open for new opportunities and collaborations.
         </p>
         <a 
-          href="mailto:nawfaljaffri@gmail.com"
+          href="mailto:nawfaljafri@gmail.com"
           className="bg-black text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest hover:scale-105 transition-transform duration-300"
         >
           Get In Touch
@@ -58,8 +58,8 @@ export default function Home() {
         </div>
         <div className="text-left md:text-right flex flex-col items-start md:items-end">
           <p className="font-bold text-sm uppercase tracking-widest opacity-60">Reach Out</p>
-          <a href="mailto:nawfaljaffri@gmail.com" className="text-xl md:text-3xl font-black tracking-tighter hover:opacity-50 transition-opacity mt-2 inline-block">
-            nawfaljaffri@gmail.com
+          <a href="mailto:nawfaljafri@gmail.com" className="text-xl md:text-3xl font-black tracking-tighter hover:opacity-50 transition-opacity mt-2 inline-block">
+            nawfaljafri@gmail.com
           </a>
         </div>
       </footer>

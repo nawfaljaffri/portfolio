@@ -477,7 +477,7 @@ function CRTScreen({
     const contactX = COLS - 30;
     const isHoverEmail = hoverRef.current.y === 3 && hoverRef.current.x >= contactX && hoverRef.current.x < contactX + 22;
     const isHoverLinkedIn = hoverRef.current.y === 5 && hoverRef.current.x >= contactX && hoverRef.current.x < contactX + 28;
-    writeUI(contactX, 3, `nawfaljaffri@gmail.com`, isHoverEmail ? 2 : 0)
+    writeUI(contactX, 3, `nawfaljafri@gmail.com`, isHoverEmail ? 2 : 0)
     writeUI(contactX, 4, `+971 50 4945990`, 0)
     writeUI(contactX, 5, `linkedin.com/in/nawfaljaffri`, isHoverLinkedIn ? 2 : 0)
     writeUI(contactX, 6, `Location: Dubai, UAE`, 1)
@@ -1204,7 +1204,7 @@ if (!uiState.isBooted) {
         const contactX = COLS - 30;
         if (gridY === 3 && gridX >= contactX && gridX < contactX + 22) {
             playTick();
-            window.location.href = 'mailto:nawfaljaffri@gmail.com';
+            window.location.href = 'mailto:nawfaljafri@gmail.com';
             return;
         }
         if (gridY === 5 && gridX >= contactX && gridX < contactX + 28) {

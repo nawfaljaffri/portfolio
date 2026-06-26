@@ -19,26 +19,28 @@ type Project = {
 
 const projects: Project[] = [
   {
-    id: '5',
-    title: '8-Bit Adventure',
-    category: 'Game Dev',
-    description: 'Custom pixel-art game exploring algorithmic logic and physics.',
-    color: 'bg-[#FAFAFA] border border-gray-100 text-[#111]',
-    colSpan: 'md:col-span-2',
-    rowSpan: 'md:row-span-1',
-    imageLayout: 'pixel-art',
-    technologies: 'C++, SDL2, WebAssembly'
-  },
-  {
     id: '2',
     title: 'Language Learner',
     category: 'iOS / iPadOS',
     description: 'Immersive language learning application built for dual-screen environments.',
     color: 'bg-[#F5F5F5] border border-gray-100 text-[#111]',
+    colSpan: 'md:col-span-2',
+    rowSpan: 'md:row-span-1',
+    imageLayout: 'mockup-ipad',
+    videoSrc: '/projects/JERN_RECORDING.mp4',
+    liveLink: 'https://jern-v2.vercel.app',
+    technologies: 'Swift, SwiftUI, CoreData'
+  },
+  {
+    id: '5',
+    title: '8-Bit Adventure',
+    category: 'Game Dev',
+    description: 'Custom pixel-art game exploring algorithmic logic and physics.',
+    color: 'bg-[#FAFAFA] border border-gray-100 text-[#111]',
     colSpan: 'md:col-span-1',
     rowSpan: 'md:row-span-2',
-    imageLayout: 'mockup-ipad',
-    technologies: 'Swift, SwiftUI, CoreData'
+    imageLayout: 'pixel-art',
+    technologies: 'C++, SDL2, WebAssembly'
   },
   {
     id: '3',
@@ -129,8 +131,11 @@ export default function BentoGrid() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.7, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
               onClick={() => project.liveLink && setSelectedProject(project)}
-              className={`group relative overflow-hidden rounded-[2.5rem] p-8 flex flex-col justify-start ${project.color} ${project.colSpan} ${project.rowSpan} transition-all duration-500 hover:shadow-2xl ${project.liveLink ? 'cursor-pointer' : ''}`}
+              className={`group relative overflow-hidden isolate [clip-path:inset(0_0_0_0_round_2.5rem)] rounded-[2.5rem] p-8 flex flex-col justify-start ${project.color} ${project.colSpan} ${project.rowSpan} transition-all duration-500 hover:shadow-2xl ${project.liveLink ? 'cursor-pointer' : ''}`}
             >
+              {/* Overlay border to prevent Safari/WebKit subpixel rendering bleed of absolute children */}
+              <div className="absolute inset-0 rounded-[2.5rem] border border-gray-100 pointer-events-none z-30" />
+
               {/* Text Content - Tightly restricted width to NEVER overlap the bottom-right graphics */}
               <div className={`z-20 relative pointer-events-none flex flex-col items-start ${project.colSpan === 'md:col-span-2' ? 'w-[75%] md:w-[40%]' : 'w-[80%] md:w-[65%]'}`}>
                 <span className="text-xs font-bold uppercase tracking-widest opacity-50 mb-2 block">
@@ -206,8 +211,8 @@ export default function BentoGrid() {
               
               {/* iPad Mockup - Anchored deep into the bottom right corner */}
               {project.imageLayout === 'mockup-ipad' && (
-                <div className="absolute -bottom-24 -right-16 w-[300px] h-[430px] md:w-[360px] md:h-[510px] bg-[#111] border-[10px] md:border-[12px] border-[#111] rounded-[1.5rem] md:rounded-[2rem] shadow-2xl transform group-hover:-translate-y-12 transition-transform duration-700 ease-out z-10 overflow-hidden flex items-center justify-center">
-                  <div className="w-[96%] h-[97%] bg-[#1A1A1A] rounded-[1rem] md:rounded-[1.2rem] border border-white/5 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs overflow-hidden">
+                <div className="absolute -bottom-[110px] -right-[240px] md:-bottom-[155px] md:-right-[190px] w-[520px] h-[350px] md:w-[600px] md:h-[403px] bg-[#111] border-[10px] md:border-[12px] border-[#111] rounded-[1.5rem] md:rounded-[2rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 overflow-hidden flex items-center justify-center">
+                  <div className="w-full h-full bg-[#1A1A1A] rounded-[1rem] md:rounded-[1.2rem] border border-white/5 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs overflow-hidden relative">
                     {project.videoSrc ? (
                       <video src={project.videoSrc} autoPlay loop muted playsInline className="w-full h-full object-cover" />
                     ) : (

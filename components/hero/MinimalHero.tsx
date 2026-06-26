@@ -3,7 +3,6 @@
 import React from 'react'
 import { motion, Variants } from 'framer-motion'
 import Link from 'next/link'
-import CustomCursor from '@/components/ui/CustomCursor'
 
 export default function MinimalHero() {
   const container: Variants = {
@@ -20,8 +19,7 @@ export default function MinimalHero() {
   }
 
   return (
-    <div className="relative w-full h-[100dvh] min-h-[100dvh] bg-white text-[#111] flex flex-col justify-between pt-8 md:pt-12 md:cursor-none">
-      <CustomCursor />
+    <div className="relative w-full h-[100dvh] min-h-[100dvh] bg-white text-[#111] flex flex-col justify-between pt-8 md:pt-12">
       
       {/* Top Nav */}
       <motion.nav 

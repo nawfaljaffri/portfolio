@@ -118,20 +118,23 @@ const ExperienceCard = ({ item }: { item: any }) => {
 
   return (
     <div 
-      className="w-full relative z-30 cursor-pointer"
+      className="w-full relative z-30 cursor-pointer group/card"
       onClick={() => setIsFlipped(!isFlipped)}
       style={{ perspective: 1000 }}
     >
+      {/* Decoupled 2D Shadow Layer for buttery smooth Safari rendering */}
+      <div className="absolute inset-0 rounded-[2rem] shadow-sm group-hover/card:shadow-xl transition-shadow duration-200 will-change-[box-shadow] pointer-events-none z-0" />
+
       <motion.div
-        className="w-full relative grid"
+        className="w-full relative grid z-10 will-change-transform"
         animate={{ rotateY: isFlipped ? 180 : 0 }}
-        transition={{ duration: 0.6, type: "spring", stiffness: 200, damping: 20 }}
+        transition={{ duration: 0.5, type: "spring", stiffness: 260, damping: 25 }}
         style={{ transformStyle: "preserve-3d" }}
       >
         {/* Front Face */}
         <div 
-          className="w-full bg-white border border-gray-100 shadow-sm hover:shadow-xl transition-shadow duration-300 rounded-[2rem] p-6 flex flex-col group [grid-area:1/1]"
-          style={{ backfaceVisibility: "hidden" }}
+          className="w-full bg-white border border-gray-100 rounded-[2rem] p-6 flex flex-col group/front [grid-area:1/1]"
+          style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
         >
           <div className="mb-4 shrink-0">
             <span className="text-[9px] font-bold uppercase tracking-widest opacity-50 bg-black/5 px-2 py-1 rounded-sm">{item.location}</span>
@@ -148,7 +151,7 @@ const ExperienceCard = ({ item }: { item: any }) => {
           </div>
           
           <div className="mt-auto pt-4 border-t border-gray-50 flex justify-end shrink-0">
-            <span className="text-[10px] font-bold uppercase tracking-widest opacity-30 group-hover:opacity-60 transition-opacity flex items-center gap-1">
+            <span className="text-[10px] font-bold uppercase tracking-widest opacity-30 group-hover/card:opacity-60 transition-opacity duration-200 flex items-center gap-1">
               Tap for Details <span className="text-[16px] ml-0.5">⟲</span>
             </span>
           </div>
@@ -156,8 +159,8 @@ const ExperienceCard = ({ item }: { item: any }) => {
 
         {/* Back Face */}
         <div 
-          className="w-full h-full bg-gray-50 border border-gray-200 shadow-inner rounded-[2rem] p-6 flex flex-col [grid-area:1/1]"
-          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+          className="w-full h-full bg-gray-50 border border-gray-200 rounded-[2rem] p-6 flex flex-col [grid-area:1/1]"
+          style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
         >
           <h4 className="text-sm font-bold uppercase tracking-widest opacity-40 mb-4 pb-4 border-b border-gray-200 shrink-0">
             Role Details
@@ -188,7 +191,7 @@ export default function ExperienceSection() {
     offset: ["start center", "end center"]
   })
 
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 60, damping: 20 })
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 25, restDelta: 0.001 })
 
   return (
     <section id="experience" className="relative w-full py-24 bg-white text-[#111]">
@@ -205,24 +208,28 @@ export default function ExperienceSection() {
           
           {/* Desktop Central Line */}
           <div className="hidden md:block absolute left-1/2 top-4 bottom-4 w-3 bg-gray-200 -translate-x-1/2 rounded-full z-0" />
-          <motion.div 
-            className="hidden md:block absolute left-1/2 top-4 bottom-4 w-3 bg-black -translate-x-1/2 rounded-full origin-top z-10"
-            style={{ scaleY: smoothProgress }}
-          />
+          <div className="hidden md:block absolute left-1/2 top-4 bottom-4 w-3 -translate-x-1/2 z-10 pointer-events-none">
+            <motion.div 
+              className="w-full h-full bg-black rounded-full origin-top will-change-transform"
+              style={{ scaleY: smoothProgress }}
+            />
+          </div>
 
           {/* Mobile Left Line */}
           <div className="md:hidden absolute left-4 top-4 bottom-4 w-2 bg-gray-200 -translate-x-1/2 rounded-full z-0" />
-          <motion.div 
-            className="md:hidden absolute left-4 top-4 bottom-4 w-2 bg-black -translate-x-1/2 rounded-full origin-top z-10"
-            style={{ scaleY: smoothProgress }}
-          />
+          <div className="md:hidden absolute left-4 top-4 bottom-4 w-2 -translate-x-1/2 z-10 pointer-events-none">
+            <motion.div 
+              className="w-full h-full bg-black rounded-full origin-top will-change-transform"
+              style={{ scaleY: smoothProgress }}
+            />
+          </div>
 
           {/* Mobile Layout (Standard 1 column) */}
           <div className="md:hidden flex flex-col gap-12 w-full pl-10 relative z-20">
             {experience.map((item, i) => (
               <div key={i} className="relative w-full group min-w-0">
-                <div className="absolute top-12 -left-10 w-10 h-1 bg-gray-200 group-hover:bg-black transition-colors duration-500 z-0" />
-                <div className="absolute top-12 -left-[20px] -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white border-[3px] border-gray-300 group-hover:border-black group-hover:scale-125 transition-all duration-500 z-20" />
+                <div className="absolute top-12 -left-10 w-10 h-1 bg-gray-200 group-hover:bg-black transition-colors duration-200 ease-out z-0" />
+                <div className="absolute top-12 -left-[20px] -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white border-[3px] border-gray-300 group-hover:border-black group-hover:scale-125 transition-[transform,colors,border-color] duration-200 ease-out will-change-transform z-20" />
                 <ExperienceCard item={item} />
               </div>
             ))}
@@ -237,8 +244,8 @@ export default function ExperienceSection() {
                 if (i % 2 !== 0) return null
                 return (
                   <div key={i} className="relative w-full group min-w-0">
-                    <div className="absolute top-16 -right-8 w-8 h-1 bg-gray-200 group-hover:bg-black transition-colors duration-500 z-0" />
-                    <div className="absolute top-16 -right-8 translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white border-[4px] border-gray-200 group-hover:border-black group-hover:scale-125 transition-all duration-500 z-20" />
+                    <div className="absolute top-16 -right-8 w-8 h-1 bg-gray-200 group-hover:bg-black transition-colors duration-200 ease-out z-0" />
+                    <div className="absolute top-16 -right-8 translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white border-[4px] border-gray-200 group-hover:border-black group-hover:scale-125 transition-[transform,colors,border-color] duration-200 ease-out will-change-transform z-20" />
                     <ExperienceCard item={item} />
                   </div>
                 )
@@ -251,8 +258,8 @@ export default function ExperienceSection() {
                 if (i % 2 === 0) return null
                 return (
                   <div key={i} className="relative w-full group min-w-0">
-                    <div className="absolute top-16 -left-8 w-8 h-1 bg-gray-200 group-hover:bg-black transition-colors duration-500 z-0" />
-                    <div className="absolute top-16 -left-8 -translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white border-[4px] border-gray-200 group-hover:border-black group-hover:scale-125 transition-all duration-500 z-20" />
+                    <div className="absolute top-16 -left-8 w-8 h-1 bg-gray-200 group-hover:bg-black transition-colors duration-200 ease-out z-0" />
+                    <div className="absolute top-16 -left-8 -translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white border-[4px] border-gray-200 group-hover:border-black group-hover:scale-125 transition-[transform,colors,border-color] duration-200 ease-out will-change-transform z-20" />
                     <ExperienceCard item={item} />
                   </div>
                 )

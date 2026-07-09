@@ -4,7 +4,6 @@ import SmoothScroll from "@/components/ui/SmoothScroll";
 
 export const metadata: Metadata = {
   title: "Nawfal Jaffri | Portfolio",
-  description: "Swiss Punk meets Digital Brutalism",
 };
 
 export default function RootLayout({

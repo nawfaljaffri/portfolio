@@ -11,7 +11,7 @@ type Project = {
   color: string
   colSpan?: string
   rowSpan?: string
-  imageLayout?: 'mockup-iphone' | 'mockup-ipad' | 'full' | 'pixel-art' | 'terminal'
+  imageLayout?: 'mockup-iphone' | 'mockup-ipad' | 'mockup-iphone-social' | 'full' | 'pixel-art' | 'terminal'
   videoSrc?: string
   liveLink?: string
   technologies?: string
@@ -46,11 +46,13 @@ const projects: Project[] = [
     id: '3',
     title: 'Social Questionnaire',
     category: 'Social App',
-    description: 'Tinder-style card swipe mechanics for friends to ask deep questions and connect.',
+    description: 'Tinder-style card swipe mechanics for friends to ask deep questions & connect.',
     color: 'bg-[#FAFAFA] border border-gray-100 text-[#111]',
     colSpan: 'md:col-span-1',
     rowSpan: 'md:row-span-1',
-    imageLayout: 'mockup-iphone',
+    imageLayout: 'mockup-iphone-social',
+    videoSrc: '/projects/cwjtappdemorec.mp4',
+    liveLink: 'https://cwjt.vercel.app/',
     technologies: 'React Native, Firebase'
   },
   {
@@ -137,7 +139,7 @@ export default function BentoGrid() {
               <div className="absolute inset-0 rounded-[2.5rem] border border-gray-100 pointer-events-none z-30" />
 
               {/* Text Content - Tightly restricted width to NEVER overlap the bottom-right graphics */}
-              <div className={`z-20 relative pointer-events-none flex flex-col items-start ${project.colSpan === 'md:col-span-2' ? 'w-[75%] md:w-[40%]' : 'w-[80%] md:w-[65%]'}`}>
+              <div className={`z-20 relative pointer-events-none flex flex-col items-start ${project.colSpan === 'md:col-span-2' ? 'w-[75%] md:w-[40%]' : project.imageLayout === 'mockup-iphone-social' ? 'w-[70%] md:w-[45%]' : project.imageLayout === 'mockup-iphone' ? 'w-[75%] md:w-[50%]' : 'w-[80%] md:w-[65%]'}`}>
                 <span className="text-xs font-bold uppercase tracking-widest opacity-50 mb-2 block">
                   {project.category}
                 </span>
@@ -194,16 +196,31 @@ export default function BentoGrid() {
                 </div>
               )}
               
-              {/* iPhone Mockup - Smaller, tucked tightly into the bottom right corner */}
+              {/* iPhone Mockup - Classic sleek frame for standard iPhone projects */}
               {project.imageLayout === 'mockup-iphone' && (
-                <div className="absolute -bottom-16 -right-6 md:-bottom-20 md:-right-8 w-[140px] h-[303px] md:w-[160px] md:h-[346px] bg-black border-[5px] md:border-[6px] border-[#111] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl transform group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 overflow-hidden flex flex-col items-center justify-start pt-2 md:pt-3">
-                  <div className="w-[92%] h-[97%] bg-[#1A1A1A] rounded-[1.6rem] md:rounded-[2rem] border border-white/5 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs overflow-hidden relative">
+                <div className="absolute -bottom-16 -right-6 md:-bottom-24 md:-right-8 w-[150px] h-[315px] md:w-[200px] md:h-[421px] bg-black border-[4px] md:border-[5px] border-[#18181B] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 flex items-center justify-center p-[2px] md:p-[3px]">
+                  {/* Inner Screen */}
+                  <div className="w-full h-full bg-[#1A1A1A] rounded-[1.8rem] md:rounded-[2.25rem] overflow-hidden relative border border-white/5 shadow-inner">
                     {/* Dynamic Island Notch */}
-                    <div className="absolute top-1.5 md:top-2 w-[35%] h-[12px] md:h-[14px] bg-black rounded-full z-20"></div>
+                    <div className="absolute top-2 md:top-3 left-1/2 -translate-x-1/2 w-[30%] h-[12px] md:h-[16px] bg-black rounded-full z-20 shadow-sm border border-white/5"></div>
                     {project.videoSrc ? (
-                      <video src={project.videoSrc} autoPlay loop muted playsInline className="w-full h-full object-cover" />
+                      <video src={project.videoSrc} autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover" />
                     ) : (
-                      <span className="opacity-50">↓</span>
+                      <div className="w-full h-full flex items-center justify-center text-white/20">↓</div>
+                    )}
+                  </div>
+                </div>
+              )}
+              
+              {/* iPhone Social Mockup - Exact 0.4838 aspect ratio, notchless, sleek frame */}
+              {project.imageLayout === 'mockup-iphone-social' && (
+                <div className="absolute -bottom-24 -right-8 md:-bottom-40 md:-right-12 w-[152px] h-[301px] md:w-[212px] md:h-[421px] bg-black border-[4px] md:border-[5px] border-[#18181B] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 flex items-center justify-center p-[2px] md:p-[3px]">
+                  {/* Inner Screen */}
+                  <div className="w-full h-full bg-[#1A1A1A] rounded-[1.8rem] md:rounded-[2.25rem] overflow-hidden relative border border-white/5 shadow-inner">
+                    {project.videoSrc ? (
+                      <video src={project.videoSrc} autoPlay loop muted playsInline className="absolute -top-[2%] md:-top-[3%] left-0 w-full h-[102%] md:h-[103%] object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-white/20">↓</div>
                     )}
                   </div>
                 </div>

@@ -119,7 +119,21 @@ const ExperienceCard = ({ item }: { item: any }) => {
   return (
     <div 
       className="w-full relative z-30 cursor-pointer group/card"
-      onClick={() => setIsFlipped(!isFlipped)}
+      onClick={() => {
+        if (window.matchMedia("(max-width: 767px)").matches) {
+          setIsFlipped(!isFlipped)
+        }
+      }}
+      onMouseEnter={() => {
+        if (window.matchMedia("(min-width: 768px)").matches) {
+          setIsFlipped(true)
+        }
+      }}
+      onMouseLeave={() => {
+        if (window.matchMedia("(min-width: 768px)").matches) {
+          setIsFlipped(false)
+        }
+      }}
       style={{ perspective: 1000 }}
     >
       {/* Decoupled 2D Shadow Layer for buttery smooth Safari rendering */}
@@ -152,7 +166,9 @@ const ExperienceCard = ({ item }: { item: any }) => {
           
           <div className="mt-auto pt-4 border-t border-gray-50 flex justify-end shrink-0">
             <span className="text-[10px] font-bold uppercase tracking-widest opacity-30 group-hover/card:opacity-60 transition-opacity duration-200 flex items-center gap-1">
-              Tap for Details <span className="text-[16px] ml-0.5">⟲</span>
+              <span className="md:hidden">Tap for Details</span>
+              <span className="hidden md:inline">Hover for Details</span>
+              <span className="text-[16px] ml-0.5">⟲</span>
             </span>
           </div>
         </div>

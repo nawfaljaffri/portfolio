@@ -1,23 +1,40 @@
-'use client'
-
-import React, { useEffect } from 'react'
+import React from 'react'
 import MinimalHero from '@/components/hero/MinimalHero'
 import AboutSection from '@/components/ui/AboutSection'
 import BentoGrid from '@/components/ui/BentoGrid'
 import ExperienceSection from '@/components/ui/ExperienceSection'
+import ScrollToTop from '@/components/ui/ScrollToTop'
+import VisualExperiments from '@/components/ui/VisualExperiments'
+import { client } from '@/lib/sanity/client'
 import SkillsMarquee from '@/components/ui/SkillsMarquee'
 import FloatingNav from '@/components/ui/FloatingNav'
 
-export default function Home() {
-  
-  // Ensure the page loads at the very top (fixing the scroll bug)
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
+export const revalidate = 3600 // Revalidate cache every hour for super fast page loads
+async function getPosters() {
+  return client.fetch(`
+    *[_type == "poster"] | order(coalesce(order, 999) asc, _createdAt desc) {
+      _id,
+      title,
+      image {
+        asset->{
+          _id,
+          url,
+          metadata {
+            dimensions
+          }
+        }
+      },
+      date
+    }
+  `)
+}
+
+export default async function Home() {
+  const posters = await getPosters()
 
   return (
     <main className="relative min-h-screen bg-white text-[#111] selection:bg-black selection:text-white pb-8">
-      
+      <ScrollToTop />
       <FloatingNav />
 
       {/* New Minimal Framer Hero */}
@@ -29,16 +46,19 @@ export default function Home() {
       {/* Projects Section (Bento Grid) */}
       <BentoGrid />
 
-      {/* Skills Marquee */}
+      {/* Skills Marquee (No title, just pills between Works and Experiments) */}
       <SkillsMarquee />
+
+      {/* Visual Experiments (Archive) */}
+      <VisualExperiments items={posters} />
 
       {/* Experience Section */}
       <ExperienceSection />
 
       {/* Contact Section */}
-      <section id="contact" className="w-full max-w-7xl mx-auto px-6 md:px-12 py-16 flex flex-col items-center justify-center text-center">
+      <section id="contact" className="w-full max-w-[1300px] mx-auto px-6 md:px-12 py-16 flex flex-col items-center justify-center text-center">
         <h2 className="text-sm font-bold uppercase tracking-widest opacity-50 mb-6">What's Next?</h2>
-        <h3 className="text-5xl md:text-8xl font-black tracking-tighter mb-8">Let's Work Together</h3>
+        <h3 className="text-5xl md:text-8xl font-bold tracking-tight mb-8">Let's Work Together</h3>
         <p className="max-w-xl mx-auto text-lg opacity-80 mb-12">
           Whether you have an ambitious idea or a massive project, I'm currently open for new opportunities and collaborations.
         </p>
@@ -51,14 +71,14 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="w-full max-w-7xl mx-auto border-t border-gray-200 bg-white px-6 md:px-12 py-8 mt-4 mb-0 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+      <footer className="w-full max-w-[1300px] mx-auto border-t border-gray-200 bg-white px-6 md:px-12 py-8 mt-4 mb-0 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
         <div>
-          <p className="font-black text-lg tracking-tight">Nawfal ©2026</p>
+          <p className="font-bold text-lg tracking-tight">Nawfal ©2026</p>
           <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mt-2">All rights reserved</p>
         </div>
         <div className="text-left md:text-right flex flex-col items-start md:items-end">
           <p className="font-bold text-sm uppercase tracking-widest opacity-60">Reach Out</p>
-          <a href="mailto:nawfaljafri@gmail.com" className="text-xl md:text-3xl font-black tracking-tighter hover:opacity-50 transition-opacity mt-2 inline-block">
+          <a href="mailto:nawfaljafri@gmail.com" className="text-xl md:text-3xl font-bold tracking-tight hover:opacity-50 transition-opacity mt-2 inline-block">
             nawfaljafri@gmail.com
           </a>
         </div>

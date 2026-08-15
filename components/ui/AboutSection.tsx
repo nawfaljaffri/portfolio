@@ -6,7 +6,7 @@ import ScrollHighlightText from '../typography/ScrollHighlightText'
 
 export default function AboutSection() {
   return (
-    <section id="about" className="w-full max-w-7xl mx-auto px-6 md:px-12 py-24 bg-white text-[#111]">
+    <section id="about" className="w-full max-w-[1300px] mx-auto px-6 md:px-12 py-24 bg-white text-[#111]">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}

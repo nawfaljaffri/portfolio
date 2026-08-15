@@ -29,7 +29,7 @@ export default function MinimalHero() {
         className="w-full px-6 md:px-12 flex flex-col md:flex-row justify-between items-start md:items-start gap-8 md:gap-4 text-xs font-semibold uppercase tracking-widest z-20"
       >
         <div className="flex justify-between w-full md:w-auto">
-          <span className="font-black text-sm tracking-tight normal-case">Nawfal®</span>
+          <span className="font-bold text-sm tracking-tight normal-case">Nawfal®</span>
           <span className="md:hidden opacity-50">DUBAI, UAE</span>
         </div>
         

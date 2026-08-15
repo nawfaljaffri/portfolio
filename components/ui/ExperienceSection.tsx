@@ -211,13 +211,18 @@ export default function ExperienceSection() {
 
   return (
     <section id="experience" className="relative w-full py-24 bg-white text-[#111]">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
+      <div className="max-w-[1300px] mx-auto px-6 md:px-12">
         
         <div className="mb-24">
           <h2 className="text-xs font-bold uppercase tracking-widest border-t border-gray-200 pt-4 mb-4 text-gray-400">
             Professional Timeline
           </h2>
-          <h3 className="text-4xl md:text-6xl font-medium tracking-tight">Experience</h3>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <h3 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">Experience</h3>
+              <p className="max-w-md text-lg opacity-60">A timeline of my professional roles, internships, and creative positions.</p>
+            </div>
+          </div>
         </div>
         
         <div className="relative w-full" ref={containerRef}>

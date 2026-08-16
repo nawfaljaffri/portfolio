@@ -54,8 +54,9 @@ const projects: Project[] = [
     rowSpan: 'md:row-span-1',
     imageLayout: 'mockup-iphone',
     technologies: 'Figma, Anti Gravity, Claude',
-    liveLink: '/projects/masar-case-study.pdf',
-    buttonText: 'View Case Study'
+    liveLink: 'https://masar-silk.vercel.app',
+    buttonText: 'View Demo',
+    videoSrc: '/masardemo.webm'
   },
   {
     id: '2',
@@ -140,7 +141,7 @@ export default function BentoGrid() {
             >
               {/* Bottom Left Button */}
               {project.liveLink && (
-                <div className="absolute bottom-6 md:bottom-8 left-6 md:left-8 z-40 pointer-events-none flex items-start">
+                <div className="absolute bottom-6 md:bottom-auto md:top-8 left-6 md:left-auto md:right-8 z-40 pointer-events-none flex items-start">
                   <span className={`text-[9px] font-bold uppercase tracking-widest px-4 py-2 rounded-full shadow-sm transition-all duration-300 group-hover:bg-black group-hover:text-white group-hover:border-black ${project.color.includes('text-white') ? 'bg-white/10 text-white backdrop-blur-md border border-white/10 group-hover:bg-white group-hover:text-black group-hover:border-white' : 'bg-white text-black border border-gray-100'}`}>
                     {project.buttonText || 'View Project'}
                   </span>

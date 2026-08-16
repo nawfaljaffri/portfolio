@@ -27,7 +27,7 @@ const projects: Project[] = [
     colSpan: 'md:col-span-2',
     rowSpan: 'md:row-span-1',
     imageLayout: 'mockup-iphone-social',
-    videoSrc: '/projects/cwjtappdemorec.mp4',
+    videoSrc: '/projects/cwjtappdemorec.webm',
     liveLink: 'https://cwjt.vercel.app/',
     technologies: 'React Native, Firebase',
     buttonText: 'View App'
@@ -41,7 +41,7 @@ const projects: Project[] = [
     rowSpan: 'md:row-span-1',
     imageLayout: 'mockup-iphone',
     technologies: 'Figma',
-    videoSrc: '/projects/breaddemo.mp4',
+    videoSrc: '/projects/breaddemo.webm',
     liveLink: 'https://embed.figma.com/proto/L48mT4cjZsnOk0pB4QQykT/Bread?node-id=15-237&starting-point-node-id=15%3A237&embed-host=share',
     buttonText: 'View Prototype'
   },
@@ -65,7 +65,7 @@ const projects: Project[] = [
     colSpan: 'md:col-span-3',
     rowSpan: 'md:row-span-1',
     imageLayout: 'mockup-ipad',
-    videoSrc: '/projects/JERN_RECORDING.mp4',
+    videoSrc: '/projects/JERN_RECORDING.webm',
     liveLink: 'https://jern-v2.vercel.app',
     technologies: 'Swift, SwiftUI, CoreData',
     buttonText: 'View App'
@@ -78,7 +78,7 @@ const projects: Project[] = [
     colSpan: 'md:col-span-3',
     rowSpan: 'md:row-span-1',
     imageLayout: 'terminal',
-    videoSrc: '/projects/crtos.mp4',
+    videoSrc: '/projects/crtos.webm',
     liveLink: 'https://crt-terminal-os-web.vercel.app',
     technologies: 'React, Framer Motion, TypeScript',
     buttonText: 'View Demo'

@@ -39,9 +39,9 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
     const shuffledSkills = [...skills].sort(() => 0.5 - Math.random())
     
     shuffledSkills.forEach((skill, i) => {
-      // Estimate larger DOM sizes for desktop physics body match
-      const estimatedWidth = skill.length * 12 + 64
-      const estimatedHeight = 56
+      // Estimate accurate DOM sizes based on mobile/desktop classes
+      const estimatedWidth = isMobile ? skill.length * 8 + 40 : skill.length * 12 + 64
+      const estimatedHeight = isMobile ? 40 : 56
       
       // Distribute evenly to prevent overlapping explosions on mount
       const columns = Math.max(2, Math.floor(width / 120))

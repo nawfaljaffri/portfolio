@@ -41,7 +41,7 @@ const projects: Project[] = [
     rowSpan: 'md:row-span-1',
     imageLayout: 'mockup-iphone',
     technologies: 'Figma',
-    videoSrc: '/projects/breaddemo.webm',
+    videoSrc: '/projects/breadappdemonew.webm',
     liveLink: 'https://embed.figma.com/proto/L48mT4cjZsnOk0pB4QQykT/Bread?node-id=15-237&starting-point-node-id=15%3A237&embed-host=share',
     buttonText: 'View Prototype'
   },

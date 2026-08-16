@@ -9,7 +9,7 @@ import { client } from '@/lib/sanity/client'
 import SkillsMarquee from '@/components/ui/SkillsMarquee'
 import FloatingNav from '@/components/ui/FloatingNav'
 
-export const revalidate = 3600 // Revalidate cache every hour for super fast page loads
+export const dynamic = 'force-dynamic'
 async function getPosters() {
   return client.fetch(`
     *[_type == "poster"] | order(coalesce(order, 999) asc, _createdAt desc) {

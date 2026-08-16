@@ -5,8 +5,9 @@ import { motion } from 'framer-motion'
 import PhysicsSkillsView from './PhysicsSkillsView'
 
 const skills = [
-  "Python", "Java", "HTML", "CSS", "C++", "Assembly", "Three.js", "WebGL", "SQL",
-  "Affinity", "Illustrator", "Canva", "DaVinci", "Figma", "Framer", "Blender", "Unity", "Autodesk"
+  "Python", "Java", "HTML", "CSS", "Assembly", "Three.js", "WebGL", "SQL",
+  "Affinity", "Illustrator", "Canva", "DaVinci", "Figma", "Framer", "Blender", "Unity", "Autodesk",
+  "Mid Journey", "AIGC Tools", "Excel", "Adobe", "Antigravity", "Claude", "Eleven Labs"
 ]
 
 export default function SkillsMarquee() {

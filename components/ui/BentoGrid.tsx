@@ -88,6 +88,7 @@ const projects: Project[] = [
 
 export default function BentoGrid() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [previewMode, setPreviewMode] = useState<'demo' | 'case-study'>('demo')
   const crtVideoRef = useRef<HTMLVideoElement>(null)
 
   // Prevent body scroll when modal is open
@@ -136,7 +137,12 @@ export default function BentoGrid() {
               key={project.id}
               initial={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
-              onClick={() => project.liveLink && setSelectedProject(project)}
+              onClick={() => {
+                if (project.liveLink) {
+                  setSelectedProject(project)
+                  setPreviewMode('demo')
+                }
+              }}
               className={`group relative overflow-hidden isolate [clip-path:inset(0_0_0_0_round_2.5rem)] rounded-[2.5rem] p-6 md:p-8 flex flex-col justify-start ${project.color} shrink-0 w-[80vw] h-[450px] snap-center md:w-auto md:h-auto md:shrink shadow-sm border border-black/5 ${project.colSpan} ${project.rowSpan} transition-all duration-500 hover:shadow-2xl ${project.liveLink ? 'cursor-pointer' : ''}`}
             >
               {/* Bottom Left Button */}
@@ -287,13 +293,19 @@ export default function BentoGrid() {
                   )}
                 </div>
                 <div className="flex items-center gap-3 sm:gap-4">
+                  {selectedProject.id === '1' && (
+                    <div className="flex bg-white/5 p-1 rounded-full border border-white/10 hidden sm:flex mr-2">
+                      <button onClick={() => setPreviewMode('demo')} className={`px-4 py-1.5 text-xs sm:text-sm font-bold rounded-full transition-colors ${previewMode === 'demo' ? 'bg-white text-black' : 'text-white hover:bg-white/10'}`}>View Demo</button>
+                      <button onClick={() => setPreviewMode('case-study')} className={`px-4 py-1.5 text-xs sm:text-sm font-bold rounded-full transition-colors ${previewMode === 'case-study' ? 'bg-white text-black' : 'text-white hover:bg-white/10'}`}>View Case Study</button>
+                    </div>
+                  )}
                   <a 
-                    href={selectedProject.liveLink} 
+                    href={selectedProject.id === '1' && previewMode === 'case-study' ? '/projects/masar-case-study.pdf' : selectedProject.liveLink} 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white border border-white/10 text-xs sm:text-sm font-bold rounded-full transition-colors hidden sm:inline-block"
                   >
-                    Open in New Tab ↗
+                    Open in New Tab
                   </a>
                   <button 
                     onClick={() => setSelectedProject(null)}
@@ -307,8 +319,9 @@ export default function BentoGrid() {
               {/* Modal Iframe */}
               <div className="flex-1 w-full bg-[#0A0A0A] relative overflow-hidden">
                 <iframe 
-                  src={selectedProject.liveLink}
-                  className="absolute inset-0 w-full h-full border-none"
+                  src={selectedProject.id === '1' && previewMode === 'case-study' ? '/projects/masar-case-study.pdf' : selectedProject.liveLink}
+                  style={{ transform: 'scale(0.8)', transformOrigin: 'top left', width: '125%', height: '125%' }}
+                  className="absolute inset-0 border-none"
                   loading="lazy"
                   allow="autoplay; fullscreen; xr-spatial-tracking"
                 />

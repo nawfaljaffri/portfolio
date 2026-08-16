@@ -29,7 +29,7 @@ const projects: Project[] = [
     imageLayout: 'mockup-iphone-social',
     videoSrc: '/projects/cwjtappdemorec.webm',
     liveLink: 'https://cwjt.vercel.app/',
-    technologies: 'React Native, Firebase',
+    technologies: 'Next.js, Tailwind, Framer Motion, Figma',
     buttonText: 'View App'
   },
   {
@@ -67,7 +67,7 @@ const projects: Project[] = [
     imageLayout: 'mockup-ipad',
     videoSrc: '/projects/JERN_RECORDING.webm',
     liveLink: 'https://jern-v2.vercel.app',
-    technologies: 'Swift, SwiftUI, CoreData',
+    technologies: 'Next.js, TypeScript, Tailwind, Framer Motion',
     buttonText: 'View App'
   },
   {
@@ -80,7 +80,7 @@ const projects: Project[] = [
     imageLayout: 'terminal',
     videoSrc: '/projects/crtos.webm',
     liveLink: 'https://crt-terminal-os-web.vercel.app',
-    technologies: 'React, Framer Motion, TypeScript',
+    technologies: 'Next.js, Three.js, React Three Fiber, Framer Motion',
     buttonText: 'View Demo'
   }
 ]

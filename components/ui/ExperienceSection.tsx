@@ -210,10 +210,10 @@ export default function ExperienceSection() {
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 25, restDelta: 0.001 })
 
   return (
-    <section id="experience" className="relative w-full py-24 bg-white text-[#111]">
+    <section id="experience" className="relative w-full pt-12 pb-24 md:py-24 bg-white text-[#111]">
       <div className="max-w-[1300px] mx-auto px-6 md:px-12">
         
-        <div className="mb-24">
+        <div className="mb-12 md:mb-24">
           <h2 className="text-xs font-bold uppercase tracking-widest border-t border-gray-200 pt-4 mb-4 text-gray-400">
             Professional Timeline
           </h2>

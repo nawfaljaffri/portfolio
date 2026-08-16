@@ -129,7 +129,7 @@ export default function BentoGrid() {
         </motion.div>
 
         {/* Horizontal scroll carousel on mobile, Grid on desktop */}
-        <div className="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-6 gap-6 md:auto-rows-[380px] pb-8 -mx-6 px-6 md:mx-0 md:px-0 hide-scrollbar touch-pan-y" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div className="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-6 gap-6 md:auto-rows-[380px] pb-8 -mx-6 px-6 md:mx-0 md:px-0 hide-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {projects.map((project, idx) => (
             <motion.div
               key={project.id}

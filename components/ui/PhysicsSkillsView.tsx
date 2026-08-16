@@ -181,7 +181,7 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
   return (
     <div 
       ref={sceneRef} 
-      className="relative w-full overflow-hidden bg-white h-[400px] md:h-[180px] touch-pan-y" 
+      className="relative w-full overflow-hidden bg-white h-[400px] md:h-[180px]" 
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerUp}

@@ -56,7 +56,7 @@ export default function VisualExperiments({ items }: { items: any[] }) {
           </div>
           <Link 
             href="/archive" 
-            className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest bg-gray-100 hover:bg-black hover:text-white text-black px-4 py-2 rounded-full transition-colors mb-2 md:mb-6"
+            className="w-fit flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest bg-gray-100 hover:bg-black hover:text-white text-black px-4 py-2 rounded-full transition-colors mb-2 md:mb-6"
           >
             <span>View Archive</span>
             <span className="text-lg leading-none mt-[-2px]">→</span>

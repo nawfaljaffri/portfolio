@@ -18,7 +18,7 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
 
     const width = sceneRef.current.clientWidth
     const isMobile = window.innerWidth < 768
-    const height = isMobile ? 400 : 180
+    const height = sceneRef.current.clientHeight || (isMobile ? 400 : 180)
     
     // Create engine
     const engine = Engine.create()
@@ -72,9 +72,11 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
         const newWidth = entry.contentRect.width
+        const newHeight = entry.contentRect.height
         // Update horizontal wall positions
-        Body.setPosition(rightWall, { x: newWidth + 500, y: height / 2 })
-        Body.setPosition(ground, { x: newWidth / 2, y: height + 500 })
+        Body.setPosition(rightWall, { x: newWidth + 500, y: newHeight / 2 })
+        Body.setPosition(leftWall, { x: -500, y: newHeight / 2 })
+        Body.setPosition(ground, { x: newWidth / 2, y: newHeight + 500 })
         Body.setPosition(ceiling, { x: newWidth / 2, y: -500 })
         
         // Push any escaped pills back inside

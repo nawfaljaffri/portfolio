@@ -83,16 +83,20 @@ export default function MinimalHero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1 }}
-          className="hidden md:flex flex-col items-center gap-3 mb-2"
+          className="hidden md:flex flex-col items-center gap-4 mb-2 cursor-pointer group"
+          onClick={() => {
+            const projectsSection = document.getElementById('projects');
+            if (projectsSection) projectsSection.scrollIntoView({ behavior: 'smooth' });
+          }}
         >
-          <div className="w-[1px] h-16 bg-black/10 overflow-hidden relative">
+          <div className="w-[2px] h-20 bg-black/10 overflow-hidden relative rounded-full">
             <motion.div 
-              className="absolute top-0 left-0 w-full h-full bg-black/40"
-              animate={{ y: ['-100%', '100%'] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
+              className="absolute top-0 left-0 w-full h-1/2 bg-black rounded-full"
+              animate={{ y: ['-100%', '200%'] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
             />
           </div>
-          <span className="text-[9px] font-bold uppercase tracking-widest opacity-30" style={{ writingMode: 'vertical-rl' }}>Scroll</span>
+          <span className="text-[11px] font-bold uppercase tracking-[0.3em] opacity-80 group-hover:opacity-100 transition-opacity" style={{ writingMode: 'vertical-rl' }}>Scroll</span>
         </motion.div>
       </div>
     </div>

@@ -51,8 +51,8 @@ export default function MinimalHero() {
         </div>
       </motion.nav>
 
-      {/* Massive Bottom Typography (Left Aligned, Equal Padding) */}
-      <div className="w-full flex justify-start pb-6 md:pb-12 z-20 px-6 md:px-12 overflow-hidden">
+      {/* Massive Bottom Typography (Left Aligned, Equal Padding) & Scroll Indicator */}
+      <div className="w-full flex justify-between items-end pb-6 md:pb-12 z-20 px-6 md:px-12 overflow-hidden">
         <motion.div 
           variants={container}
           initial="hidden"
@@ -76,6 +76,23 @@ export default function MinimalHero() {
               Jaffri
             </motion.span>
           </div>
+        </motion.div>
+
+        {/* Subtle Scroll Indicator */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1 }}
+          className="hidden md:flex flex-col items-center gap-3 mb-2"
+        >
+          <div className="w-[1px] h-16 bg-black/10 overflow-hidden relative">
+            <motion.div 
+              className="absolute top-0 left-0 w-full h-full bg-black/40"
+              animate={{ y: ['-100%', '100%'] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
+            />
+          </div>
+          <span className="text-[9px] font-bold uppercase tracking-widest opacity-30" style={{ writingMode: 'vertical-rl' }}>Scroll</span>
         </motion.div>
       </div>
     </div>

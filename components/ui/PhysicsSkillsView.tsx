@@ -89,19 +89,30 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
     })
     resizeObserver.observe(sceneRef.current)
 
-    // Sync DOM elements with Physics bodies
-    Events.on(engine, 'afterUpdate', () => {
+    // Manual requestAnimationFrame loop (replaces Matter.Runner and Events)
+    let animationFrameId: number;
+    let lastTime = performance.now();
+    
+    const loop = (time: number) => {
+      // Calculate delta to keep physics consistent
+      const delta = Math.max(16, Math.min(time - lastTime, 32));
+      lastTime = time;
+      
+      // Step the physics engine manually
+      Engine.update(engine, delta);
+      
+      // Directly sync DOM without relying on Events.on
       pillBodies.forEach(({ body, id }) => {
         const el = elementsMapRef.current.get(id)
         if (el) {
           el.style.transform = `translate(-50%, -50%) translate(${body.position.x}px, ${body.position.y}px) rotate(${body.angle}rad)`
         }
       })
-    })
-
-    // Start engine runner
-    const runner = Runner.create()
-    Runner.run(runner, engine)
+      
+      animationFrameId = requestAnimationFrame(loop);
+    };
+    
+    animationFrameId = requestAnimationFrame(loop);
     
     // Scroll velocity forces
     let lastScrollY = window.scrollY
@@ -110,11 +121,8 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
       const velocity = currentScrollY - lastScrollY
       lastScrollY = currentScrollY
       
-      // If we scroll quickly, apply a force to all bodies
       if (Math.abs(velocity) > 2) {
-        // Always fly UP when scrolling fast in either direction, simulating a rollercoaster lift
         const forceMagnitude = -Math.abs(velocity) * 0.0008
-        
         pillBodies.forEach(({ body }) => {
           Body.applyForce(body, body.position, { 
             x: (Math.random() - 0.5) * 0.002, 
@@ -128,7 +136,7 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
-      Runner.stop(runner)
+      cancelAnimationFrame(animationFrameId)
       Engine.clear(engine)
     }
   }, [skills])

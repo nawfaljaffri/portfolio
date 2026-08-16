@@ -204,7 +204,7 @@ export default function BentoGrid() {
               
               {/* iPad Mockup - Peaking from right, silver frame */}
               {project.imageLayout === 'mockup-ipad' && (
-                <div className={`absolute top-[150px] md:top-[120px] -right-[250px] md:-right-[250px] w-[550px] h-[369px] md:w-[700px] md:h-[470px] bg-black border-[3px] md:border-[4px] ${project.color.includes('text-white') ? 'border-[#E5E5EA]' : 'border-[#18181B]'} rounded-[1rem] md:rounded-[2rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 flex items-center justify-center p-[6px] md:p-[11px]`}>
+                <div className={`absolute top-[130px] md:top-[120px] -right-[280px] md:-right-[250px] w-[550px] h-[369px] md:w-[700px] md:h-[470px] bg-black border-[3px] md:border-[4px] ${project.color.includes('text-white') ? 'border-[#E5E5EA]' : 'border-[#18181B]'} rounded-[1rem] md:rounded-[2rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 flex items-center justify-center p-[6px] md:p-[11px]`}>
                   <div className="w-full h-full bg-[#1A1A1A] rounded-[0.8rem] md:rounded-[1rem] border border-white/5 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs overflow-hidden relative">
                     {project.videoSrc ? (
                       <video src={project.videoSrc} autoPlay loop muted playsInline className="w-full h-full object-cover" />
@@ -217,7 +217,7 @@ export default function BentoGrid() {
 
               {/* Terminal Window for OS/CLI projects */}
               {project.imageLayout === 'terminal' && (
-                <div className="absolute top-[160px] md:top-[120px] -right-[240px] md:-right-[240px] w-[520px] h-[368px] md:w-[640px] md:h-[453px] bg-black border-[2px] md:border-[4px] border-[#222] rounded-xl md:rounded-2xl shadow-2xl transform group-hover:-translate-y-6 transition-transform duration-700 ease-out flex flex-col overflow-hidden z-10">
+                <div className="absolute top-[130px] md:top-[120px] -right-[270px] md:-right-[240px] w-[520px] h-[368px] md:w-[640px] md:h-[453px] bg-black border-[2px] md:border-[4px] border-[#222] rounded-xl md:rounded-2xl shadow-2xl transform group-hover:-translate-y-6 transition-transform duration-700 ease-out flex flex-col overflow-hidden z-10">
                   {/* MacOS style window bar */}
                   <div className="h-5 md:h-8 w-full bg-[#1A1A1A] flex items-center px-3 gap-1.5 md:gap-2 shrink-0 border-b border-white/10">
                     <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#FF5F56]"></div>

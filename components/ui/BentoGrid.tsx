@@ -128,8 +128,8 @@ export default function BentoGrid() {
           </div>
         </motion.div>
 
-        {/* Increased row height to give items more breathing room */}
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-6 auto-rows-[380px]">
+        {/* Horizontal scroll carousel on mobile, Grid on desktop */}
+        <div className="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-6 gap-6 md:auto-rows-[380px] pb-8 -mx-6 px-6 md:mx-0 md:px-0 hide-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {projects.map((project, idx) => (
             <motion.div
               key={project.id}
@@ -138,11 +138,11 @@ export default function BentoGrid() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.7, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
               onClick={() => project.liveLink && setSelectedProject(project)}
-              className={`group relative overflow-hidden isolate [clip-path:inset(0_0_0_0_round_2.5rem)] rounded-[2.5rem] p-8 flex flex-col justify-start ${project.color} ${project.colSpan} ${project.rowSpan} transition-all duration-500 hover:shadow-2xl ${project.liveLink ? 'cursor-pointer' : ''}`}
+              className={`group relative overflow-hidden isolate [clip-path:inset(0_0_0_0_round_2.5rem)] rounded-[2.5rem] p-8 flex flex-col justify-start ${project.color} shrink-0 w-[85vw] h-[450px] snap-center md:w-auto md:h-auto md:shrink ${project.colSpan} ${project.rowSpan} transition-all duration-500 hover:shadow-2xl ${project.liveLink ? 'cursor-pointer' : ''}`}
             >
-              {/* Top Right Button */}
+              {/* Bottom Left Button */}
               {project.liveLink && (
-                <div className="absolute top-8 right-8 z-40 pointer-events-none flex items-start">
+                <div className="absolute bottom-8 left-8 z-40 pointer-events-none flex items-start">
                   <span className={`text-[9px] font-bold uppercase tracking-widest px-4 py-2 rounded-full shadow-sm transition-all duration-300 group-hover:bg-black group-hover:text-white group-hover:border-black ${project.color.includes('text-white') ? 'bg-white/10 text-white backdrop-blur-md border border-white/10 group-hover:bg-white group-hover:text-black group-hover:border-white' : 'bg-white text-black border border-gray-100'}`}>
                     {project.buttonText || 'View Project'}
                   </span>
@@ -176,7 +176,7 @@ export default function BentoGrid() {
               
               {/* iPhone Mockup - Silver sleek frame for standard iPhone projects */}
               {project.imageLayout === 'mockup-iphone' && (
-                <div className={`absolute top-[110px] md:top-[120px] left-1/2 -translate-x-1/2 w-[180px] h-[378px] md:w-[240px] md:h-[505px] bg-black border-[3px] md:border-[4px] ${project.color.includes('text-white') ? 'border-[#E5E5EA]' : 'border-[#18181B]'} rounded-[2rem] md:rounded-[2.5rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 flex items-center justify-center p-[2px] md:p-[3px]`}>
+                <div className={`absolute top-[130px] md:top-[120px] left-1/2 -translate-x-1/2 w-[220px] h-[462px] md:w-[240px] md:h-[505px] bg-black border-[3px] md:border-[4px] ${project.color.includes('text-white') ? 'border-[#E5E5EA]' : 'border-[#18181B]'} rounded-[2rem] md:rounded-[2.5rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 flex items-center justify-center p-[2px] md:p-[3px]`}>
                   {/* Inner Screen */}
                   <div className="w-full h-full bg-[#1A1A1A] rounded-[1.8rem] md:rounded-[2.25rem] overflow-hidden relative border border-white/5 shadow-inner">
                     {/* Dynamic Island Notch */}
@@ -192,7 +192,7 @@ export default function BentoGrid() {
               
               {/* iPhone Social Mockup - Exact 0.4838 aspect ratio, notchless, silver sleek frame */}
               {project.imageLayout === 'mockup-iphone-social' && (
-                <div className={`absolute top-[110px] md:top-[120px] left-1/2 -translate-x-1/2 w-[180px] h-[360px] md:w-[250px] md:h-[500px] bg-black border-[3px] md:border-[4px] ${project.color.includes('text-white') ? 'border-[#E5E5EA]' : 'border-[#18181B]'} rounded-[2rem] md:rounded-[2.5rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 flex items-center justify-center p-[2px] md:p-[3px]`}>
+                <div className={`absolute top-[130px] md:top-[120px] left-1/2 -translate-x-1/2 w-[220px] h-[440px] md:w-[250px] md:h-[500px] bg-black border-[3px] md:border-[4px] ${project.color.includes('text-white') ? 'border-[#E5E5EA]' : 'border-[#18181B]'} rounded-[2rem] md:rounded-[2.5rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 flex items-center justify-center p-[2px] md:p-[3px]`}>
                   {/* Inner Screen */}
                   <div className="w-full h-full bg-[#1A1A1A] rounded-[1.8rem] md:rounded-[2.25rem] overflow-hidden relative border border-white/5 shadow-inner">
                     {project.videoSrc ? (
@@ -206,7 +206,7 @@ export default function BentoGrid() {
               
               {/* iPad Mockup - Peaking from right, silver frame */}
               {project.imageLayout === 'mockup-ipad' && (
-                <div className={`absolute top-[110px] md:top-[120px] -right-[80px] md:-right-[120px] w-[520px] h-[350px] md:w-[600px] md:h-[403px] bg-black border-[3px] md:border-[4px] ${project.color.includes('text-white') ? 'border-[#E5E5EA]' : 'border-[#18181B]'} rounded-[1.5rem] md:rounded-[2rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 flex items-center justify-center p-[8px] md:p-[11px]`}>
+                <div className={`absolute top-[180px] md:top-[120px] -right-[20px] md:-right-[120px] w-[350px] h-[235px] md:w-[600px] md:h-[403px] bg-black border-[3px] md:border-[4px] ${project.color.includes('text-white') ? 'border-[#E5E5EA]' : 'border-[#18181B]'} rounded-[1rem] md:rounded-[2rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 flex items-center justify-center p-[6px] md:p-[11px]`}>
                   <div className="w-full h-full bg-[#1A1A1A] rounded-[0.8rem] md:rounded-[1rem] border border-white/5 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs overflow-hidden relative">
                     {project.videoSrc ? (
                       <video src={project.videoSrc} autoPlay loop muted playsInline className="w-full h-full object-cover" />
@@ -219,7 +219,7 @@ export default function BentoGrid() {
 
               {/* Terminal Window for OS/CLI projects */}
               {project.imageLayout === 'terminal' && (
-                <div className="absolute top-[110px] md:top-[120px] -right-[40px] md:-right-[60px] w-[400px] h-[283px] md:w-[540px] md:h-[382px] bg-black border-[2px] md:border-[4px] border-[#222] rounded-xl md:rounded-2xl shadow-2xl transform group-hover:-translate-y-6 transition-transform duration-700 ease-out flex flex-col overflow-hidden z-10">
+                <div className="absolute top-[180px] md:top-[120px] -right-[20px] md:-right-[60px] w-[320px] h-[226px] md:w-[540px] md:h-[382px] bg-black border-[2px] md:border-[4px] border-[#222] rounded-xl md:rounded-2xl shadow-2xl transform group-hover:-translate-y-6 transition-transform duration-700 ease-out flex flex-col overflow-hidden z-10">
                   {/* MacOS style window bar */}
                   <div className="h-5 md:h-8 w-full bg-[#1A1A1A] flex items-center px-3 gap-1.5 md:gap-2 shrink-0 border-b border-white/10">
                     <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#FF5F56]"></div>

@@ -44,7 +44,7 @@ export default function VisualExperiments({ items }: { items: any[] }) {
   if (items.length === 0) return null;
 
   return (
-    <section className="w-full bg-white text-[#111] py-24 md:py-32 flex flex-col relative overflow-hidden">
+    <section className="w-full bg-white text-[#111] pt-0 pb-24 md:pb-32 flex flex-col relative overflow-hidden">
       <div className="w-full max-w-[1300px] mx-auto px-6 md:px-12 mb-12">
         <h2 className="text-xs font-bold uppercase tracking-widest border-t border-gray-200 pt-4 mb-4 text-gray-400">
           Creative Explorations

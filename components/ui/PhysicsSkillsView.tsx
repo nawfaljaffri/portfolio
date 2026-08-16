@@ -17,7 +17,7 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
     const { Engine, Render, Runner, World, Bodies, Composite, Events, Body } = Matter
 
     const width = sceneRef.current.clientWidth
-    const height = 400 // Fixed height for mobile view
+    const height = 180 // Thin divider height
     
     // Create engine
     const engine = Engine.create()
@@ -38,8 +38,9 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
     const shuffledSkills = [...skills].sort(() => 0.5 - Math.random())
     
     shuffledSkills.forEach((skill, i) => {
-      const estimatedWidth = skill.length * 10 + 48
-      const estimatedHeight = 44
+      // Estimate larger DOM sizes for desktop physics body match
+      const estimatedWidth = skill.length * 12 + 64
+      const estimatedHeight = 56
       
       // Distribute evenly to prevent overlapping explosions on mount
       const columns = Math.max(2, Math.floor(width / 120))
@@ -180,7 +181,7 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
     <div 
       ref={sceneRef} 
       className="relative w-full overflow-hidden bg-white" 
-      style={{ height: '400px' }}
+      style={{ height: '180px' }}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerUp}
@@ -194,7 +195,7 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
             else elementsMapRef.current.delete(id)
           }}
           onPointerDown={(e) => handlePointerDown(e, id)}
-          className="absolute top-0 left-0 inline-flex items-center justify-center px-5 py-2.5 bg-gray-100 rounded-full text-sm font-bold text-[#111] cursor-grab active:cursor-grabbing select-none"
+          className="absolute top-0 left-0 inline-flex items-center justify-center px-5 py-2.5 md:px-8 md:py-3.5 bg-gray-100 rounded-full text-sm md:text-lg font-bold text-[#111] cursor-grab active:cursor-grabbing select-none whitespace-nowrap"
           style={{ 
             willChange: 'transform',
             touchAction: 'none' // Prevents scrolling when dragging a pill

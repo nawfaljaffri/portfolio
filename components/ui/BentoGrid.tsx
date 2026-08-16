@@ -129,13 +129,11 @@ export default function BentoGrid() {
         </motion.div>
 
         {/* Horizontal scroll carousel on mobile, Grid on desktop */}
-        <div className="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-6 gap-6 md:auto-rows-[380px] pb-8 -mx-6 px-6 md:mx-0 md:px-0 hide-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div className="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-6 gap-6 md:auto-rows-[380px] pb-8 -mx-6 px-6 md:mx-0 md:px-0 hide-scrollbar touch-pan-y" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {projects.map((project, idx) => (
             <motion.div
               key={project.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
+              initial={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
               onClick={() => project.liveLink && setSelectedProject(project)}
               className={`group relative overflow-hidden isolate [clip-path:inset(0_0_0_0_round_2.5rem)] rounded-[2.5rem] p-6 md:p-8 flex flex-col justify-start ${project.color} shrink-0 w-[80vw] h-[450px] snap-center md:w-auto md:h-auto md:shrink shadow-sm border border-black/5 ${project.colSpan} ${project.rowSpan} transition-all duration-500 hover:shadow-2xl ${project.liveLink ? 'cursor-pointer' : ''}`}
@@ -206,7 +204,7 @@ export default function BentoGrid() {
               
               {/* iPad Mockup - Peaking from right, silver frame */}
               {project.imageLayout === 'mockup-ipad' && (
-                <div className={`absolute top-[220px] md:top-[120px] -right-[60px] md:-right-[120px] w-[450px] h-[302px] md:w-[600px] md:h-[403px] bg-black border-[3px] md:border-[4px] ${project.color.includes('text-white') ? 'border-[#E5E5EA]' : 'border-[#18181B]'} rounded-[1rem] md:rounded-[2rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 flex items-center justify-center p-[6px] md:p-[11px]`}>
+                <div className={`absolute top-[220px] md:top-[120px] -right-[150px] md:-right-[200px] w-[450px] h-[302px] md:w-[600px] md:h-[403px] bg-black border-[3px] md:border-[4px] ${project.color.includes('text-white') ? 'border-[#E5E5EA]' : 'border-[#18181B]'} rounded-[1rem] md:rounded-[2rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 flex items-center justify-center p-[6px] md:p-[11px]`}>
                   <div className="w-full h-full bg-[#1A1A1A] rounded-[0.8rem] md:rounded-[1rem] border border-white/5 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs overflow-hidden relative">
                     {project.videoSrc ? (
                       <video src={project.videoSrc} autoPlay loop muted playsInline className="w-full h-full object-cover" />
@@ -219,7 +217,7 @@ export default function BentoGrid() {
 
               {/* Terminal Window for OS/CLI projects */}
               {project.imageLayout === 'terminal' && (
-                <div className="absolute top-[240px] md:top-[120px] -right-[40px] md:-right-[60px] w-[420px] h-[297px] md:w-[540px] md:h-[382px] bg-black border-[2px] md:border-[4px] border-[#222] rounded-xl md:rounded-2xl shadow-2xl transform group-hover:-translate-y-6 transition-transform duration-700 ease-out flex flex-col overflow-hidden z-10">
+                <div className="absolute top-[240px] md:top-[120px] -right-[120px] md:-right-[180px] w-[420px] h-[297px] md:w-[540px] md:h-[382px] bg-black border-[2px] md:border-[4px] border-[#222] rounded-xl md:rounded-2xl shadow-2xl transform group-hover:-translate-y-6 transition-transform duration-700 ease-out flex flex-col overflow-hidden z-10">
                   {/* MacOS style window bar */}
                   <div className="h-5 md:h-8 w-full bg-[#1A1A1A] flex items-center px-3 gap-1.5 md:gap-2 shrink-0 border-b border-white/10">
                     <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#FF5F56]"></div>

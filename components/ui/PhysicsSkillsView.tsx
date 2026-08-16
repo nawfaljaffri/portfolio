@@ -17,7 +17,7 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
     const { Engine, Render, Runner, World, Bodies, Composite, Events, Body } = Matter
 
     const width = sceneRef.current.clientWidth
-    const height = 180 // Thin divider height
+    const height = sceneRef.current.clientHeight
     
     // Create engine
     const engine = Engine.create()
@@ -180,8 +180,7 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
   return (
     <div 
       ref={sceneRef} 
-      className="relative w-full overflow-hidden bg-white" 
-      style={{ height: '180px' }}
+      className="relative w-full overflow-hidden bg-white h-[400px] md:h-[180px]" 
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerUp}

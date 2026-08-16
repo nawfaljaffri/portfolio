@@ -176,7 +176,7 @@ export default function BentoGrid() {
               
               {/* iPhone Mockup - Silver sleek frame for standard iPhone projects */}
               {project.imageLayout === 'mockup-iphone' && (
-                <div className={`absolute top-[110px] md:top-[120px] left-1/2 -translate-x-1/2 w-[180px] h-[378px] md:w-[240px] md:h-[505px] bg-black border-[4px] md:border-[5px] ${project.color.includes('text-white') ? 'border-[#E5E5EA]' : 'border-[#18181B]'} rounded-[2rem] md:rounded-[2.5rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 flex items-center justify-center p-[2px] md:p-[3px]`}>
+                <div className={`absolute top-[110px] md:top-[120px] left-1/2 -translate-x-1/2 w-[180px] h-[378px] md:w-[240px] md:h-[505px] bg-black border-[3px] md:border-[4px] ${project.color.includes('text-white') ? 'border-[#E5E5EA]' : 'border-[#18181B]'} rounded-[2rem] md:rounded-[2.5rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 flex items-center justify-center p-[2px] md:p-[3px]`}>
                   {/* Inner Screen */}
                   <div className="w-full h-full bg-[#1A1A1A] rounded-[1.8rem] md:rounded-[2.25rem] overflow-hidden relative border border-white/5 shadow-inner">
                     {/* Dynamic Island Notch */}
@@ -192,7 +192,7 @@ export default function BentoGrid() {
               
               {/* iPhone Social Mockup - Exact 0.4838 aspect ratio, notchless, silver sleek frame */}
               {project.imageLayout === 'mockup-iphone-social' && (
-                <div className={`absolute top-[110px] md:top-[120px] left-1/2 -translate-x-1/2 w-[180px] h-[360px] md:w-[250px] md:h-[500px] bg-black border-[4px] md:border-[5px] ${project.color.includes('text-white') ? 'border-[#E5E5EA]' : 'border-[#18181B]'} rounded-[2rem] md:rounded-[2.5rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 flex items-center justify-center p-[2px] md:p-[3px]`}>
+                <div className={`absolute top-[110px] md:top-[120px] left-1/2 -translate-x-1/2 w-[180px] h-[360px] md:w-[250px] md:h-[500px] bg-black border-[3px] md:border-[4px] ${project.color.includes('text-white') ? 'border-[#E5E5EA]' : 'border-[#18181B]'} rounded-[2rem] md:rounded-[2.5rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 flex items-center justify-center p-[2px] md:p-[3px]`}>
                   {/* Inner Screen */}
                   <div className="w-full h-full bg-[#1A1A1A] rounded-[1.8rem] md:rounded-[2.25rem] overflow-hidden relative border border-white/5 shadow-inner">
                     {project.videoSrc ? (
@@ -206,7 +206,7 @@ export default function BentoGrid() {
               
               {/* iPad Mockup - Peaking from right, silver frame */}
               {project.imageLayout === 'mockup-ipad' && (
-                <div className={`absolute top-[110px] md:top-[120px] -right-[80px] md:-right-[120px] w-[520px] h-[350px] md:w-[600px] md:h-[403px] bg-black border-[4px] md:border-[5px] ${project.color.includes('text-white') ? 'border-[#E5E5EA]' : 'border-[#18181B]'} rounded-[1.5rem] md:rounded-[2rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 flex items-center justify-center p-[10px] md:p-[14px]`}>
+                <div className={`absolute top-[110px] md:top-[120px] -right-[80px] md:-right-[120px] w-[520px] h-[350px] md:w-[600px] md:h-[403px] bg-black border-[3px] md:border-[4px] ${project.color.includes('text-white') ? 'border-[#E5E5EA]' : 'border-[#18181B]'} rounded-[1.5rem] md:rounded-[2rem] shadow-2xl transform-gpu group-hover:-translate-y-6 transition-transform duration-700 ease-out z-10 flex items-center justify-center p-[8px] md:p-[11px]`}>
                   <div className="w-full h-full bg-[#1A1A1A] rounded-[0.8rem] md:rounded-[1rem] border border-white/5 shadow-inner flex flex-col items-center justify-center text-white/20 text-xs overflow-hidden relative">
                     {project.videoSrc ? (
                       <video src={project.videoSrc} autoPlay loop muted playsInline className="w-full h-full object-cover" />

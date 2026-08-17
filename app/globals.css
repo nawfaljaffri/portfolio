@@ -20,6 +20,12 @@ html {
   font-size: 90%;
 }
 
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);

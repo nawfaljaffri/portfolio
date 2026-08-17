@@ -3,8 +3,11 @@
 import React from 'react'
 import { motion, Variants } from 'framer-motion'
 import Link from 'next/link'
+import { useCursor } from '@/context/CursorContext'
 
 export default function MinimalHero() {
+  const { setCursor } = useCursor()
+
   const container: Variants = {
     hidden: { opacity: 0 },
     show: {
@@ -19,7 +22,11 @@ export default function MinimalHero() {
   }
 
   return (
-    <div className="relative w-full h-[100dvh] min-h-[100dvh] bg-white text-[#111] flex flex-col justify-between pt-8 md:pt-12">
+    <div 
+      className="relative w-full h-[100dvh] min-h-[100dvh] bg-white text-[#111] flex flex-col justify-between pt-8 md:pt-12"
+      onMouseEnter={() => setCursor('hero')}
+      onMouseLeave={() => setCursor('default')}
+    >
       
       {/* Top Nav */}
       <motion.nav 

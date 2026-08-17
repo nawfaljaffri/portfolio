@@ -21,7 +21,7 @@ type Project = {
 const projects: Project[] = [
   {
     id: '3',
-    title: 'Social Questionnaire',
+    title: 'Can We Just Talk',
     category: 'Social App',
     color: 'bg-[#FAFAFA] text-[#111]',
     colSpan: 'md:col-span-2',
@@ -34,7 +34,7 @@ const projects: Project[] = [
   },
   {
     id: '4',
-    title: 'Finance Tracker',
+    title: 'Bread',
     category: 'Fintech',
     color: 'bg-[#F5F5F5] text-[#111]',
     colSpan: 'md:col-span-2',
@@ -47,20 +47,20 @@ const projects: Project[] = [
   },
   {
     id: '1',
-    title: 'School Bus Tracker',
+    title: 'Masar',
     category: 'Map Integration',
     color: 'bg-[#FAFAFA] text-[#111]',
     colSpan: 'md:col-span-2',
     rowSpan: 'md:row-span-1',
     imageLayout: 'mockup-iphone',
-    technologies: 'Figma, Anti Gravity, Claude',
+    technologies: 'Figma, Anti Gravity',
     liveLink: 'https://masar-silk.vercel.app',
     buttonText: 'View Demo',
     videoSrc: '/masardemo.webm'
   },
   {
     id: '2',
-    title: 'Language Learner',
+    title: 'JERN',
     category: 'iOS / iPadOS',
     color: 'bg-[#F9F9F9] text-[#111]',
     colSpan: 'md:col-span-3',
@@ -73,7 +73,7 @@ const projects: Project[] = [
   },
   {
     id: '6',
-    title: 'CRT Terminal OS',
+    title: 'CRT Terminal Simulator',
     category: 'Web Dev',
     color: 'bg-[#F5F5F5] text-[#111]',
     colSpan: 'md:col-span-3',

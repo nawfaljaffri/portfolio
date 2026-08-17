@@ -30,11 +30,11 @@ export default function AboutSection() {
           className="md:col-span-7 flex flex-col gap-6 lg:gap-8"
         >
           <ScrollHighlightText 
-            text="Hi, I'm Nawfal Jaffri. A student at University Of Birmingham Dubai studying Artificial Intelligence with Computer Science."
+            text="Hi, I'm Nawfal. A Product Designer & UI/UX Developer studying Artificial Intelligence & Computer Science."
             className="text-4xl md:text-4xl lg:text-5xl font-medium tracking-tight leading-[1.2]"
           />
           <p className="text-lg md:text-lg lg:text-xl font-medium opacity-60 max-w-2xl leading-relaxed">
-            I have a wide range of skillsets such as brand development, events management, marketing, graphic, UI and UX design.
+            Undergraduate at the University of Birmingham Dubai. I love finding what's missing in an experience and building to fill that gap using design and data.
           </p>
         </motion.div>
 

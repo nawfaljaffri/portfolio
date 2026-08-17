@@ -85,25 +85,25 @@ export default function CustomCursor() {
       width: 16,
       height: 16,
       borderRadius: 16,
-      backgroundColor: '#3687ff',
+      backgroundColor: '#007aff',
     },
     hero: {
       width: activeText ? 'auto' : 16,
       height: activeText ? 32 : 16,
       borderRadius: 32,
-      backgroundColor: '#3687ff',
+      backgroundColor: '#007aff',
     },
     hover: {
       width: 'auto',
       height: 32,
       borderRadius: 32,
-      backgroundColor: '#3687ff',
+      backgroundColor: '#007aff',
     },
     'easter-egg': {
       width: 'auto',
       height: 32,
       borderRadius: 32,
-      backgroundColor: '#3687ff',
+      backgroundColor: '#007aff',
     }
   }
 

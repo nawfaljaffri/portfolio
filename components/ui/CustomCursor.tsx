@@ -31,7 +31,7 @@ export default function CustomCursor() {
 
   // Hero section animation loop
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout
+    let timeoutId: NodeJS.Timeout | undefined
     let isFirstTime = true
     let isRunning = true
 
@@ -66,7 +66,6 @@ export default function CustomCursor() {
     } else {
       isRunning = false
       clearTimeout(timeoutId)
-      setHeroText(null)
     }
 
     return () => {

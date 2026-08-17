@@ -127,7 +127,6 @@ export default function BentoGrid() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
               <h3 className="text-4xl md:text-6xl font-bold tracking-tight text-[#111] mb-4">Selected Works</h3>
-              <p className="max-w-md text-lg opacity-60">A showcase of software engineering, UI/UX design, and full-stack development projects.</p>
             </div>
           </div>
         </motion.div>

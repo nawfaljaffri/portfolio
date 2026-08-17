@@ -3,11 +3,13 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform, useAnimationFrame } from 'framer-motion'
 import { urlForImage } from '@/lib/sanity/image'
+import { useCursor } from '@/context/CursorContext'
 
 type ViewMode = 'grid' | 'compact' | 'wide'
 
 export default function MasonryGrid({ items }: { items: any[] }) {
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
+  const { setCursor } = useCursor()
   
   // Auto-scrolling state
   const [autoScrollY, setAutoScrollY] = useState(0)
@@ -52,7 +54,12 @@ export default function MasonryGrid({ items }: { items: any[] }) {
         transition={{ ease: "linear", duration: 0 }}
       >
         {data.map((poster) => (
-          <div key={poster._id} className="relative overflow-hidden bg-black/5 w-full rounded-2xl">
+          <div 
+            key={poster._id} 
+            className="relative overflow-hidden bg-black/5 w-full rounded-2xl cursor-pointer"
+            onMouseEnter={() => setCursor('hover', 'VIEW')}
+            onMouseLeave={() => setCursor('default')}
+          >
             {poster.image?.asset?.url ? (
               <img 
                 src={urlForImage(poster.image).url()} 

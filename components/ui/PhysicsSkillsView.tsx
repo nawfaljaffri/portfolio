@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import Matter from 'matter-js'
+import { useCursor } from '@/context/CursorContext'
 
 export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
   const sceneRef = useRef<HTMLDivElement>(null)
@@ -10,6 +11,7 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
   const elementsMapRef = useRef(new Map<string, HTMLDivElement>())
   const pillBodiesRef = useRef<{ body: Matter.Body, id: string, skill: string }[]>([])
   const dragConstraintRef = useRef<Matter.Constraint | null>(null)
+  const { setCursor } = useCursor()
 
   useEffect(() => {
     if (!sceneRef.current) return
@@ -204,7 +206,13 @@ export default function PhysicsSkillsView({ skills }: { skills: string[] }) {
             if (el) elementsMapRef.current.set(id, el)
             else elementsMapRef.current.delete(id)
           }}
-          onPointerDown={(e) => handlePointerDown(e, id)}
+          onMouseEnter={() => setCursor('hover', 'DRAG ME')}
+          onMouseLeave={() => setCursor('default')}
+          onPointerDown={(e) => {
+            handlePointerDown(e, id)
+            setCursor('hover', 'WEEE!')
+          }}
+          onPointerUp={() => setCursor('hover', 'DRAG ME')}
           className="absolute top-0 left-0 inline-flex items-center justify-center px-5 py-2.5 md:px-8 md:py-3.5 bg-gray-100 rounded-full text-sm md:text-lg font-bold text-[#111] cursor-grab active:cursor-grabbing select-none whitespace-nowrap"
           style={{ 
             willChange: 'transform',

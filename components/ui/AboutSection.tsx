@@ -3,8 +3,11 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import ScrollHighlightText from '../typography/ScrollHighlightText'
+import { useCursor } from '@/context/CursorContext'
 
 export default function AboutSection() {
+  const { setCursor } = useCursor()
+
   return (
     <section id="about" className="w-full max-w-[1300px] mx-auto px-6 md:px-12 py-24 bg-white text-[#111]">
       <motion.div 
@@ -46,11 +49,15 @@ export default function AboutSection() {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="md:col-span-5 flex justify-center md:justify-end mt-8 md:mt-0"
         >
-          <div className="w-full max-w-sm aspect-[3/4] bg-gray-100 rounded-[2rem] overflow-hidden shadow-2xl relative">
+          <div 
+            className="w-full max-w-sm aspect-[3/4] bg-gray-100 rounded-[2rem] overflow-hidden shadow-2xl relative"
+            onMouseEnter={() => setCursor('hover', 'NICE TO MEET YOU')}
+            onMouseLeave={() => setCursor('default')}
+          >
             <img 
               src="/profile.jpg" 
               alt="Nawfal Jaffri" 
-              className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105 cursor-none"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
               }}

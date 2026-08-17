@@ -39,13 +39,13 @@ export default function CustomCursor() {
       if (!isRunning) return
       if (isFirstTime) {
         setHeroText('HI!')
-        await new Promise(r => { timeoutId = setTimeout(r, 2000) })
+        await new Promise(r => { timeoutId = setTimeout(r, 1000) })
         isFirstTime = false
       }
 
       while (isRunning) {
         setHeroText(null) // circle
-        await new Promise(r => { timeoutId = setTimeout(r, 2000) })
+        await new Promise(r => { timeoutId = setTimeout(r, 1000) })
         if (!isRunning) break
         
         setHeroText('SCROLL DOWN')
@@ -74,27 +74,10 @@ export default function CustomCursor() {
     }
   }, [variant])
 
-  // Easter egg scroll listener
-  const { setCursor } = useCursor()
-  useEffect(() => {
-    const handleScroll = () => {
-      // Check if we're near the bottom of the page
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
-        if (variant !== 'easter-egg') setCursor('easter-egg')
-      } else {
-        if (variant === 'easter-egg') setCursor('default')
-      }
-    }
-    
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [variant, setCursor])
-
   // Determine current active text based on variant
   let activeText: string | null = null
   if (variant === 'hero') activeText = heroText
   if (variant === 'hover') activeText = text
-  if (variant === 'easter-egg') activeText = 'nawf'
 
   // Variant configurations
   const variants = {

@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useCursor } from '@/context/CursorContext'
 
 type Project = {
   id: string
@@ -91,7 +90,6 @@ export default function BentoGrid() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [previewMode, setPreviewMode] = useState<'demo' | 'case-study'>('demo')
   const crtVideoRef = useRef<HTMLVideoElement>(null)
-  const { setCursor } = useCursor()
 
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -138,10 +136,6 @@ export default function BentoGrid() {
               key={project.id}
               initial={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
-              onMouseEnter={() => {
-                if (project.liveLink) setCursor('hover', 'VIEW APP')
-              }}
-              onMouseLeave={() => setCursor('default')}
               onClick={() => {
                 if (project.liveLink) {
                   setSelectedProject(project)

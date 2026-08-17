@@ -46,17 +46,16 @@ export default function VisualExperiments({ items }: { items: any[] }) {
   if (items.length === 0) return null;
 
   return (
-    <section className="w-full bg-white text-[#111] pt-0 pb-8 md:pb-32 flex flex-col relative overflow-hidden">
+    <section className="w-full bg-white text-[#111] pt-12 md:pt-24 pb-8 md:pb-32 flex flex-col relative overflow-hidden">
       <div className="w-full max-w-[1300px] mx-auto px-6 md:px-12 mb-12">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="border-t border-gray-200 pt-4 mb-4" />
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
             <h3 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">Visual Experiments</h3>
             <p className="max-w-md text-lg opacity-60">A curated selection of posters, graphic design concepts, and visual explorations.</p>
           </div>
           <Link 
             href="/archive" 
-            onMouseEnter={() => setCursor('hover', 'EXPLORE')}
-            onMouseLeave={() => setCursor('default')}
             className="w-fit flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest bg-gray-100 hover:bg-black hover:text-white text-black px-4 py-2 rounded-full transition-colors mb-2 md:mb-6"
           >
             <span>View Archive</span>

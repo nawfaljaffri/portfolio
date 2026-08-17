@@ -41,16 +41,16 @@ export default function MinimalHero() {
         </div>
         
         <div className="flex flex-col gap-2">
-          <a href="/#projects" className="hover:opacity-50 transition-opacity cursor-pointer">Projects</a>
-          <a href="/#experience" className="hover:opacity-50 transition-opacity cursor-pointer">Experience</a>
-          <Link href="/archive" className="hover:opacity-50 transition-opacity cursor-pointer">Archive</Link>
-          <a href="/#about" className="hover:opacity-50 transition-opacity cursor-pointer">About</a>
+          <a href="/#projects" className="hover:opacity-50 transition-opacity cursor-pointer" onMouseEnter={() => setCursor('default')} onMouseLeave={() => setCursor('hero')}>Projects</a>
+          <a href="/#experience" className="hover:opacity-50 transition-opacity cursor-pointer" onMouseEnter={() => setCursor('default')} onMouseLeave={() => setCursor('hero')}>Experience</a>
+          <Link href="/archive" className="hover:opacity-50 transition-opacity cursor-pointer" onMouseEnter={() => setCursor('default')} onMouseLeave={() => setCursor('hero')}>Archive</Link>
+          <a href="/#about" className="hover:opacity-50 transition-opacity cursor-pointer" onMouseEnter={() => setCursor('default')} onMouseLeave={() => setCursor('hero')}>About</a>
         </div>
         
         <div className="flex flex-col gap-2">
-          <a href="mailto:nawfaljafri@gmail.com" className="hover:opacity-50 transition-opacity cursor-pointer">Contact</a>
-          <a href="https://www.linkedin.com/in/nawfaljaffri/" target="_blank" rel="noopener noreferrer" className="hover:opacity-50 transition-opacity cursor-pointer">LinkedIn</a>
-          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="hover:opacity-50 transition-opacity cursor-pointer">Resume</a>
+          <a href="mailto:nawfaljafri@gmail.com" className="hover:opacity-50 transition-opacity cursor-pointer" onMouseEnter={() => setCursor('default')} onMouseLeave={() => setCursor('hero')}>Contact</a>
+          <a href="https://www.linkedin.com/in/nawfaljaffri/" target="_blank" rel="noopener noreferrer" className="hover:opacity-50 transition-opacity cursor-pointer" onMouseEnter={() => setCursor('default')} onMouseLeave={() => setCursor('hero')}>LinkedIn</a>
+          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="hover:opacity-50 transition-opacity cursor-pointer" onMouseEnter={() => setCursor('default')} onMouseLeave={() => setCursor('hero')}>Resume</a>
         </div>
         
         <div className="hidden md:flex flex-col gap-2 text-right">

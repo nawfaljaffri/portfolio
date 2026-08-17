@@ -62,12 +62,22 @@ export default async function Home() {
         <p className="max-w-xl mx-auto text-lg opacity-80 mb-12">
           Whether you have an ambitious idea or a massive project, I'm currently open for new opportunities and collaborations.
         </p>
-        <a 
-          href="mailto:nawfaljafri@gmail.com"
-          className="bg-black text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest hover:scale-105 transition-transform duration-300"
-        >
-          Get In Touch
-        </a>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a 
+            href="mailto:nawfaljafri@gmail.com"
+            className="bg-black text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest hover:scale-105 transition-transform duration-300"
+          >
+            Get In Touch
+          </a>
+          <a 
+            href="/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-gray-100 text-[#111] px-8 py-4 rounded-full font-bold uppercase tracking-widest hover:bg-gray-200 hover:scale-105 transition-all duration-300"
+          >
+            View Resume
+          </a>
+        </div>
       </section>
 
       {/* Footer */}
@@ -80,6 +90,9 @@ export default async function Home() {
           <p className="font-bold text-sm uppercase tracking-widest opacity-60">Reach Out</p>
           <a href="mailto:nawfaljafri@gmail.com" className="text-xl md:text-3xl font-bold tracking-tight hover:opacity-50 transition-opacity mt-2 inline-block">
             nawfaljafri@gmail.com
+          </a>
+          <a href="https://www.linkedin.com/in/nawfaljaffri/" target="_blank" rel="noopener noreferrer" className="text-xs md:text-sm font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors mt-4 inline-block">
+            LinkedIn
           </a>
         </div>
       </footer>

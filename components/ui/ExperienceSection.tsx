@@ -5,6 +5,34 @@ import { motion, useScroll, useSpring } from 'framer-motion'
 
 const experience = [
   { 
+    company: "Murtabit", 
+    location: "Dubai, UAE", 
+    roles: [
+      { 
+        title: "UI/UX Designer", 
+        date: "07/2026–Present",
+        description: [
+          "Designed B-side merchant tools and C-side NFC payment flows for a comprehensive SoftPOS platform.",
+          "Prototyped a dual-state POS/calculator interface optimized for rapid numeric entry and native bill splitting."
+        ]
+      }
+    ] 
+  },
+  { 
+    company: "rremm", 
+    location: "Dubai, UAE", 
+    roles: [
+      { 
+        title: "Brand Designer & Art Director", 
+        date: "07/2026–Present",
+        description: [
+          "Directing the brand identity and editorial web design for high-profile fine art clients, including bespoke digital positioning for artists painting for the UAE Royal Family.",
+          "Developing heritage-inspired luxury color systems, typography hierarchies, and editorial layout frameworks tailored for fine art exhibition and digital storytelling."
+        ]
+      }
+    ] 
+  },
+  { 
     company: "Susty", 
     location: "Dubai, UAE", 
     roles: [
@@ -57,6 +85,20 @@ const experience = [
         date: "09/2025–Present",
         description: [
           "Designed high-quality posters and managed social media marketing for all university events."
+        ]
+      }
+    ] 
+  },
+  { 
+    company: "Bread (Antler Startup)", 
+    location: "Dubai, UAE", 
+    roles: [
+      { 
+        title: "UI/UX Designer", 
+        date: "03/2024–11/2024",
+        description: [
+          "Designed a gamified financial literacy application integrating interactive progress tracking to drive consumer retention.",
+          "Prototyped high-fidelity fintech dashboards to translate complex transaction data into accessible user interfaces."
         ]
       }
     ] 

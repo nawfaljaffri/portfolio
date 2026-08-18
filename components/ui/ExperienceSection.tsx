@@ -38,7 +38,7 @@ const experience = [
     roles: [
       { 
         title: "Application Content Developer", 
-        date: "05/2025–Present",
+        date: "05/2025–06/2026",
         description: [
           "Developed 70+ interactive sustainability experiences (quizzes, stories, and gamification modules).",
           "Boosted new users by 53% and overall platform user engagement by 48%.",
@@ -83,7 +83,7 @@ const experience = [
       },
       { 
         title: "Lead Graphic Designer, Student Association", 
-        date: "09/2025–Present",
+        date: "11/2025–06/2026",
         description: [
           "Designed high-quality posters and managed social media marketing for all university events."
         ]

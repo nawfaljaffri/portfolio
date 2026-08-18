@@ -55,8 +55,8 @@ const experience = [
         title: "Marketing Local Vice President", 
         date: "05/2026–Present",
         description: [
-          "Hosted extensive workshops on Branding, Marketing, & Graphic Design.",
-          "Directed the comprehensive state-level rebranding of the organization."
+          "Trained & Hosted multiple Workshops on Graphic Design, Branding, & Marketing",
+          "Led & Created a scalable brand identity & design system for seamless handoff to future teams."
         ]
       }
     ] 
@@ -67,9 +67,10 @@ const experience = [
     roles: [
       { 
         title: "President Lead, Google Developer's Group On Campus", 
-        date: "05/2026–Present",
+        date: "06/2026–Present",
         description: [
-          "Fostered a vibrant student developer community via GDG campus initiatives."
+          "Direct all organizational strategy, recruitment, & technical event planning for the chapter.",
+          "Lead the creative direction for all assets, driving community engagement across campus."
         ]
       },
       { 
